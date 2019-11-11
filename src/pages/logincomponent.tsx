@@ -7,10 +7,6 @@ import React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
 
-
-
-
-
 class Login extends React.Component<RouteComponentProps> {
 constructor(props: any){
   super(props);
