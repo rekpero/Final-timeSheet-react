@@ -1,9 +1,8 @@
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import { withStyles } from "@material-ui/core/styles";
+import TextField from "material-ui/TextField";
 import Toolbar from "@material-ui/core/Toolbar";
-
 import AddIcon from "@material-ui/icons/Add";
 import Modal from "@material-ui/core/Modal";
 import TimerIcon from "@material-ui/icons/Timer";
@@ -14,8 +13,9 @@ import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import Fab from "@material-ui/core/Fab";
 import SaveIcon from "@material-ui/icons/Save";
-
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import CancelIcon from "@material-ui/icons/Cancel";
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -62,19 +62,27 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(4, 6, 6, 8)
     },
     formControl: {
-      margin: theme.spacing(1),
+      marginRight: theme.spacing(5),
       maxWidth: 100
     },
     selectEmpty: {
       marginTop: theme.spacing(2)
     },
     time: {
+      marginRight: theme.spacing(1),
       maxWidth: 25,
-      paddingLeft: 5
+      marginTop: theme.spacing(6)
     },
-    calender: { width: 100, height: 20, paddingTop: 0 },
+    calender: {
+      marginTop: theme.spacing(6),
+      width: 100,
+      marginLeft: theme.spacing(5)
+    },
     button: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(3)
+    },
+    modal: {
+      Color: "grey"
     }
   })
 );
@@ -102,7 +110,7 @@ function BottomAppBar() {
   const inputLabel = React.useRef<HTMLLabelElement>(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date("2019-11-11T23:11:54")
+    new Date("2019-11-11")
   );
   const handleOpen = () => {
     setOpen(true);
@@ -127,86 +135,107 @@ function BottomAppBar() {
           <AddIcon />
         </Fab>
         <Modal
+          className={classes.modal}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={open}
           onClose={handleClose}
         >
           <div style={modalStyle} className={classes.paper1}>
-            <div style={{ backgroundColor: "black" }}>
-              {" "}
-              <h2 id="simple-modal-title">Register Time</h2>
-            </div>
+            {" "}
+            <h2 id="simple-modal-title">Register Time</h2>
+            <Grid container direction="row">
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="age-native-simple">Project</InputLabel>
+                <Select native>
+                  <option value="" />
 
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-native-simple">Project</InputLabel>
-              <Select native>
-                <option value="" />
-                <option>
-                  <Icon color="secondary">add_circle</Icon>
-                </option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
-              </Select>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-native-simple">Project</InputLabel>
-              <Select native>
-                <option value="" />
-                <option value={10}>Ten</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
-              </Select>
-            </FormControl>
-            <br></br>
-            <br></br>
-            <FormControl className={classes.time}>
-              <Input
-                id="standard-adornment-weight"
-                // value={values.weight}
-                // onChange={handleChange('weight')}
-                endAdornment={<InputAdornment position="end">h</InputAdornment>}
-                aria-describedby="standard-weight-helper-text"
-                // inputProps={{
-                //   'aria-label': 'weight',
-                // }}
-              />
-            </FormControl>
+                  <option value={20}>Twenty</option>
+                  <option value={30}>Thirty</option>
+                </Select>
+              </FormControl>
 
-            <FormControl className={classes.time}>
-              <Input
-                id="standard-adornment-weight"
-                // value={values.weight}
-                // onChange={handleChange('weight')}
-                endAdornment={<InputAdornment position="end">m</InputAdornment>}
-                aria-describedby="standard-weight-helper-text"
-                // inputProps={{
-                //   'aria-label': 'weight',
-                // }}
-              />
-            </FormControl>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                className={classes.calender}
-                disableToolbar
-                // variant="inline"
-                format="MM/dd/yyyy"
-                // margin="normal"
-                id="date-picker-inline"
-                value={selectedDate}
-                onChange={handleDateChange}
-                // KeyboardButtonProps={{
-                //   'aria-label': 'change date',
-                // }}
-              />
-            </MuiPickersUtilsProvider>
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="age-native-simple">Project</InputLabel>
+                <Select native>
+                  <option value="" />
+                  <option value={10}>Ten</option>
+                  <option value={20}>Twenty</option>
+                  <option value={30}>Thirty</option>
+                </Select>
+              </FormControl>
+              
+            </Grid>
+            <Grid container direction="row">
+              <div>
+                <FormControl className={classes.time}>
+                  <Input
+                    id="standard-adornment-weight"
+                    // value={values.weight}
+                    // onChange={handleChange('weight')}
+                    endAdornment={
+                      <InputAdornment position="end">h</InputAdornment>
+                    }
+                    aria-describedby="standard-weight-helper-text"
+                    // inputProps={{
+                    //   'aria-label': 'weight',
+                    // }}
+                  />
+                </FormControl>
+
+                <FormControl className={classes.time}>
+                  <Input
+                    id="standard-adornment-weight"
+                    // value={values.weight}
+                    // onChange={handleChange('weight')}
+                    endAdornment={
+                      <InputAdornment position="end">m</InputAdornment>
+                    }
+                    aria-describedby="standard-weight-helper-text"
+                    // inputProps={{
+                    //   'aria-label': 'weight',
+                    // }}
+                  />
+                </FormControl>
+              </div>
+
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  className={classes.calender}
+                  disableToolbar
+                  // variant="inline"
+                  format="MM/dd/yyyy"
+                  // margin="normal"
+                  id="date-picker-inline"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  // KeyboardButtonProps={{
+                  //   'aria-label': 'change date',
+                  // }}
+                />
+              </MuiPickersUtilsProvider>
+              
+            </Grid>
+            <Grid container direction="row">
             <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              className={classes.button}
-              startIcon={<SaveIcon />}
-            ></Button>
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.button}
+                startIcon={<PlayArrowIcon />}
+              >
+                Timer
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.button}
+                startIcon={<SaveIcon />}
+              >
+                Save
+              </Button>
+            </Grid>
           </div>
         </Modal>
 
