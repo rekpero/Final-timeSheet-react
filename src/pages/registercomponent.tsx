@@ -1,10 +1,8 @@
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import AppBar from "material-ui/AppBar";
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import React from "react";
+import React, { ChangeEvent } from "react";
+import TextField from "@material-ui/core/TextField";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import { Typography, Grid, Button } from "@material-ui/core";
 
-import { withRouter, RouteComponentProps, Link } from "react-router-dom";
 class Register extends React.Component<RouteComponentProps> {
   constructor(props: any) {
     super(props);
@@ -16,21 +14,39 @@ class Register extends React.Component<RouteComponentProps> {
   render() {
     return (
       <div>
-        <MuiThemeProvider>
-          <div>
-            <h1>Register </h1>
-
-            <TextField
-              hintText="Enter your Username"
-              floatingLabelText="Username"
-              onChange={(event, newValue) =>
-                this.setState({ username: newValue })
-              }
-            />
-
-            <RaisedButton label="Register" primary={true} style={style} />
-          </div>
-        </MuiThemeProvider>
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          style={{ marginTop: "20%" }}
+        >
+          <Grid container spacing={3} direction="row" justify="center">
+            <Grid item xs={6}>
+              <Typography variant="h6">Register </Typography>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} direction="row" justify="center">
+            <Grid item xs={6}>
+              <TextField
+                id="outlined-basic"
+                label="Email"
+                type="email"
+                margin="normal"
+                variant="outlined"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.setState({ username: event.target.value })
+                }
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} direction="row" justify="center">
+            <Grid item xs={6}>
+              <Button variant="contained" size="large" color="primary">
+                Signup
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
       </div>
     );
   }
