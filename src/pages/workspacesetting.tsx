@@ -41,7 +41,7 @@ class WorkspaceSetting extends React.Component<RouteComponentProps> {
                <div>
                    <h4>Name</h4>
                    <span style = {{fontSize: "11px"}}>Choose the name that will be displayed for this workspace.</span>
-               </div>
+               </div><br></br>
                  <TextField
                    hintText="Enter workspace name"
                    floatingLabelText="Workspace name"
