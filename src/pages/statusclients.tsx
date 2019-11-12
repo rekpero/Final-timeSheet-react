@@ -6,7 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Login from '../pages/logincomponent';
 import history from './history';
 const useStyles = makeStyles({
   root: {
@@ -26,12 +25,13 @@ function createData(name: string, project: number) {
 }
 
 const rows = [
-  createData('AT&T Dev', 159),
-  createData('AT&T Maintenance', 237),
-  createData('Metlife Marketing', 262),
+  createData('AT&T', 19),
+  createData('METLIFE', 27),
+  createData('HEINEKEN', 22),
+  createData('SBI', 12),
 ];
 
- function StatusProject() {
+ function StatusClients() {
   const classes = useStyles();
 
   
@@ -60,4 +60,4 @@ const rows = [
     </Paper>
   );
 }
-export default StatusProject;
+export default StatusClients;
