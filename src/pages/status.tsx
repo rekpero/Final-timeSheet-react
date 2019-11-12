@@ -9,6 +9,7 @@ import StatusOverview from './statusoverview';
 import StatusProject from './statusproject';
 import StatusMembers from './statusmembers';
 import StatusClients from './statusclients';
+import StatusPhases from './statusphases';
 
 
 interface TabPanelProps {
@@ -85,7 +86,7 @@ export default function Status() {
         {StatusClients}
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Phase Categories
+        {StatusPhases}
       </TabPanel>
     </div>
   );
