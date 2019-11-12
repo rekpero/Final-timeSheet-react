@@ -13,9 +13,8 @@ import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import Fab from "@material-ui/core/Fab";
 import SaveIcon from "@material-ui/icons/Save";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import CancelIcon from "@material-ui/icons/Cancel";
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -30,7 +29,8 @@ import {
   FormHelperText,
   Input,
   Button,
-  Icon
+  Icon,
+  Typography
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -63,20 +63,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     formControl: {
       marginRight: theme.spacing(5),
-      maxWidth: 100
+      width: "100%"
     },
     selectEmpty: {
       marginTop: theme.spacing(2)
     },
     time: {
       marginRight: theme.spacing(1),
-      maxWidth: 25,
-      marginTop: theme.spacing(6)
+      marginTop: theme.spacing(6),
+      width: "100%"
     },
     calender: {
       marginTop: theme.spacing(6),
-      width: 100,
-      marginLeft: theme.spacing(5)
+      marginRight: theme.spacing(5),
+      width: "100%"
     },
     button: {
       margin: theme.spacing(3)
@@ -143,98 +143,109 @@ function BottomAppBar() {
         >
           <div style={modalStyle} className={classes.paper1}>
             {" "}
-            <h2 id="simple-modal-title">Register Time</h2>
-            <Grid container direction="row">
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">Project</InputLabel>
-                <Select native>
-                  <option value="" />
+            <Typography variant="h4">Register Time</Typography>
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs>
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="age-native-simple">Project</InputLabel>
+                  <Select native>
+                    <option value="" />
 
-                  <option value={20}>Twenty</option>
-                  <option value={30}>Thirty</option>
-                </Select>
-              </FormControl>
-
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">Project</InputLabel>
-                <Select native>
-                  <option value="" />
-                  <option value={10}>Ten</option>
-                  <option value={20}>Twenty</option>
-                  <option value={30}>Thirty</option>
-                </Select>
-              </FormControl>
-              
+                    <option value={20}>Twenty</option>
+                    <option value={30}>Thirty</option>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs>
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="age-native-simple">Project</InputLabel>
+                  <Select native>
+                    <option value="" />
+                    <option value={10}>Ten</option>
+                    <option value={20}>Twenty</option>
+                    <option value={30}>Thirty</option>
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
-            <Grid container direction="row">
-              <div>
-                <FormControl className={classes.time}>
-                  <Input
-                    id="standard-adornment-weight"
-                    // value={values.weight}
-                    // onChange={handleChange('weight')}
-                    endAdornment={
-                      <InputAdornment position="end">h</InputAdornment>
-                    }
-                    aria-describedby="standard-weight-helper-text"
-                    // inputProps={{
-                    //   'aria-label': 'weight',
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs>
+                <Grid container direction="row" spacing={2}>
+                  <Grid item xs>
+                    <FormControl className={classes.time}>
+                      <Input
+                        id="standard-adornment-weight"
+                        // value={values.weight}
+                        // onChange={handleChange('weight')}
+                        endAdornment={
+                          <InputAdornment position="end">h</InputAdornment>
+                        }
+                        aria-describedby="standard-weight-helper-text"
+                        // inputProps={{
+                        //   'aria-label': 'weight',
+                        // }}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs>
+                    <FormControl className={classes.time}>
+                      <Input
+                        id="standard-adornment-weight"
+                        // value={values.weight}
+                        // onChange={handleChange('weight')}
+                        endAdornment={
+                          <InputAdornment position="end">m</InputAdornment>
+                        }
+                        aria-describedby="standard-weight-helper-text"
+                        // inputProps={{
+                        //   'aria-label': 'weight',
+                        // }}
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    className={classes.calender}
+                    disableToolbar
+                    // variant="inline"
+                    format="MM/dd/yyyy"
+                    // margin="normal"
+                    id="date-picker-inline"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    // KeyboardButtonProps={{
+                    //   'aria-label': 'change date',
                     // }}
                   />
-                </FormControl>
-
-                <FormControl className={classes.time}>
-                  <Input
-                    id="standard-adornment-weight"
-                    // value={values.weight}
-                    // onChange={handleChange('weight')}
-                    endAdornment={
-                      <InputAdornment position="end">m</InputAdornment>
-                    }
-                    aria-describedby="standard-weight-helper-text"
-                    // inputProps={{
-                    //   'aria-label': 'weight',
-                    // }}
-                  />
-                </FormControl>
-              </div>
-
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  className={classes.calender}
-                  disableToolbar
-                  // variant="inline"
-                  format="MM/dd/yyyy"
-                  // margin="normal"
-                  id="date-picker-inline"
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  // KeyboardButtonProps={{
-                  //   'aria-label': 'change date',
-                  // }}
-                />
-              </MuiPickersUtilsProvider>
-              
+                </MuiPickersUtilsProvider>
+              </Grid>
             </Grid>
-            <Grid container direction="row">
-            <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                className={classes.button}
-                startIcon={<PlayArrowIcon />}
-              >
-                Timer
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                className={classes.button}
-                startIcon={<SaveIcon />}
-              >
-                Save
-              </Button>
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  className={classes.button}
+                  startIcon={<PlayArrowIcon />}
+                >
+                  Timer
+                </Button>
+              </Grid>
+              <Grid item xs>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  className={classes.button}
+                  startIcon={<SaveIcon />}
+                >
+                  Save
+                </Button>
+              </Grid>
             </Grid>
           </div>
         </Modal>

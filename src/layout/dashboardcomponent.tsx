@@ -47,17 +47,6 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
       <div>
         <VerticalTabs></VerticalTabs>
         <BottomAppBar></BottomAppBar>
-        <div
-          style={{ width: "20", paddingLeft: 500, float: "right" }}
-          className="col-md-6 col-sm-6 py-3"
-        >
-          <Chart
-            labels={["Project", "Project"]}
-            chartData={[this.state.List1.length, this.state.List2.length]}
-            color={["#28A745", "#DC3545"]}
-            title={"Projects Progress"}
-          />
-        </div>
       </div>
     );
   }
