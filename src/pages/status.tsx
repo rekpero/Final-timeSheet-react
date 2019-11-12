@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import StatusOverview from './statusoverview';
 import StatusProject from './statusproject';
+import StatusMembers from './statusmembers';
 
 
 interface TabPanelProps {
@@ -77,7 +78,7 @@ export default function Status() {
         {StatusProject}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Members
+        {StatusMembers}
       </TabPanel>
       <TabPanel value={value} index={3}>
         Client
