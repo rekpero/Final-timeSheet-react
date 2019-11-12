@@ -7,10 +7,10 @@ import Register from "../pages/registercomponent";
 import Dashboard from "../pages/dashboardcomponent";
 import WorkspaceSetting from "../pages/workspacesetting";
 
-
 import New from "../pages/new";
-import { Component } from 'react';
 import SimpleTabs from "../pages/status";
+import Status from "../pages/status";
+//import StatusOverview from "../pages/statusoverview";
 
 
 
@@ -20,11 +20,11 @@ const AppRouter: React.FC = () => {
   return (
     <Router>
       <App>
-
-  <Route exact path="/status" render={() => <SimpleTabs  />} />   
+  
+      
+  <Route exact path="/status" render={() => <Status  />} />   
   <Route exact path="/" component={Login} />
-
-      <Route exact path="/settings" component={WorkspaceSetting} />
+  <Route exact path="/settings" component={WorkspaceSetting} />
 
   <Route exact path="/register" component={Register}/>     
   <Route path="/dash" component={Dashboard} />

@@ -5,6 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+//import StatusOverview from './statusoverview';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,9 +42,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  tablePanel: {
+    marginLeft: '7%',
+    marginTop: '7%',
+  }
 }));
 
-export default function SimpleTabs() {
+export default function Status() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -62,19 +67,20 @@ export default function SimpleTabs() {
           <Tab label="Phase Categories" {...a11yProps(4)} />
         </Tabs>
       </AppBar>
+      <div className={classes.tablePanel}>
       <TabPanel value={value} index={0}>
-        Overview
-      </TabPanel>
+      StatusOverview
+      </TabPanel></div>
       <TabPanel value={value} index={1}>
         Projects
       </TabPanel>
       <TabPanel value={value} index={2}>
         Members
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={3}>
         Client
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={4}>
         Phase Categories
       </TabPanel>
     </div>
