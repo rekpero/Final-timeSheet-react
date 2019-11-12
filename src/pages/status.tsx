@@ -5,7 +5,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-//import StatusOverview from './statusoverview';
+import StatusOverview from './statusoverview';
+import StatusProject from './statusproject';
 
 
 interface TabPanelProps {
@@ -70,10 +71,10 @@ export default function Status() {
       </AppBar>
       <div className={classes.tablePanel}>
       <TabPanel value={value} index={0}>
-      StatusOverview
+      {StatusOverview}
       </TabPanel></div>
       <TabPanel value={value} index={1}>
-        Projects
+        {StatusProject}
       </TabPanel>
       <TabPanel value={value} index={2}>
         Members

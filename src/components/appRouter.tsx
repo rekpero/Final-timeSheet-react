@@ -1,16 +1,12 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import App from "../App";
-
 import Login from '../pages/logincomponent'
 import Register from "../pages/registercomponent";
 import Dashboard from "../pages/dashboardcomponent";
 import WorkspaceSetting from "../pages/workspacesetting";
-
 import New from "../pages/new";
-import SimpleTabs from "../pages/status";
 import Status from "../pages/status";
-//import StatusOverview from "../pages/statusoverview";
 
 
 
@@ -20,9 +16,9 @@ const AppRouter: React.FC = () => {
   return (
     <Router>
       <App>
-  
-      
-  <Route exact path="/status" render={() => <Status  />} />   
+   
+     
+  <Route exact path="/status" render={() => <Status />} />   
   <Route exact path="/" component={Login} />
   <Route exact path="/settings" component={WorkspaceSetting} />
 
