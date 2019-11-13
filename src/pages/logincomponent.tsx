@@ -1,71 +1,82 @@
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-
-import React from 'react';
-import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
-
-
-
-
-
+import React, { ChangeEvent } from "react";
+import { withRouter, RouteComponentProps, Link } from "react-router-dom";
+import { Grid, Typography, Button } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 
 class Login extends React.Component<RouteComponentProps> {
-constructor(props: any){
-  super(props);
-  this.state={
-  username:'',
-  password:''
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      username: "",
+      password: ""
+    };
   }
-  
-  
- }
- 
-render() {
+
+  render() {
     return (
-      <div >
-        <MuiThemeProvider>
-          <div>
-          
-           <h1>  Login </h1>
-           
-           <TextField
-             hintText="Enter your Username"
-             floatingLabelText="Username"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
-             />
-           <br/>
-             <TextField
-               type="password"
-               hintText="Enter your Password"
-               floatingLabelText="Password"
-               onChange = {(event,newValue) => this.setState({password:newValue})}
-               />
-             <br/>
-             <Link to="/dash" className="text-white"><RaisedButton label="Submit" primary={true} style={style}  /></Link>
-
-             
-         </div>
-         <span>
-                New to here?{" "}
-                <Link to="/register" className="text-white">
-                  Register
-                </Link>
-                </span>
-         
-         </MuiThemeProvider>
+      <div>
+        <div>
+          <Grid
+            container
+            spacing={3}
+            justify="center"
+            style={{ marginTop: "10%" }}
+          >
+            <Grid item xs={6}>
+              <Typography variant="h6">Login</Typography>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} direction="row" justify="center">
+            <Grid item xs={6}>
+              <TextField
+                id="outlined-basic"
+                label="Email"
+                type="email"
+                margin="normal"
+                variant="outlined"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.setState({ username: event.target.value })
+                }
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} direction="row" justify="center">
+            <Grid item xs={6}>
+              <TextField
+                id="outlined-basic"
+                label="Password"
+                type="password"
+                margin="normal"
+                variant="outlined"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.setState({ username: event.target.value })
+                }
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} direction="row" justify="center">
+            <Grid item xs={6}>
+              <Link to="/dash" className="text-white">
+                <Button variant="contained" size="large" color="primary">
+                  Login
+                </Button>
+              </Link>
+            </Grid>
+          </Grid>
+        </div>
+        <span>
+          New to here?{" "}
+          <Link to="/register" className="text-white">
+            Register
+          </Link>
+        </span>
       </div>
-    
-      );
-    }
-
- 
+    );
   }
+}
 const style = {
- margin: 15,
+  margin: 15
 };
-
 
 // onClick={(event) => this.handleClick(event)}
 export default withRouter(Login);

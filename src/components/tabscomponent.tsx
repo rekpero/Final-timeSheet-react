@@ -2,12 +2,12 @@ import React from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import routes from "./dashboardrouters";
-// import { withRouter, RouteComponentProps } from 'react-router';
-import history from "./history";
+import routes from "../routes/dashboardrouters";
+import history from "../services/history";
+import { withRouter, RouteComponentProps } from "react-router";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import managementRoutes from "./managementRoutes";
+import managementRoutes from "../routes/managementRoutes";
 
 const ITEM_HEIGHT = 48;
 
@@ -16,8 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     marginTop: 65,
     backgroundColor: theme.palette.background.paper,
-    display: "flex",
-    height: "100vh"
+    display: "flex"
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`
@@ -26,7 +25,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginLeft: "100"
   }
 }));
-function VerticalTabs(props: any) {
+
+const VerticalTabs: React.FC<{}> = (props: any) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -63,6 +63,7 @@ function VerticalTabs(props: any) {
               onClick={event => {
                 event.preventDefault();
                 history.push(prop.layout + prop.path);
+                // history.push(prop.layout + prop.path);
               }}
             ></Tab>
           );
@@ -105,6 +106,6 @@ function VerticalTabs(props: any) {
       </Tabs>
     </div>
   );
-}
+};
 
 export default VerticalTabs;
