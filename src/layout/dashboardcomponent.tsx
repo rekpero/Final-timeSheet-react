@@ -1,5 +1,4 @@
 import React from "react";
-
 import { RouteComponentProps } from "react-router-dom";
 import VerticalTabs from "../components/tabscomponent";
 import AppBarComponent from "../components/appbarcomponent";
@@ -26,7 +25,7 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
   render() {
     return (
       <div>
-        <VerticalTabs></VerticalTabs>
+        <VerticalTabs {...this.props}></VerticalTabs>
         <AppBarComponent></AppBarComponent>
       </div>
     );

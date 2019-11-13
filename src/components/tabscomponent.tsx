@@ -1,13 +1,18 @@
 import React from "react";
+import { RouteComponentProps } from "react-router-dom";
+import PropTypes from "prop-types";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import routes from "../routes/dashboardrouters";
 import history from "../services/history";
-import { withRouter, RouteComponentProps } from "react-router";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import managementRoutes from "../routes/managementRoutes";
+import { Typography, Box } from "@material-ui/core";
+import StatusComponent from "./statuscomponent";
+import ActivityLogComponent from "./activitylogcomponent";
+import WorkspaceSettingComponent from "./workspacesettingcomponent";
 
 const ITEM_HEIGHT = 48;
 
@@ -25,10 +30,36 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginLeft: "100"
   }
 }));
+const TabPanel = (props: any) => {
+  const { children, value, index, ...other } = props;
 
-const VerticalTabs: React.FC<{}> = (props: any) => {
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+      style={{ width: "100%" }}
+    >
+      <Box>{children}</Box>
+    </Typography>
+  );
+};
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
+};
+
+const VerticalTabs: React.FC<RouteComponentProps> = (
+  props: RouteComponentProps
+) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [managementValue, setManagementValue] = React.useState();
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -97,6 +128,7 @@ const VerticalTabs: React.FC<{}> = (props: any) => {
               onClick={e => {
                 handleClose();
                 history.push(prop.layout + prop.path);
+                setManagementValue(key);
               }}
             >
               {prop.name}
@@ -104,6 +136,24 @@ const VerticalTabs: React.FC<{}> = (props: any) => {
           ))}
         </Menu>
       </Tabs>
+      <TabPanel value={value} index={0}>
+        Item One
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Item Two
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <StatusComponent />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        Item Four
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <ActivityLogComponent />
+      </TabPanel>
+      <TabPanel value={value} index={5}>
+        {managementValue === 3 ? <WorkspaceSettingComponent /> : null}
+      </TabPanel>
     </div>
   );
 };

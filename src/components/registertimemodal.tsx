@@ -61,6 +61,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       margin: theme.spacing(3)
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: 600
     }
   })
 );
@@ -97,7 +101,9 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
       onClose={props.handleClose}
     >
       <div style={modalStyle} className={classes.paper1}>
-        <Typography variant="h4">Register Time</Typography>
+        <Typography variant="h6" className={classes.title}>
+          Register Time
+        </Typography>
         <Grid container direction="row" spacing={2}>
           <Grid item xs>
             <FormControl className={classes.formControl}>
