@@ -62,7 +62,9 @@ const VerticalTabs: React.FC<RouteComponentProps> = (
   const [managementValue, setManagementValue] = React.useState();
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+    if (newValue !== 5) {
+      setValue(newValue);
+    }
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -103,6 +105,7 @@ const VerticalTabs: React.FC<RouteComponentProps> = (
           label="Management"
           onClick={event => {
             event.preventDefault();
+            setManagementValue(null);
             handleClick(event);
           }}
         >
@@ -129,6 +132,7 @@ const VerticalTabs: React.FC<RouteComponentProps> = (
                 handleClose();
                 history.push(prop.layout + prop.path);
                 setManagementValue(key);
+                setValue(5);
               }}
             >
               {prop.name}
