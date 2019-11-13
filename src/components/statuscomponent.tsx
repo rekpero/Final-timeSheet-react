@@ -1,16 +1,15 @@
-import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import StatusOverview from './statusoverview';
-import StatusProject from './statusproject';
-import StatusMembers from './statusmembers';
-import StatusClients from './statusclients';
-import StatusPhases from './statusphases';
-
+import React from "react";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import StatusOverview from "./statusoverviewcomponent";
+import StatusProject from "./statusprojectcomponent";
+import StatusMembers from "./statusmemberscomponent";
+import StatusClients from "./statusclientscomponent";
+import StatusPhases from "./statusphasescomponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,7 +37,7 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: any) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`
   };
 }
 
@@ -46,14 +45,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+    width: "100%"
   },
   tablePanel: {
-    marginLeft: '7%',
-    marginTop: '7%',
+    marginLeft: "7%",
+    marginTop: "7%"
   }
 }));
 
-export default function Status() {
+const StatusComponent: React.FC<{}> = (props: any) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -64,7 +64,11 @@ export default function Status() {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="simple tabs example"
+        >
           <Tab label="Overview" {...a11yProps(0)} />
           <Tab label="Projects" {...a11yProps(1)} />
           <Tab label="Members" {...a11yProps(2)} />
@@ -73,9 +77,10 @@ export default function Status() {
         </Tabs>
       </AppBar>
       <div className={classes.tablePanel}>
-      <TabPanel value={value} index={0}>
-      {StatusOverview}
-      </TabPanel></div>
+        <TabPanel value={value} index={0}>
+          {StatusOverview}
+        </TabPanel>
+      </div>
       <TabPanel value={value} index={1}>
         {StatusProject}
       </TabPanel>
@@ -90,4 +95,5 @@ export default function Status() {
       </TabPanel>
     </div>
   );
-}
+};
+export default StatusComponent;

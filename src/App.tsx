@@ -1,16 +1,8 @@
-import React from 'react';
-import './App.css';
-import Login from './pages/logincomponent';
-// import {AppRouter} from './components/appRouter';
+import React from "react";
+import "./App.css";
 
 const App: React.FC = (props: any) => {
-  return (
-    <div className="App">
-
-    {props.children}
-     
-    </div>
-  );
-}
+  return <div className="App">{props.children}</div>;
+};
 
 export default App;
