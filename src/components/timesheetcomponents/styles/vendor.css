@@ -118,7 +118,55 @@
   opacity: 0;
 }
 
+.timesheet__overlay-play {
+  position: absolute;
+  top: 4px;
+  right: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  color: #383A48;
+  background: #ccced8;
+  padding: 0;
+  font-size: 10px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.timesheet__overlay-edit {
+  position: absolute;
+  top: 4px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  color: #383A48;
+  background: #ccced8;
+  padding: 0;
+  font-size: 10px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+}
+
 .timesheet__overlay:hover .timesheet__overlay-action {
+  opacity: 1;
+  transition: 200ms opacity ease;
+}
+
+.timesheet__overlay:hover .timesheet__overlay-play {
+  opacity: 1;
+  transition: 200ms opacity ease;
+}
+
+.timesheet__overlay:hover .timesheet__overlay-edit {
   opacity: 1;
   transition: 200ms opacity ease;
 }
@@ -215,6 +263,19 @@
   background: #338650;
 }
 
+.timesheet__overlay--current .timesheet__overlay-play {
+  top: 32px;
+  color: #58da86;
+  background: #338650;
+}
+
+.timesheet__overlay--current .timesheet__overlay-edit {
+  top: 32px;
+  color: #58da86;
+  background: #338650;
+}
+
+
 .timesheet__overlay--done .timesheet__overlay-inner {
   background: #ccced8;
 }
@@ -239,6 +300,18 @@
   background: #383A48;
 }
 
+.timesheet__overlay--done .timesheet__overlay-play {
+  top: 32px;
+  color: #ccced8;
+  background: #383A48;
+}
+
+.timesheet__overlay--done .timesheet__overlay-edit {
+  top: 32px;
+  color: #ccced8;
+  background: #383A48;
+}
+
 .timesheet__overlay--requested .timesheet__overlay-resizer::before,
 .timesheet__overlay--requested .timesheet__overlay-resizer::after {
   background: #1D3557;
@@ -258,7 +331,21 @@
 }
 
 .timesheet__overlay--requested .timesheet__overlay-action {
-  top: 32px;
+  top: 4px;
+  color: #A8DADC;
+  background: #1D3557;
+  opacity: 1;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-play {
+  top: 4px;
+  color: #A8DADC;
+  background: #1D3557;
+  opacity: 1;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-edit {
+  top: 4px;
   color: #A8DADC;
   background: #1D3557;
   opacity: 1;

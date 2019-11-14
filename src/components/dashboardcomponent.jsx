@@ -17,11 +17,6 @@ export default class DashboardComponent extends React.Component {
         start: moment('10:00 am', 'hh:mm a'),
         end: moment('11:30 am', 'hh:mm a'),
         data: {
-          subject: {
-            id: 1,
-            name: moment.utc(moment('11:30 am', 'hh:mm a').diff(moment('10:00 am', 'hh:mm a'))).format("HH:mm")
-          },
-
           professor: {
             id: 2,
             name: 'Accounting'
@@ -39,11 +34,6 @@ export default class DashboardComponent extends React.Component {
         start: moment('10:00 am', 'hh:mm a'),
         end: moment('1:00 pm', 'hh:mm a'),
         data: {
-          subject: {
-            id: 1,
-            name: moment.utc(moment('1:00 pm', 'hh:mm a').diff(moment('10:00 am', 'hh:mm a'))).format("HH:mm")
-          },
-
           professor: {
             id: 2,
             name: 'Accounting'
@@ -60,11 +50,6 @@ export default class DashboardComponent extends React.Component {
         start: moment('10:00 am', 'hh:mm a'),
         end: moment('1:00 pm', 'hh:mm a'),
         data: {
-          subject: {
-            id: 1,
-            name: moment.utc(moment('1:00 pm', 'hh:mm a').diff(moment('10:00 am', 'hh:mm a'))).format("HH:mm")
-          },
-
           professor: {
             id: 2,
             name: 'Accounting'

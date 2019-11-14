@@ -10,6 +10,8 @@ import DraggableLayer from './DraggableLayer';
 import Resizer from './Resizer';
 import Popover from './Popover';
 import HoverCard from './HoverCard';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import EditIcon from '@material-ui/icons/Edit';
 
 class Timesheet extends React.Component {
   static propTypes = {
@@ -126,16 +128,17 @@ class Timesheet extends React.Component {
               {schedules[day].map((schedule, ii) => {
                 // console.log(this.dayWeek[now.day() - 1] === day)
                 const current = now.isSameOrAfter(schedule.start) && now.isSameOrBefore(schedule.end) && this.dayWeek[now.day() - 1] === day;
-                const done = now.isAfter(schedule.end);
+                const done = (now.isAfter(schedule.end) && this.dayWeek.indexOf(day) === (now.day() -1)) || this.dayWeek.indexOf(day) < (now.day() -1);
+                const request = (now.isBefore(schedule.start) && this.dayWeek.indexOf(day) === (now.day() -1)) || this.dayWeek.indexOf(day) > (now.day() -1);
 
                 const content = (
                   <div onDoubleClick={this.handleEdit(day, ii)}
                     onMouseEnter={this.handleMouseEnter(day, ii)}
                     onMouseLeave={this.handleMouseLeave}
                     className={c('timesheet__overlay', {
-                      'timesheet__overlay--current': !schedule.request && current,
-                      'timesheet__overlay--done': !schedule.request && done,
-                      'timesheet__overlay--requested': schedule.request
+                      'timesheet__overlay--current': current,
+                      'timesheet__overlay--done':  done,
+                      'timesheet__overlay--requested': request
                     })}
                     style={{
                       transform: `translateY(${height * times.findIndex((time) => time.start.isSame(schedule.start))}px)`,
@@ -144,33 +147,27 @@ class Timesheet extends React.Component {
                     key={ii}>
                     <div className="timesheet__overlay-inner">
                       {!scaled && (schedule.request || current || done) && <div className="timesheet__overlay-status">
-                        {schedule.request
-                          ? (editing && schedules[edit.day][edit.index] === schedule
-                            ? 'Requested'
-                            : <Tooltip overlay={`Requested by ${schedule.requester.user.name} of Department ${schedule.requester.department.name}`} placement="right">
-                              <span>Requested</span>
-                            </Tooltip>)
-                          : (current ? 'On-going' : 'Done')}
+                        {done
+                          ? 'Done'
+                          : (current ? 'On-going' : 'Requested')}
                       </div>}
 
                       {!scaled && !editing && !this.props.request && schedule.request && <button className="timesheet__overlay-action" onClick={this.handleRequestAction(day, ii, true)}>
                         <Tooltip overlay="Accept" placement="right"><span>✔</span></Tooltip>
                       </button>}
 
-                      {!scaled && !editing && schedule.request && (!this.props.request || (this.props.request && this.props.requester.id === schedule.requester.id)) && <button className={c('timesheet__overlay-action', {
-                        'timesheet__overlay-action--negative': !this.props.request
-                      })} onClick={this.handleRequestAction(day, ii, false)}>
-                        <Tooltip overlay={this.props.request ? 'Cancel' : 'Decline'} placement="right"><span>✕</span></Tooltip>
-                      </button>}
-
-                      {!disabled && !scaled && !editing && !schedule.request && !this.props.request && <button className="timesheet__overlay-action"
+                      {!disabled && !scaled && !editing && !schedule.request && !this.props.request && <div><button className="timesheet__overlay-action"
                         onClick={this.handleDelete(day, ii)}>
                         <Tooltip overlay="Delete" placement="right"><span>✕</span></Tooltip>
-                      </button>}
+                      </button><button className="timesheet__overlay-edit">
+                        <Tooltip overlay="Edit" placement="right"><span><EditIcon fontSize="small" style={{height: 15, width: 15}}/></span></Tooltip>
+                      </button><button className="timesheet__overlay-play">
+                        <Tooltip overlay="Play" placement="right"><span><PlayArrowIcon fontSize="small"/></span></Tooltip>
+                      </button></div>}
 
                       {!scaled && <h6 className="timesheet__overlay-project">{schedule.data.section.name || 'Section Name'}</h6>}
                       {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.professor.name || 'Professor Name'}</h6>}
-                      {!scaled && <h4 className="timesheet__overlay-title">{schedule.data.subject.name || 'Subject Name'}</h4>}
+                      {!scaled && <h4 className="timesheet__overlay-title">{moment.utc(schedule.end.diff(schedule.start)).format("HH:mm") || '1h20m'}</h4>}
 
                       {!disabled && <Resizer
                         schedules={schedules}

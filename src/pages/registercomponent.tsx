@@ -51,8 +51,6 @@ class Register extends React.Component<RouteComponentProps> {
     );
   }
 }
-const style = {
-  margin: 15
-};
+
 // onClick={(event) => this.handleClick(event)}
 export default withRouter(Register);

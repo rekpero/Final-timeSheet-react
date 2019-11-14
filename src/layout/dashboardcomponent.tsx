@@ -2,7 +2,7 @@ import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import VerticalTabs from "../components/tabscomponent";
 import AppBarComponent from "../components/appbarcomponent";
-import Chart from "../components/chartscomponent";
+// import Chart from "../components/chartscomponent";
 
 interface IDashboard {
   backgroundColor: string;

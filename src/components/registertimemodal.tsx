@@ -2,22 +2,21 @@ import React from "react";
 import Modal from "@material-ui/core/Modal";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import DateFnsUtils from "@date-io/date-fns";
+
 import SaveIcon from "@material-ui/icons/Save";
+import CreateProjectModal from "./createprojectmodal";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker
 } from "@material-ui/pickers";
 import {
   FormControl,
   Select,
-  MenuItem,
   InputLabel,
   InputAdornment,
-  FormHelperText,
   Input,
   Button,
-  Icon,
   Grid,
   Typography
 } from "@material-ui/core";
@@ -26,6 +25,7 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 interface IRegisterTimeModalProps {
   open: boolean;
   handleClose: () => void;
+  buttonClicked: (hrs: number, min: number, timer: boolean) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -88,9 +88,25 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date("2019-11-11T23:11:54")
   );
-
+  var [hrs, setHrs] = React.useState(0);
+  var [min, setMin] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
   const handleDateChange = () => {
     console.log("Paras");
+  };
+  const handleOpen = () => {
+    console.log("Paras");
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleTimeHrs = (e: any) => {
+    setHrs(e.target.value);
+  };
+  const handleTimeMinutes = (e: any) => {
+    setMin(e.target.value);
   };
 
   return (
@@ -102,17 +118,28 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
     >
       <div style={modalStyle} className={classes.paper1}>
         <Typography variant="h6" className={classes.title}>
+          <AddCircleIcon />
           Register Time
         </Typography>
         <Grid container direction="row" spacing={2}>
           <Grid item xs>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="age-native-simple">Project</InputLabel>
-              <Select native>
-                <option value="" />
-
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
+              <Select
+                native
+                onChange={e => {
+                  if (e.target.value === "create") {
+                    handleOpen();
+                  }
+                }}
+              >
+                {" "}
+                <option>No Selection</option>
+                <option value="create">Create New Project</option>
+                <CreateProjectModal
+                  open={open}
+                  handleClose={handleClose}
+                ></CreateProjectModal>
               </Select>
             </FormControl>
           </Grid>
@@ -136,7 +163,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                   <Input
                     id="standard-adornment-weight"
                     // value={values.weight}
-                    // onChange={handleChange('weight')}
+                    onChange={handleTimeHrs}
                     endAdornment={
                       <InputAdornment position="end">h</InputAdornment>
                     }
@@ -152,7 +179,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                   <Input
                     id="standard-adornment-weight"
                     // value={values.weight}
-                    // onChange={handleChange('weight')}
+                    onChange={handleTimeMinutes}
                     endAdornment={
                       <InputAdornment position="end">m</InputAdornment>
                     }
@@ -191,6 +218,13 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
               size="large"
               className={classes.button}
               startIcon={<PlayArrowIcon />}
+              onClick={() => {
+                if (hrs == 0 && min == 0) {
+                  alert("enter time");
+                } else {
+                  props.buttonClicked(hrs, min, true);
+                }
+              }}
             >
               Timer
             </Button>
