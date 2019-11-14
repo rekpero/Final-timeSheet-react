@@ -1,33 +1,63 @@
 import React from "react";
 
-import { RouteComponentProps } from "react-router-dom";
 import VerticalTabs from "../components/tabscomponent";
 import AppBarComponent from "../components/appbarcomponent";
-// import Chart from "../components/chartscomponent";
+import projectService from "../services/projectService";
+import { IProjectInfo } from "../model/project";
+import { IPhasesInfo } from "../model/phases";
+import { IClientInfo } from "../model/clients";
+import { IProjectTimeSheet } from "../model/timesheet";
 
-interface IDashboard {
-  backgroundColor: string;
-  activeColor: string;
-  List1: Array<string>;
-  List2: Array<string>;
+interface IDashboardDataState {
+  project: IProjectInfo[];
+  phases: IPhasesInfo[];
+  clients: IClientInfo[];
+  timeSheet: IProjectTimeSheet[];
 }
 
-class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
+class Dashboard extends React.Component<{}, IDashboardDataState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      backgroundColor: "black",
-      activeColor: "info",
-      List1: ["Paras", "Kumar", "soni"],
-      List2: ["Paras", "Kumar", "soni"]
+      project: [],
+      phases: [],
+      clients: [],
+      timeSheet: []
     };
+  }
+  componentDidMount() {
+    projectService
+      .projectInfo()
+      .subscribe((projectInfo: IProjectInfo[]) =>
+        this.setState({ project: projectInfo })
+      );
+    projectService
+      .clientData()
+      .subscribe((clientData: IClientInfo[]) =>
+        this.setState({ clients: clientData })
+      );
+    projectService
+      .phasesInfo()
+      .subscribe((phasesInfo: IPhasesInfo[]) =>
+        this.setState({ phases: phasesInfo })
+      );
+    projectService
+      .timeSheetData()
+      .subscribe((timeSheetInfo: IProjectTimeSheet[]) =>
+        this.setState({ timeSheet: timeSheetInfo })
+      );
   }
 
   render() {
     return (
       <div>
         <VerticalTabs></VerticalTabs>
-        <AppBarComponent></AppBarComponent>
+        <AppBarComponent
+          project={this.state.project}
+          phases={this.state.phases}
+          timeSheet={this.state.timeSheet}
+          clients={this.state.clients}
+        ></AppBarComponent>
       </div>
     );
   }

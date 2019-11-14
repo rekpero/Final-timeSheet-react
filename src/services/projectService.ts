@@ -1,17 +1,17 @@
 import { Observable, defer, from } from "rxjs";
 
-import { IProjectTimesheet } from "../model/timesheet";
+import { IProjectTimeSheet } from "../model/timesheet";
 import { IProjectInfo } from "../model/project";
 import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 
 class ProjectService {
-  public timeSheetData = (): Observable<IProjectTimesheet[]> => {
+  public timeSheetData = (): Observable<IProjectTimeSheet[]> => {
     return defer(() =>
       // for lazy loading
 
       {
-        return from<Promise<IProjectTimesheet[]>>( // generic type coversion of promise to observable
+        return from<Promise<IProjectTimeSheet[]>>( // generic type coversion of promise to observable
           fetch(`http://localhost:3000/timesheet`).then(r => r.json())
         );
       }
@@ -48,7 +48,7 @@ class ProjectService {
 
       {
         return from<Promise<IPhasesInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/timesheet`).then(r => r.json())
+          fetch(`http://localhost:3000/phases`).then(r => r.json())
         );
       }
     );

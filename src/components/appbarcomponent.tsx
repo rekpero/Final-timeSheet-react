@@ -17,6 +17,10 @@ import { IconButton } from "@material-ui/core";
 import EnteriesModal from "./enteriesmodal";
 import TimerModal from "./timercomponent";
 import TimerPaper from "./timerpaper";
+import { IProjectInfo } from "../model/project";
+import { IProjectTimeSheet } from "../model/timesheet";
+import { IClientInfo } from "../model/clients";
+import { IPhasesInfo } from "../model/phases";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,8 +40,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
+interface IAppBarProps {
+  project: IProjectInfo[];
+  phases: IPhasesInfo[];
+  clients: IClientInfo[];
+  timeSheet: IProjectTimeSheet[];
+}
 
-const AppBarComponent: React.FC<{}> = (props: any) => {
+const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   const classes = useStyles();
   const [showTimer, setTimer] = React.useState(false);
   var [hrs, setHrs] = React.useState(0);
@@ -109,6 +119,10 @@ const AppBarComponent: React.FC<{}> = (props: any) => {
         </IconButton>
       </Toolbar>
       <RegisterTimeModal
+        project={props.project}
+        phases={props.phases}
+        timeSheet={props.timeSheet}
+        clients={props.clients}
         open={open}
         handleClose={handleClose}
         buttonClicked={showTimerPaper}

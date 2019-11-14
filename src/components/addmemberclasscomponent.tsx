@@ -49,6 +49,10 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
     this.state.number.push(true);
     return this.setState({ number: this.state.number });
   };
+  deleteRecord = (e: number) => {
+    this.state.number.splice(e, 1);
+    return this.setState({ number: this.state.number });
+  };
 
   render() {
     return (
@@ -113,8 +117,14 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
                         0
                       </Grid>
                       <Grid item xs>
-                        <div onClick={e => this.handleChange(key)}>
-                          {prop ? <DeleteOutlineIcon /> : <CloseIcon />}
+                        <div>
+                          {prop ? (
+                            <DeleteOutlineIcon
+                              onClick={e => this.handleChange(key)}
+                            />
+                          ) : (
+                            <CloseIcon onClick={e => this.deleteRecord(key)} />
+                          )}
                         </div>
                       </Grid>
                     </Grid>

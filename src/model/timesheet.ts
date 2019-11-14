@@ -1,4 +1,4 @@
-export interface IProjectTimesheet {
+export interface IProjectTimeSheet {
   id: number;
   projectId: number;
   timeWorked: number;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "@material-ui/core/Modal";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import DateFnsUtils from "@date-io/date-fns";
@@ -18,14 +18,23 @@ import {
   Input,
   Button,
   Grid,
-  Typography
+  Typography,
+  TextField
 } from "@material-ui/core";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import { IProjectInfo } from "../model/project";
+import { IPhasesInfo } from "../model/phases";
+import { IClientInfo } from "../model/clients";
+import { IProjectTimeSheet } from "../model/timesheet";
 
 interface IRegisterTimeModalProps {
   open: boolean;
   handleClose: () => void;
   buttonClicked: (hrs: number, min: number, timer: boolean) => void;
+  project: IProjectInfo[];
+  phases: IPhasesInfo[];
+  clients: IClientInfo[];
+  timeSheet: IProjectTimeSheet[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -91,7 +100,6 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
     console.log("Paras");
   };
   const handleOpen = () => {
-    console.log("Paras");
     setOpen(true);
   };
 
@@ -104,7 +112,12 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   const handleTimeMinutes = (e: any) => {
     setMin(e.target.value);
   };
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   projectService.projectInfo().subscribe((data: IProjectInfo)
+  // });
 
+  console.log(props.project);
   return (
     <Modal
       aria-labelledby="simple-modal-title"
@@ -130,9 +143,21 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                 }}
               >
                 {" "}
-                <option>No Selection</option>
-                <option value="create">Create New Project</option>
+                <optgroup label="">
+                  <option>No Selection</option>
+                  <option value="create">Create New Project</option>
+                </optgroup>
+                <optgroup label="">
+                  {props.project.map((prop, key) => {
+                    console.log(prop);
+                    return <option>{prop.name}</option>;
+                  })}
+                </optgroup>
                 <CreateProjectModal
+                  project={props.project}
+                  phases={props.phases}
+                  timeSheet={props.timeSheet}
+                  clients={props.clients}
                   open={open}
                   handleClose={handleClose}
                 ></CreateProjectModal>
@@ -141,12 +166,12 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
           </Grid>
           <Grid item xs>
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-native-simple">Project</InputLabel>
+              <InputLabel htmlFor="age-native-simple">Phases</InputLabel>
               <Select native>
-                <option value="" />
-                <option value={10}>Ten</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
+                {props.phases.map((prop, key) => {
+                  console.log(prop);
+                  return <option>{prop.name}</option>;
+                })}
               </Select>
             </FormControl>
           </Grid>
@@ -205,6 +230,19 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
               />
             </MuiPickersUtilsProvider>
           </Grid>
+        </Grid>
+
+        <Grid container direction="row">
+          <TextField
+            id="standard-full-width"
+            style={{ margin: 8 }}
+            placeholder="Notes"
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
         </Grid>
         <Grid container direction="row" spacing={2}>
           <Grid item xs>
