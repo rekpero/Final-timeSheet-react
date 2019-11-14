@@ -4,7 +4,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import routes from "../routes/dashboardrouters";
 import history from "../services/history";
-import { withRouter, RouteComponentProps } from "react-router";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import managementRoutes from "../routes/managementRoutes";

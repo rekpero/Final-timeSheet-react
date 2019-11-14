@@ -214,7 +214,13 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
               size="large"
               className={classes.button}
               startIcon={<PlayArrowIcon />}
-              onClick={() => props.buttonClicked(hrs, min, true)}
+              onClick={() => {
+                if (hrs == 0 && min == 0) {
+                  alert("enter time");
+                } else {
+                  props.buttonClicked(hrs, min, true);
+                }
+              }}
             >
               Timer
             </Button>

@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
-      padding: theme.spacing(4, 6, 6, 8),
-      [theme.breakpoints.down("sm")]: {
-        width: 200,
-        height: 100
-      }
+      padding: theme.spacing(4, 6, 6, 8)
+      //   [theme.breakpoints.down("sm")]: {
+      //     width: 200,
+      //     height:
+      //   }
     },
 
     selectEmpty: {
@@ -55,9 +55,12 @@ const AddMemberModal: React.FC<IAddMemberModalProps> = (
   const [modalStyle] = React.useState(getModalStyle);
 
   const handleChange = (e: number) => {
+    console.log(number[e]);
     number[e] = !number[e];
     setArray(number);
+    console.log(number);
   };
+  console.log(number);
 
   return (
     <Modal

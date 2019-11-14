@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "@material-ui/core/Modal";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { Grid, Typography, Button, TextField } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import TimerIcon from "@material-ui/icons/Timer";
 
 interface ItimerModalProps {
@@ -49,10 +49,6 @@ const TimerModal: React.FC<ItimerModalProps> = (props: ItimerModalProps) => {
   var [number, setArray] = React.useState([true, true, true]);
   const [modalStyle] = React.useState(getModalStyle);
 
-  const handleChange = (e: number) => {
-    number[e] = !number[e];
-    setArray(number);
-  };
 
   return (
     <Modal

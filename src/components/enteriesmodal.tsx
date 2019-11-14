@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "@material-ui/core/Modal";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import { Grid, Typography, Button, TextField } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 
 interface IEnteriesModalProps {
   open: boolean;
@@ -50,11 +50,6 @@ const EnteriesModal: React.FC<IEnteriesModalProps> = (
   }
   var [number, setArray] = React.useState([true, true, true]);
   const [modalStyle] = React.useState(getModalStyle);
-
-  const handleChange = (e: number) => {
-    number[e] = !number[e];
-    setArray(number);
-  };
 
   return (
     <Modal

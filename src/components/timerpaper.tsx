@@ -40,9 +40,10 @@ const TimerPaper: React.FC<ITimerPaperProps> = (props: ITimerPaperProps) => {
   function startCountDown() {
     intervalHandle = setInterval(tick, 60000);
   }
+  startCountDown();
 
   return (
-    <div onClick={startCountDown}>
+    <div>
       <Paper className={classes.paper1}>
         <Grid container direction="row" spacing={2}>
           <Grid item xs>

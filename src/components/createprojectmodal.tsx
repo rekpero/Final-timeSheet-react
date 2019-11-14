@@ -85,9 +85,6 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
   const [modalStyle] = React.useState(getModalStyle);
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date("2019-11-11T23:11:54")
-  );
 
   const handleClick = () => {
     setOpen(!open);
@@ -244,7 +241,7 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
         <hr></hr>
         <div
           onClick={e => {
-            handleClick();
+            handleClick3();
           }}
         >
           <Grid container direction="row" alignItems="center">
