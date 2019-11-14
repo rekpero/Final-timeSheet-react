@@ -6,6 +6,8 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { Grid, Button } from "@material-ui/core";
+import PhaseProjectComponent from "./phaseprojectcomponent";
+import InfoProjectComponent from "./infoprojectcomponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -89,10 +91,10 @@ const EditProjectComponent: React.FC<{}> = (props: any) => {
       </AppBar>
       <div className={classes.tablePanel}>
         <TabPanel value={value} index={0}>
-        PhaseProjectComponent
+        {InfoProjectComponent}
         </TabPanel>
         <TabPanel value={value} index={1}>
-        Phases
+        {PhaseProjectComponent}
         </TabPanel>
         <TabPanel value={value} index={2}>
         Members 
