@@ -5,11 +5,13 @@ import App from "../App";
 import Login from "../pages/logincomponent";
 import Register from "../pages/registercomponent";
 import Dashboard from "../layout/dashboardcomponent";
+import EditProjectComponent from "../components/editprojectcomponent";
 
 const AppRouter: React.FC = () => {
   return (
     <Router>
-      <App>
+      <App>  
+        <Route exact path="/testing" component={EditProjectComponent} />
         <Route exact path="/" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route path="/dash" component={Dashboard} />
