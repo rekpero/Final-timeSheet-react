@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles, Theme } from "@material-ui/core/styles";
@@ -13,6 +13,8 @@ import { Typography, Box } from "@material-ui/core";
 import StatusComponent from "./statuscomponent";
 import ActivityLogComponent from "./activitylogcomponent";
 import WorkspaceSettingComponent from "./workspacesettingcomponent";
+import ProjectComponent from "./projectcomponent";
+import DashboardComponent from "./dashboardcomponent";
 
 const ITEM_HEIGHT = 48;
 
@@ -68,7 +70,6 @@ const VerticalTabs: React.FC<RouteComponentProps> = (
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  console.log(open);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -77,6 +78,13 @@ const VerticalTabs: React.FC<RouteComponentProps> = (
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    const path = props.location.pathname;
+    const routesList = routes.map(route => route.layout + route.path);
+    console.log(path, routesList.indexOf(path));
+    setValue(routesList.indexOf(path));
+  }, [props.location.pathname]);
 
   return (
     <div className={classes.root}>
@@ -141,10 +149,10 @@ const VerticalTabs: React.FC<RouteComponentProps> = (
         </Menu>
       </Tabs>
       <TabPanel value={value} index={0}>
-        Item One
+        <DashboardComponent />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <ProjectComponent />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <StatusComponent />
