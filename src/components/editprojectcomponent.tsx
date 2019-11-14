@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import { Grid, Button } from "@material-ui/core";
 import PhaseProjectComponent from "./phaseprojectcomponent";
 import InfoProjectComponent from "./infoprojectcomponent";
+import MemberProjectComponent from "./memberprojectcomponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -97,7 +98,7 @@ const EditProjectComponent: React.FC<{}> = (props: any) => {
         {PhaseProjectComponent}
         </TabPanel>
         <TabPanel value={value} index={2}>
-        Members 
+        {MemberProjectComponent} 
         </TabPanel>
       </div>
     </div>
