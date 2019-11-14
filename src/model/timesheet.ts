@@ -1,7 +1,7 @@
 export interface IProjectTimesheet {
   id: number;
-  projectId: string;
-  timeWorked: string;
+  projectId: number;
+  timeWorked: number;
   date: string;
 
   note: number;

@@ -17,8 +17,7 @@ import {
   Typography,
   TextField
 } from "@material-ui/core";
-
-import AddMemberModal from "./addmembermodal";
+import AddMember from "./addmemberclasscomponent";
 
 interface ICreateProjectModalProps {
   open: boolean;
@@ -160,10 +159,11 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
                 <option value="" />
                 <option>No Selection</option>
                 <option value="create">Add Client</option>
-                <AddMemberModal
+                <AddMember
                   open={open4}
                   handleClose={handleClose}
-                ></AddMemberModal>
+                  classes={classes}
+                ></AddMember>
               </Select>
             </FormControl>
           </Grid>
