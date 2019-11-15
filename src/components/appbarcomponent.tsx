@@ -33,15 +33,21 @@ const useStyles = makeStyles((theme: Theme) =>
       left: 0,
       right: 0,
       margin: "0 auto"
+    },
+    timer: {
+      position: "relative",
+      marginLeft: 0
     }
   })
 );
-
-const AppBarComponent: React.FC<{}> = (props: any) => {
+interface IAppBarProps {
+  setTimer: (hours: number, minutes: number, timer: boolean) => void;
+  openTimer: boolean;
+  hrs: number;
+  min: number;
+}
+const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   const classes = useStyles();
-  const [showTimer, setTimer] = React.useState(false);
-  var [hrs, setHrs] = React.useState(0);
-  var [min, setMin] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
@@ -66,11 +72,6 @@ const AppBarComponent: React.FC<{}> = (props: any) => {
   // const showTimerPaper = () => {
   //   setTimer(props.showTimer);
   // };
-  const showTimerPaper = (hrs: number, min: number, timer: boolean) => {
-    setHrs(hrs);
-    setMin(min);
-    setTimer(timer);
-  };
 
   return (
     <AppBar position="fixed" color="primary" className={classes.appBar}>
@@ -85,7 +86,11 @@ const AppBarComponent: React.FC<{}> = (props: any) => {
         </Fab>
 
         <div className={classes.grow} />
-        {showTimer ? <TimerPaper hrs={hrs} minutes={min} /> : null}
+        {props.openTimer ? (
+          <IconButton color="inherit" className={classes.timer}>
+            <TimerPaper hrs={props.hrs} minutes={props.min} />
+          </IconButton>
+        ) : null}
         <IconButton color="inherit">
           <TimerIcon onClick={handleOpen2}></TimerIcon>
           <EnteriesModal
@@ -111,7 +116,7 @@ const AppBarComponent: React.FC<{}> = (props: any) => {
       <RegisterTimeModal
         open={open}
         handleClose={handleClose}
-        buttonClicked={showTimerPaper}
+        buttonClicked={props.setTimer}
       ></RegisterTimeModal>
     </AppBar>
   );

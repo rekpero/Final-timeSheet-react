@@ -6,49 +6,61 @@ import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 
 class ProjectService {
-  public timeSheetData = (): Observable<IProjectTimesheet[]> => {
+  public getTimeSheetData = (): Observable<IProjectTimesheet[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IProjectTimesheet[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/timesheet`).then(r => r.json())
+          fetch(`http://localhost:3500/timesheet`).then(r => r.json())
         );
       }
     );
   };
 
-  public clientData = (): Observable<IClientInfo[]> => {
+  public getClientData = (): Observable<IClientInfo[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IClientInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/clients`).then(r => r.json())
+          fetch(`http://localhost:3500/clients`).then(r => r.json())
         );
       }
     );
   };
 
-  public projectInfo = (): Observable<IProjectInfo[]> => {
+  public getProjectInfo = (): Observable<IProjectInfo[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IProjectInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/project`).then(r => r.json())
+          fetch(`http://localhost:3500/project`).then(r => r.json())
         );
       }
     );
   };
 
-  public phasesInfo = (): Observable<IPhasesInfo[]> => {
+  public getProjectInfoById = (id: number): Observable<IProjectInfo> => {
+    return defer(() =>
+      // for lazy loading
+
+      {
+        return from<Promise<IProjectInfo>>( // generic type coversion of promise to observable
+          fetch(`http://localhost:3500/project/${id}`).then(r => r.json())
+        );
+      }
+    );
+  };
+
+  public getPhasesInfo = (): Observable<IPhasesInfo[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IPhasesInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/timesheet`).then(r => r.json())
+          fetch(`http://localhost:3500/timesheet`).then(r => r.json())
         );
       }
     );

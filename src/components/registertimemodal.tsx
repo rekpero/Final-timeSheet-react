@@ -90,6 +90,9 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   );
   var [hrs, setHrs] = React.useState(0);
   var [min, setMin] = React.useState(0);
+  var [project, setProject] = React.useState();
+  var [phase, setPhase] = React.useState();
+
   const [open, setOpen] = React.useState(false);
   const handleDateChange = () => {
     console.log("Paras");
@@ -107,6 +110,12 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   };
   const handleTimeMinutes = (e: any) => {
     setMin(e.target.value);
+  };
+  const handleProjectName = (e: any) => {
+    setProject(e.target.value);
+  };
+  const handlePhaseName = (e: any) => {
+    setPhase(e.target.value);
   };
 
   return (

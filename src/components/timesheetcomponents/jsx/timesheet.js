@@ -121,7 +121,6 @@ class Timesheet extends React.Component {
             <div className="timesheet__column" key={i}>
               {times.map((time, ii) =>
                 <div className="timesheet__item"
-                  onDoubleClick={this.handleCreate(day, ii)}
                   key={ii} />
               )}
 
@@ -132,7 +131,8 @@ class Timesheet extends React.Component {
                 const request = (now.isBefore(schedule.start) && this.dayWeek.indexOf(day) === (now.day() -1)) || this.dayWeek.indexOf(day) > (now.day() -1);
 
                 const content = (
-                  <div onDoubleClick={this.handleEdit(day, ii)}
+                  <div 
+                  onDoubleClick={e => this.props.setTimer(day, ii)}
                     onMouseEnter={this.handleMouseEnter(day, ii)}
                     onMouseLeave={this.handleMouseLeave}
                     className={c('timesheet__overlay', {
@@ -161,13 +161,14 @@ class Timesheet extends React.Component {
                         <Tooltip overlay="Delete" placement="right"><span>✕</span></Tooltip>
                       </button><button className="timesheet__overlay-edit">
                         <Tooltip overlay="Edit" placement="right"><span><EditIcon fontSize="small" style={{height: 15, width: 15}}/></span></Tooltip>
-                      </button><button className="timesheet__overlay-play">
+                      </button><button className="timesheet__overlay-play" onClick={e => this.props.setTimer(day, ii)}>
                         <Tooltip overlay="Play" placement="right"><span><PlayArrowIcon fontSize="small"/></span></Tooltip>
                       </button></div>}
 
-                      {!scaled && <h6 className="timesheet__overlay-project">{schedule.data.section.name || 'Section Name'}</h6>}
-                      {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.professor.name || 'Professor Name'}</h6>}
-                      {!scaled && <h4 className="timesheet__overlay-title">{moment.utc(schedule.end.diff(schedule.start)).format("HH:mm") || '1h20m'}</h4>}
+                      {!scaled && <h6 className="timesheet__overlay-project">{schedule.data.project.name || 'Section Name'}</h6>}
+                      {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.phase.name || 'Professor Name'}</h6>}
+                      {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.note.name || 'Note Name'}</h6>}
+                      {!scaled && <h4 className="timesheet__overlay-title">{Number.parseInt(moment.utc(schedule.end.diff(schedule.start)).format("HH")) + "h" + Number.parseInt(moment.utc(schedule.end.diff(schedule.start)).format("mm")) + "m" || '1h20m'}</h4>}
 
                       {!disabled && <Resizer
                         schedules={schedules}
@@ -206,17 +207,6 @@ class Timesheet extends React.Component {
             </div>
           )}
 
-          {!disabled && editing && <Popover
-            schedules={schedules}
-            schedule={schedules[edit.day][edit.index]}
-            source={edit}
-            recent={recent}
-            subjects={subjects}
-            professors={professors}
-            sections={sections}
-            scaled={scaled}
-            onCancel={this.handleCancel}
-            onSubmit={this.handleSubmit} />}
 
           {scaled && hovering && <HoverCard
             ref={(c) => this.hover = c}
@@ -290,53 +280,6 @@ class Timesheet extends React.Component {
       });
   }
 
-  /**
-   * @param {string} day Key of the schedule or day is being created
-   * @param {int} index Index of the time the schedule is being created
-   */
-  handleCreate(day, index) {
-    return () => {
-      if (this.props.disabled) {
-        return;
-      }
-
-      const {schedules, times} = this.state;
-      const time = times[index];
-      const schedule = schedules[day];
-
-      this.setState({
-        schedules: {
-          ...schedules,
-          [day]: [
-            ...schedule, {
-            start: time.start,
-            end: time.end,
-            request: this.props.request,
-            requester: this.props.requester,
-            data: {
-              subject: {
-                id: 0,
-                name: ''
-              },
-
-              professor: {
-                id: 0,
-                name: ''
-              },
-              
-              section: {
-                id: 0,
-                name: ''
-              },
-            }
-          }]
-        },
-        editing: true,
-        edit: { day, index: schedule.length, time: index },
-        recent: true
-      });
-    }
-  }
 
   handleEdit(day, index) {
     return () => {

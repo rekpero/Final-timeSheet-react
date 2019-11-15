@@ -14,7 +14,7 @@ import StatusComponent from "./statuscomponent";
 import ActivityLogComponent from "./activitylogcomponent";
 import WorkspaceSettingComponent from "./workspacesettingcomponent";
 import ProjectComponent from "./projectcomponent";
-import DashboardComponent from "./dashboardcomponent";
+import TimesheetComponent from "./timesheetcomponent";
 
 const ITEM_HEIGHT = 48;
 
@@ -55,10 +55,16 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired
 };
+interface IVerticalTabs extends RouteComponentProps {
+  setTimer: (
+    hours: number,
+    minutes: number,
+    timesheet: { id: number; project: string; phase: string },
+    timer: boolean
+  ) => void;
+}
 
-const VerticalTabs: React.FC<RouteComponentProps> = (
-  props: RouteComponentProps
-) => {
+const VerticalTabs: React.FC<IVerticalTabs> = (props: IVerticalTabs) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [managementValue, setManagementValue] = React.useState();
@@ -149,7 +155,7 @@ const VerticalTabs: React.FC<RouteComponentProps> = (
         </Menu>
       </Tabs>
       <TabPanel value={value} index={0}>
-        <DashboardComponent />
+        <TimesheetComponent setTimer={props.setTimer} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ProjectComponent />
