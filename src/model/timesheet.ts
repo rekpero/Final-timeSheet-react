@@ -1,9 +1,11 @@
-export interface IProjectTimesheet {
+import { IProjectInfo } from "./project";
+import { IPhasesInfo } from "./phases";
+
+export interface IProjectTimeSheet {
   id: number;
-  projectId: string;
-  phases: string;
+  project: IProjectInfo;
+  phase: string;
   timeWorked: string;
   date: string;
-
   note: number;
 }

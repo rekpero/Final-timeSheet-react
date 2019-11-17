@@ -159,7 +159,7 @@ class Timesheet extends React.Component {
                       {!disabled && !scaled && !editing && !schedule.request && !this.props.request && <div><button className="timesheet__overlay-action"
                         onClick={this.handleDelete(day, ii)}>
                         <Tooltip overlay="Delete" placement="right"><span>✕</span></Tooltip>
-                      </button><button className="timesheet__overlay-edit">
+                      </button><button className="timesheet__overlay-edit"  onClick={e => this.props.editTimesheet(day, ii)}>
                         <Tooltip overlay="Edit" placement="right"><span><EditIcon fontSize="small" style={{height: 15, width: 15}}/></span></Tooltip>
                       </button><button className="timesheet__overlay-play" onClick={e => this.props.setTimer(day, ii)}>
                         <Tooltip overlay="Play" placement="right"><span><PlayArrowIcon fontSize="small"/></span></Tooltip>

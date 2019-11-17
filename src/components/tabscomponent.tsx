@@ -62,6 +62,15 @@ interface IVerticalTabs extends RouteComponentProps {
     timesheet: { id: number; project: string; phase: string },
     timer: boolean
   ) => void;
+  editTimer: (
+    timesheetId: number,
+    project: string,
+    phase: string,
+    note: string,
+    hour: number,
+    minute: number,
+    date: string
+  ) => void;
 }
 
 const VerticalTabs: React.FC<IVerticalTabs> = (props: IVerticalTabs) => {
@@ -155,7 +164,10 @@ const VerticalTabs: React.FC<IVerticalTabs> = (props: IVerticalTabs) => {
         </Menu>
       </Tabs>
       <TabPanel value={value} index={0}>
-        <TimesheetComponent setTimer={props.setTimer} />
+        <TimesheetComponent
+          setTimer={props.setTimer}
+          editTimer={props.editTimer}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ProjectComponent />

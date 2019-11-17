@@ -1,22 +1,57 @@
 import { Observable, defer, from } from "rxjs";
 
-import { IProjectTimesheet } from "../model/timesheet";
+import { IProjectTimeSheet } from "../model/timesheet";
 import { IProjectInfo } from "../model/project";
 import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 
 class ProjectService {
-  public getTimeSheetData = (): Observable<IProjectTimesheet[]> => {
+  public getTimeSheetData = (): Observable<IProjectTimeSheet[]> => {
     return defer(() =>
       // for lazy loading
 
       {
-        return from<Promise<IProjectTimesheet[]>>( // generic type coversion of promise to observable
+        return from<Promise<IProjectTimeSheet[]>>( // generic type coversion of promise to observable
           fetch(`http://localhost:3500/timesheet`).then(r => r.json())
         );
       }
     );
   };
+
+  public postTimesheetData = (timesheet: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(timesheet)
+        })
+      );
+    });
+  };
+
+  public updateTimesheetData = (update: any, id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "PUT",
+          body: JSON.stringify(update)
+        })
+      );
+    });
+  };
+
+  public deleteTimesheetData = (id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet/${id}`, {
+          method: "DELETE"
+        })
+      );
+    });
+  };
+
 
   public getClientData = (): Observable<IClientInfo[]> => {
     return defer(() =>
@@ -60,11 +95,12 @@ class ProjectService {
 
       {
         return from<Promise<IPhasesInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3500/timesheet`).then(r => r.json())
+          fetch(`http://localhost:3500/phases`).then(r => r.json())
         );
       }
     );
   };
+
 
   // private mapToProductProfile=(product: IProductProfile[]): IProductProfile[] =>{
 

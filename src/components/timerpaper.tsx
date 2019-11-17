@@ -14,11 +14,12 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
-      padding: 10
+      padding: 8,
+      width: 200
       //   padding: theme.spacing(4, 6, 6, 8),
     },
     project: {
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: 550
     },
     phase: {

@@ -1,8 +1,13 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
+
 import VerticalTabs from "../components/tabscomponent";
 import AppBarComponent from "../components/appbarcomponent";
-// import Chart from "../components/chartscomponent";
+import projectService from "../services/projectService";
+import { IProjectInfo } from "../model/project";
+import { IPhasesInfo } from "../model/phases";
+import { IClientInfo } from "../model/clients";
+import { IProjectTimeSheet } from "../model/timesheet";
 
 interface IDashboard {
   backgroundColor: string;
@@ -13,6 +18,18 @@ interface IDashboard {
   minutes: number;
   timesheet: { id: number; project: string; phase: string };
   setTimer: boolean;
+  project: IProjectInfo[];
+  phases: IPhasesInfo[];
+  clients: IClientInfo[];
+  timeSheet: IProjectTimeSheet[];
+  openTimerEdit: boolean;
+  timerId: number;
+  projData: string;
+  phase: string;
+  note: string;
+  hour: number;
+  minute: number;
+  date: string;
 }
 
 class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
@@ -27,8 +44,42 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
       hours: 0,
       minutes: 0,
       timesheet: { id: 0, project: "", phase: "" },
-      setTimer: false
+      setTimer: false,
+      project: [],
+      phases: [],
+      clients: [],
+      timeSheet: [],
+      openTimerEdit: false,
+      timerId: -1,
+      projData: "",
+      phase: "",
+      note: "",
+      hour: 0,
+      minute: 0,
+      date: ""
     };
+  }
+  componentDidMount() {
+    projectService
+      .getProjectInfo()
+      .subscribe((projectInfo: IProjectInfo[]) =>
+        this.setState({ project: projectInfo })
+      );
+    projectService
+      .getClientData()
+      .subscribe((clientData: IClientInfo[]) =>
+        this.setState({ clients: clientData })
+      );
+    projectService
+      .getPhasesInfo()
+      .subscribe((phasesInfo: IPhasesInfo[]) =>
+        this.setState({ phases: phasesInfo })
+      );
+    projectService
+      .getTimeSheetData()
+      .subscribe((timeSheetInfo: IProjectTimeSheet[]) =>
+        this.setState({ timeSheet: timeSheetInfo })
+      );
   }
 
   tick = () => {
@@ -58,22 +109,85 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
     );
   };
 
-  setTimerFromModal = (hours: number, minutes: number, timer: boolean) => {
+  setTimerFromModal = (
+    hours: number,
+    minutes: number,
+    timesheet: { id: number; project: string; phase: string },
+    timer: boolean
+  ) => {
     if (this.state.setTimer) clearInterval(this.intervalHandle);
-    this.setState({ hours, minutes, setTimer: timer }, () =>
+    this.setState({ hours, minutes, timesheet, setTimer: timer }, () =>
       this.startCountDown()
     );
+  };
+
+  closeTimerEdit = () => {
+    this.setState({ openTimerEdit: false });
+  };
+
+  openTimerEdit = () => {
+    this.setState({
+      openTimerEdit: true,
+      timerId: -1,
+      projData: "",
+      phase: "",
+      note: "",
+      hour: 0,
+      minute: 0,
+      date: ""
+    });
+  };
+
+  editTimer = (
+    timerId: number,
+    project: string,
+    phase: string,
+    note: string,
+    hour: number,
+    minute: number,
+    date: string
+  ) => {
+    this.setState({
+      openTimerEdit: true,
+      timerId: timerId,
+      projData: project,
+      phase: phase,
+      note: note,
+      hour: hour,
+      minute: minute,
+      date: date
+    });
+    console.log(timerId, project, phase, note, hour, minute, date);
   };
 
   render() {
     return (
       <div>
-        <VerticalTabs {...this.props} setTimer={this.setTimer}></VerticalTabs>
+        <VerticalTabs
+          {...this.props}
+          setTimer={this.setTimer}
+          editTimer={this.editTimer}
+        ></VerticalTabs>
         <AppBarComponent
           setTimer={this.setTimerFromModal}
           hrs={this.state.hours}
           min={this.state.minutes}
+          timesheet={this.state.timesheet}
           openTimer={this.state.setTimer}
+          project={this.state.project}
+          phases={this.state.phases}
+          timeSheet={this.state.timeSheet}
+          clients={this.state.clients}
+          timerId={this.state.timerId}
+          projData={this.state.projData}
+          phase={this.state.phase}
+          note={this.state.note}
+          hour={this.state.hour}
+          minute={this.state.minute}
+          date={this.state.date}
+          editTimerOpen={this.state.openTimerEdit}
+          openTimerEdit={this.openTimerEdit}
+          closeEditTimer={this.closeTimerEdit}
         ></AppBarComponent>
       </div>
     );
