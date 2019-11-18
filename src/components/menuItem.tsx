@@ -33,6 +33,7 @@ const MenuItemComponent: React.FC<IMenuItem> = (props: IMenuItem) => {
   const theme = useTheme();
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPhase(event.target.value as string[]);
+    props.handleName(phase);
   };
   const [phase, setPhase] = React.useState<string[]>([]);
   const getStyles = (name: string, personName: string[], theme: Theme) => {
@@ -72,7 +73,6 @@ const MenuItemComponent: React.FC<IMenuItem> = (props: IMenuItem) => {
               key={prop.name}
               value={prop.name}
               style={getStyles(prop.name, phase, theme)}
-              onClick={props.handleName}
             >
               {prop.name}
             </MenuItem>

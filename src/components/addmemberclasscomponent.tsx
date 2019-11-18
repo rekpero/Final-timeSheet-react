@@ -3,14 +3,7 @@ import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import CloseIcon from "@material-ui/icons/Close";
 
-import {
-  Grid,
-  Theme,
-  Modal,
-  Typography,
-  Button,
-  TextField
-} from "@material-ui/core";
+import { Grid, Modal, Typography, Button, TextField } from "@material-ui/core";
 import SketchExample from "./color";
 import { IClientInfo } from "../model/clients";
 import projectService from "../services/projectService";
@@ -35,7 +28,10 @@ interface addMemberProps {
 class AddMember extends React.Component<addMemberProps, addMemberState> {
   constructor(props: addMemberProps) {
     super(props);
-    this.state = { clientDataState: this.props.clientData, number: [] };
+    this.state = {
+      clientDataState: this.props.clientData,
+      number: []
+    };
   }
 
   getModalStyle() {
@@ -72,7 +68,9 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
   deleteRecord = (e: number, recordName: string) => {
     this.state.clientDataState.splice(e, 1);
     let name1 = recordName;
-    projectService.deleteClient(name1).subscribe(data => console.log(data));
+    projectService
+      .deleteClient(name1)
+      .subscribe(() => this.props.clientsData());
     return this.setState({ clientDataState: this.state.clientDataState });
   };
   handleChange1 = (e: number) => {
@@ -82,7 +80,9 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
   deleteRecord1 = (e: number, recordName1: string) => {
     this.state.number.splice(e, 1);
     let name2 = recordName1;
-    projectService.deleteClient(name2).subscribe(data => console.log(data));
+    projectService
+      .deleteClient(name2)
+      .subscribe(data => this.props.clientsData());
     return this.setState({ number: this.state.number });
   };
   handleColor = (e: any, key: number) => {
@@ -120,18 +120,16 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
 
   pushClientData = () => {
     this.state.number.map((prop, key) => {
-      projectService
-        .postClient(prop.clients)
-        .subscribe(data => console.log(data));
+      projectService.postClient(prop.clients).subscribe(() => {
+        this.props.clientsData();
+      });
     });
     this.state.clientDataState.map((prop, key) => {
-      projectService
-        .postClient(prop.clients)
-        .subscribe(data => console.log(data));
+      projectService.postClient(prop.clients).subscribe(() => {
+        this.props.clientsData();
+      });
     });
-    // this.state.handleClose= !this.state.handleClose;
-    // this.setState({handleClose: this.state.handleClose});
-    this.props.clientsData();
+    this.setState({ clientDataState: this.state.clientDataState });
   };
   render() {
     return (
@@ -198,7 +196,7 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
                   <Grid item xs={5}>
                     <Grid container direction="row" spacing={2}>
                       <Grid item xs>
-                        {prop.clients.noOfProjects}
+                        {prop.clients.id}
                       </Grid>
                       <Grid item xs>
                         <div>

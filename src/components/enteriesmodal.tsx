@@ -48,7 +48,6 @@ const EnteriesModal: React.FC<IEnteriesModalProps> = (
       transform: `translate(-${top}%, -${left}%)`
     };
   }
-  var [number, setArray] = React.useState([true, true, true]);
   const [modalStyle] = React.useState(getModalStyle);
 
   return (

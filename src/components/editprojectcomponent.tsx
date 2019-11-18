@@ -5,11 +5,10 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import StatusOverview from "./statusoverviewcomponent";
-import StatusProject from "./statusprojectcomponent";
-import StatusMembers from "./statusmemberscomponent";
-import StatusClients from "./statusclientscomponent";
-import StatusPhases from "./statusphasescomponent";
+import { Grid, Button } from "@material-ui/core";
+import PhaseProjectComponent from "./phaseprojectcomponent";
+import InfoProjectComponent from "./infoprojectcomponent";
+import MemberProjectComponent from "./memberprojectcomponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,17 +49,29 @@ const useStyles = makeStyles((theme: Theme) => ({
   tablePanel: {
     marginLeft: "7%",
     marginTop: "7%"
+  },
+  button: {
+      backgroundColor: "#32943d",
+      color: "white",
+      marginTop: "7px",
+      marginBottom: "7px",
+      paddingTop: "5px",
+      paddingBottom:"5px",
+      fontSize: "12px",
+      '&:hover': {
+        backgroundColor: "darkgreen",
+      },      
   }
 }));
 
-const StatusComponent: React.FC<{}> = (props: any) => {
+const EditProjectComponent: React.FC<{}> = (props: any) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-
+  
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -69,31 +80,28 @@ const StatusComponent: React.FC<{}> = (props: any) => {
           onChange={handleChange}
           aria-label="simple tabs example"
         >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Projects" {...a11yProps(1)} />
+          <Tab label="Info" {...a11yProps(0)} />
+          <Tab label="Phases" {...a11yProps(1)} />
           <Tab label="Members" {...a11yProps(2)} />
-          <Tab label="Client" {...a11yProps(3)} />
-          <Tab label="Phase Categories" {...a11yProps(4)} />
+          <Grid item xs = {7}></Grid>
+          <Button variant="contained" size="large" className={classes.button}>
+                  Save
+          </Button>
         </Tabs>
+        
       </AppBar>
       <div className={classes.tablePanel}>
         <TabPanel value={value} index={0}>
-          {StatusOverview}
+        {InfoProjectComponent}
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+        {PhaseProjectComponent}
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+        {MemberProjectComponent} 
         </TabPanel>
       </div>
-      <TabPanel value={value} index={1}>
-        {StatusProject}
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        {StatusMembers}
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        {StatusClients}
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        {StatusPhases}
-      </TabPanel>
     </div>
   );
 };
-export default StatusComponent;
+export default EditProjectComponent;

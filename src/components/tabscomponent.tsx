@@ -14,13 +14,14 @@ import StatusComponent from "./statuscomponent";
 import ActivityLogComponent from "./activitylogcomponent";
 import WorkspaceSettingComponent from "./workspacesettingcomponent";
 import ProjectComponent from "./projectcomponent";
-import DashboardComponent from "./dashboardcomponent";
+import DashboardComponent from "../layout/dashboardcomponent";
 import { IProjectInfo } from "../model/project";
 import { IProjectTimeSheet } from "../model/timesheet";
 import { IClientInfo } from "../model/clients";
 import { IPhasesInfo } from "../model/phases";
 import AddMember from "./addmemberclasscomponent";
 import PhasesModal from "./managePhases";
+import TimesheetComponent from "./timesheetcomponent";
 
 const ITEM_HEIGHT = 48;
 
@@ -109,6 +110,21 @@ interface ITabsProps extends RouteComponentProps {
   projectData: () => void;
   phaseData: () => void;
   timesheetData: () => void;
+  setTimer: (
+    hours: number,
+    minutes: number,
+    timesheet: { id: number; project: string; phase: string },
+    timer: boolean
+  ) => void;
+  editTimer: (
+    timesheetId: number,
+    project: string,
+    phase: string,
+    note: string,
+    hour: number,
+    minute: number,
+    date: string
+  ) => void;
 }
 
 const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
@@ -222,18 +238,16 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
         </Menu>
       </Tabs>
       <TabPanel value={value} index={0}>
-        <DashboardComponent />
+        <TimesheetComponent
+          setTimer={props.setTimer}
+          editTimer={props.editTimer}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ProjectComponent />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <StatusComponent
-          project={props.project}
-          phases={props.phases}
-          timeSheet={props.timeSheet}
-          clients={props.clients}
-        />
+        <StatusComponent />
       </TabPanel>
       <TabPanel value={value} index={3}>
         Item Four

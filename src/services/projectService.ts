@@ -6,49 +6,95 @@ import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 
 class ProjectService {
-  public timeSheetData = (): Observable<IProjectTimeSheet[]> => {
+  public getTimeSheetData = (): Observable<IProjectTimeSheet[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IProjectTimeSheet[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/timesheet`).then(r => r.json())
+          fetch(`http://localhost:3500/timesheet`).then(r => r.json())
         );
       }
     );
   };
 
-  public clientData = (): Observable<IClientInfo[]> => {
+  public postTimesheetData = (timesheet: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(timesheet)
+        })
+      );
+    });
+  };
+
+  public updateTimesheetData = (update: any, id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "PUT",
+          body: JSON.stringify(update)
+        })
+      );
+    });
+  };
+
+  public deleteTimesheetData = (id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet/${id}`, {
+          method: "DELETE"
+        })
+      );
+    });
+  };
+
+  public getClientData = (): Observable<IClientInfo[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IClientInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/clients`).then(r => r.json())
+          fetch(`http://localhost:3500/clients`).then(r => r.json())
         );
       }
     );
   };
 
-  public projectInfo = (): Observable<IProjectInfo[]> => {
+  public getProjectInfo = (): Observable<IProjectInfo[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IProjectInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/project`).then(r => r.json())
+          fetch(`http://localhost:3500/project`).then(r => r.json())
         );
       }
     );
   };
 
-  public phasesInfo = (): Observable<IPhasesInfo[]> => {
+  public getProjectInfoById = (id: number): Observable<IProjectInfo> => {
+    return defer(() =>
+      // for lazy loading
+
+      {
+        return from<Promise<IProjectInfo>>( // generic type coversion of promise to observable
+          fetch(`http://localhost:3500/project/${id}`).then(r => r.json())
+        );
+      }
+    );
+  };
+
+  public getPhasesInfo = (): Observable<IPhasesInfo[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IPhasesInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3000/phases`).then(r => r.json())
+          fetch(`http://localhost:3500/phases`).then(r => r.json())
         );
       }
     );
@@ -57,7 +103,7 @@ class ProjectService {
   public postClient = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3000/clients`, {
+        fetch(`http://localhost:3500/clients`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(data)
@@ -68,7 +114,7 @@ class ProjectService {
   public postProject = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3000/project`, {
+        fetch(`http://localhost:3500/project`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(data)
@@ -80,7 +126,7 @@ class ProjectService {
   public deleteClient = (id: string): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3000/clients/${id}`, {
+        fetch(`http://localhost:3500/clients/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "DELETE"
         })

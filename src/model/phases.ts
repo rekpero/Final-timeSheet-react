@@ -1,5 +1,10 @@
 export interface IPhasesInfo {
-  id: number;
   name: string;
-  color: { r: string; g: string; b: string; a: string };
+  id: number;
+  color: {
+    r: string;
+    g: string;
+    b: string;
+    a: string;
+  };
 }

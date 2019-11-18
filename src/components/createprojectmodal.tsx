@@ -8,6 +8,7 @@ import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 import FolderIcon from "@material-ui/icons/Folder";
+import projectService from "../services/projectService";
 import {
   FormControl,
   Select,
@@ -50,13 +51,24 @@ interface IProjectState {
   openRate: boolean;
   phase: string[];
   SelectedValue: any;
-  addedProject: any;
+  addedProject: newProject;
+  selectedPhase:string[];
+}
+interface newProject{
+ 
+  name: string;
+  projectColor: { r: string; g: string; b: string; a: string };
+  clientId: number;
+  members: { name: string; hourlyrate: number };
+  phases: IPhasesInfo[];
+  budget: number;
 }
 
 class CreateProjectModal extends React.Component<
   ICreateProjectModalProps,
   IProjectState
 > {
+  
   constructor(props: ICreateProjectModalProps) {
     super(props);
     this.state = {
@@ -68,7 +80,12 @@ class CreateProjectModal extends React.Component<
       openRate: false,
       phase: [],
       SelectedValue: "",
-      addedProject: {}
+      addedProject: {name:"",projectColor: { r: "", g: "", b: "",a: ""},
+      clientId: 1,
+      members: { name: "", hourlyrate: 1 },
+      phases: [],
+      budget: 1},
+      selectedPhase:[]
     };
   }
 
@@ -83,7 +100,7 @@ class CreateProjectModal extends React.Component<
     };
   }
   handleProjectName = (e: any) => {
-    this.state.addedProject.name = e.target.value;
+    this.state.addedProject.name = e.target.value
     this.setState({ addedProject: this.state.addedProject });
   };
 
@@ -94,7 +111,15 @@ class CreateProjectModal extends React.Component<
   handleClose = () => {
     this.setState({ open4: false });
   };
+  handleMemberRate = (e: any) => {
+    this.state.addedProject.members.hourlyrate= e.target.value;
+    this.setState({ addedProject: this.state.addedProject });
+  };
 
+  handleBudget =(e: any) => {
+    this.state.addedProject.budget = e.target.value;
+    this.setState({addedProject: this.state.addedProject});
+  }
   handleClientName = (e: any) => {
     this.props.phases.map((prop, key) => {
       if (prop.name === e.target.value) {
@@ -107,11 +132,7 @@ class CreateProjectModal extends React.Component<
     this.state.addedProject.members.name = e.target.value;
     this.setState({ addedProject: this.state.addedProject });
   };
-  handleMemberRate = (e: any) => {
-    this.state.addedProject.members.hourlyRate = e.target.value;
-    this.setState({ addedProject: this.state.addedProject });
-  };
-
+ 
   handleClick = () => {
     this.setState({ open: !this.state.open });
   };
@@ -128,18 +149,44 @@ class CreateProjectModal extends React.Component<
     this.setState({ openRate: !this.state.openRate });
   };
 
-  handlePhaseName = (e: any) => {
-    console.log(e);
+  handlePhaseName = (e: string[]) => {
+    
+    e.map((prop1,key1)=>{
+      this.state.selectedPhase.push(prop1)
+      console.log(prop1);
+    });
+    this.setState({ addedProject: this.state.addedProject });
+
+  };
+  handleColor = (e: any) => {
+    this.state.addedProject.projectColor = e;
+    this.setState({ addedProject: this.state.addedProject });
+  };
+  pushProject = () => {
+    this.state.selectedPhase.map((prop1,key1)=>{
+    this.props.phases.map((prop,key)=>{
+     
+      if(prop1 === prop.name)
+      {
+        this.state.addedProject.phases.push({name: prop.name,id: prop.id,color: prop.color});
+      }
+    });
+  });
+  this.setState({addedProject: this.state.addedProject});
+
+
+
+    return projectService
+      .postProject(this.state.addedProject)
+      .subscribe(() => this.props.projectData());
   };
 
-  handleColor = (e: any) => {
-    console.log(e);
-  };
-  handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    this.setState({ phase: event.target.value as string[] });
-    // setPhase(event.target.value as string[]);
-  };
+  // handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   this.setState({ phase: event.target.value as string[] });
+  //   // setPhase(event.target.value as string[]);
+  // };
   render() {
+    console.log(this.props.project);
     return (
       <Modal
         aria-labelledby="simple-modal-title"
@@ -261,6 +308,7 @@ class CreateProjectModal extends React.Component<
                   <InputLabel htmlFor="age-native-simple">Members</InputLabel>
                   <Select
                     native
+                    
                     onChange={e => {
                       this.handleMemberName(e);
                     }}
@@ -355,26 +403,18 @@ class CreateProjectModal extends React.Component<
                   InputLabelProps={{
                     shrink: true
                   }}
+                  onChange={e => this.handleBudget(e)}
                 />
               </Grid>
               <Grid item xs={2}></Grid>
-              <Grid item xs={4}>
-                <FormControl className={this.props.classes.formControl}>
-                  <InputLabel htmlFor="age-native-simple">Members</InputLabel>
-                  <Select native>
-                    {" "}
-                    <optgroup label="">
-                      <option value=""></option>
-                      <option value="weekly">Weekly</option>
-                      <option value="monthly">Monthly</option>
-                    </optgroup>
-                  </Select>
-                </FormControl>
-              </Grid>
             </Grid>
           </Collapse>
           <Grid container direction="row" justify="flex-end"></Grid>
-          <Button variant="contained" className={this.props.classes.button1}>
+          <Button
+            variant="contained"
+            className={this.props.classes.button1}
+            onClick={e => this.pushProject()}
+          >
             Create
           </Button>
         </div>

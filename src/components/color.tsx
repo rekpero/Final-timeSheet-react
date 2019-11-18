@@ -53,7 +53,7 @@ const SketchExample: React.FC<IColorModal> = (props: IColorModal) => {
   const handleChange = (e: any) => {
     setColor(e.rgb);
     // console.log(e.rgba);
-    props.handleColor(colors);
+    props.handleColor(e.rgb);
   };
 
   return (

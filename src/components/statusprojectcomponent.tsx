@@ -7,7 +7,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import history from "../services/history";
-import { IProjectInfo } from "../model/project";
 const useStyles = makeStyles({
   root: {
     width: "70%",
@@ -28,13 +27,8 @@ const rows = [
   createData("AT&T Maintenance", 237),
   createData("Metlife Marketing", 262)
 ];
-interface IStatusProject {
-  project: IProjectInfo[];
-}
 
-const StatusProjectComponent: React.FC<IStatusProject> = (
-  props: IStatusProject
-) => {
+const StatusProjectComponent: React.FC<{}> = (props: any) => {
   const classes = useStyles();
 
   return (
@@ -51,18 +45,18 @@ const StatusProjectComponent: React.FC<IStatusProject> = (
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.project.map(prop => (
+          {rows.map(row => (
             <TableRow
-              key={prop.name}
+              key={row.name}
               hover
               onClick={e => {
                 history.push("/dash");
               }}
             >
               <TableCell component="th" scope="row">
-                {prop.name}
+                {row.name}
               </TableCell>
-              <TableCell align="right">{prop.budget.hours}</TableCell>
+              <TableCell align="right">{row.project}</TableCell>
             </TableRow>
           ))}
         </TableBody>

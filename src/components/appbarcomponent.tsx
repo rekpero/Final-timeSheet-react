@@ -18,9 +18,9 @@ import EnteriesModal from "./enteriesmodal";
 import TimerModal from "./timercomponent";
 import TimerPaper from "./timerpaper";
 import { IProjectInfo } from "../model/project";
-import { IProjectTimeSheet } from "../model/timesheet";
-import { IClientInfo } from "../model/clients";
 import { IPhasesInfo } from "../model/phases";
+import { IClientInfo } from "../model/clients";
+import { IProjectTimeSheet } from "../model/timesheet";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,10 +37,25 @@ const useStyles = makeStyles((theme: Theme) =>
       left: 0,
       right: 0,
       margin: "0 auto"
+    },
+    timer: {
+      position: "relative",
+      marginRight: 18,
+      width: 200
     }
   })
 );
 interface IAppBarProps {
+  setTimer: (
+    hours: number,
+    minutes: number,
+    timesheet: { id: number; project: string; phase: string },
+    timer: boolean
+  ) => void;
+  openTimer: boolean;
+  hrs: number;
+  min: number;
+  timesheet: { id: number; project: string; phase: string };
   project: IProjectInfo[];
   phases: IPhasesInfo[];
   clients: IClientInfo[];
@@ -49,8 +64,17 @@ interface IAppBarProps {
   projectData: () => void;
   phaseData: () => void;
   timesheetData: () => void;
+  timerId: number;
+  projData: string;
+  phase: string;
+  note: string;
+  hour: number;
+  minute: number;
+  date: string;
+  editTimerOpen: boolean;
+  openTimerEdit: () => void;
+  closeEditTimer: () => void;
 }
-
 const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   const classes = useStyles();
   const [showTimer, setTimer] = React.useState(false);
@@ -74,18 +98,14 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   const handleClose2 = () => {
     setOpen2(false);
   };
-  const handleClose = () => {
+  const handleCloseModal = () => {
     setOpenRegisterModal(false);
   };
   // const showTimerPaper = () => {
   //   setTimer(props.showTimer);
   // };
-  const showTimerPaper = (hrs: number, min: number, timer: boolean) => {
-    setHrs(hrs);
-    setMin(min);
-    setTimer(timer);
-  };
 
+  console.log(props.project);
   return (
     <AppBar position="fixed" color="primary" className={classes.appBar}>
       <Toolbar>
@@ -93,13 +113,21 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
           color="secondary"
           aria-label="add"
           className={classes.fabButton}
-          onClick={handleOpen}
+          onClick={props.openTimerEdit}
         >
           <AddIcon />
         </Fab>
 
         <div className={classes.grow} />
-        {showTimer ? <TimerPaper hrs={hrs} minutes={min} /> : null}
+        {props.openTimer ? (
+          <IconButton color="inherit" className={classes.timer}>
+            <TimerPaper
+              hrs={props.hrs}
+              minutes={props.min}
+              timesheet={props.timesheet}
+            />
+          </IconButton>
+        ) : null}
         <IconButton color="inherit">
           <TimerIcon onClick={handleOpen2}></TimerIcon>
           <EnteriesModal
@@ -127,13 +155,20 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
         projectData={props.projectData}
         phaseData={props.phaseData}
         timesheetData={props.timesheetData}
+        open={props.editTimerOpen}
+        handleClose={props.closeEditTimer}
+        buttonClicked={props.setTimer}
         project={props.project}
+        clients={props.clients}
         phases={props.phases}
         timeSheet={props.timeSheet}
-        clients={props.clients}
-        openRegisterModal={openRegisterModal}
-        handleClose={handleClose}
-        buttonClicked={showTimerPaper}
+        timerId={props.timerId}
+        projData={props.projData}
+        phase={props.phase}
+        note={props.note}
+        hour={props.hour}
+        minute={props.minute}
+        date={props.date}
       ></RegisterTimeModal>
     </AppBar>
   );
