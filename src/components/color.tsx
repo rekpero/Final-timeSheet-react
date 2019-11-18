@@ -1,15 +1,12 @@
 import React from "react";
 import reactCSS from "reactcss";
 import { SketchPicker } from "react-color";
-interface IColor {
-  r: string;
-  g: string;
-  b: string;
-  a: string;
-}
+
 interface IColorModal {
+  handleColor: (color: { r: string; g: string; b: string; a: string }) => void;
+
   displayColorPicker: boolean;
-  color: IColor;
+  color: { r: string; g: string; b: string; a: string };
 }
 
 const SketchExample: React.FC<IColorModal> = (props: IColorModal) => {
@@ -48,7 +45,6 @@ const SketchExample: React.FC<IColorModal> = (props: IColorModal) => {
 
   const handleClick = () => {
     setDisplayPicker(!displayPicker);
-    console.log(displayPicker);
   };
 
   const handleClose = () => {
@@ -56,6 +52,8 @@ const SketchExample: React.FC<IColorModal> = (props: IColorModal) => {
   };
   const handleChange = (e: any) => {
     setColor(e.rgb);
+    // console.log(e.rgba);
+    props.handleColor(colors);
   };
 
   return (

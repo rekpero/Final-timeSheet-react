@@ -54,35 +54,38 @@ class ProjectService {
     );
   };
 
-  // private mapToProductProfile=(product: IProductProfile[]): IProductProfile[] =>{
+  public postClient = (data: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3000/clients`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(data)
+        })
+      );
+    });
+  };
+  public postProject = (data: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3000/project`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(data)
+        })
+      );
+    });
+  };
 
-  // return product.map(this.mapToproduct);
-
-  // }
-
-  // private mapToproduct(product: IProductProfile):IProductProfile{
-
-  // return {
-
-  // productId: product.productId,
-
-  // productName: product.productName,
-
-  // productCode: product.productCode,
-
-  // releaseDate: product.releaseDate,
-
-  // description: product.description,
-
-  // price: product.price,
-
-  // starRating: product.starRating,
-
-  // imageUrl: product.imageUrl
-
-  // }
-
-  // }
+  public deleteClient = (id: string): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3000/clients/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "DELETE"
+        })
+      );
+    });
+  };
 }
-
 export default new ProjectService(); // exporting as an object

@@ -28,13 +28,17 @@ import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 
 interface IRegisterTimeModalProps {
-  open: boolean;
+  openRegisterModal: boolean;
   handleClose: () => void;
   buttonClicked: (hrs: number, min: number, timer: boolean) => void;
   project: IProjectInfo[];
   phases: IPhasesInfo[];
   clients: IClientInfo[];
   timeSheet: IProjectTimeSheet[];
+  clientData: () => void;
+  projectData: () => void;
+  phaseData: () => void;
+  timesheetData: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -70,6 +74,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       margin: theme.spacing(3)
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: 600
+    },
+    button1: {
+      fontSize: "small"
+    },
+    chips: {
+      display: "flex",
+      flexWrap: "wrap"
+    },
+    chip: {
+      margin: 2
     }
   })
 );
@@ -95,16 +113,18 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   );
   var [hrs, setHrs] = React.useState(0);
   var [min, setMin] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
+  const [openProject, setOpenProject] = React.useState(false);
+  const [value, setValue] = React.useState("");
   const handleDateChange = () => {
     console.log("Paras");
   };
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpenProject = () => {
+    setOpenProject(true);
+    setValue("");
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenProject(false);
   };
   const handleTimeHrs = (e: any) => {
     setHrs(e.target.value);
@@ -122,11 +142,11 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
     <Modal
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
-      open={props.open}
+      open={props.openRegisterModal}
       onClose={props.handleClose}
     >
       <div style={modalStyle} className={classes.paper1}>
-        <Typography variant="h4">
+        <Typography variant="h6" className={classes.title}>
           <AddCircleIcon />
           Register Time
         </Typography>
@@ -136,9 +156,10 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
               <InputLabel htmlFor="age-native-simple">Project</InputLabel>
               <Select
                 native
+                value={value}
                 onChange={e => {
                   if (e.target.value === "create") {
-                    handleOpen();
+                    handleOpenProject();
                   }
                 }}
               >
@@ -154,12 +175,17 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                   })}
                 </optgroup>
                 <CreateProjectModal
+                  clientData={props.clientData}
+                  projectData={props.projectData}
+                  phaseData={props.phaseData}
+                  timesheetData={props.timesheetData}
                   project={props.project}
                   phases={props.phases}
                   timeSheet={props.timeSheet}
                   clients={props.clients}
-                  open={open}
+                  openCreateProjectModal={openProject}
                   handleClose={handleClose}
+                  classes={classes}
                 ></CreateProjectModal>
               </Select>
             </FormControl>

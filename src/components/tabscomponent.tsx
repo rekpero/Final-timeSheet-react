@@ -1,5 +1,7 @@
-import React from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import React, { useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
+import PropTypes from "prop-types";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import routes from "../routes/dashboardrouters";
@@ -7,6 +9,18 @@ import history from "../services/history";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import managementRoutes from "../routes/managementRoutes";
+import { Typography, Box } from "@material-ui/core";
+import StatusComponent from "./statuscomponent";
+import ActivityLogComponent from "./activitylogcomponent";
+import WorkspaceSettingComponent from "./workspacesettingcomponent";
+import ProjectComponent from "./projectcomponent";
+import DashboardComponent from "./dashboardcomponent";
+import { IProjectInfo } from "../model/project";
+import { IProjectTimeSheet } from "../model/timesheet";
+import { IClientInfo } from "../model/clients";
+import { IPhasesInfo } from "../model/phases";
+import AddMember from "./addmemberclasscomponent";
+import PhasesModal from "./managePhases";
 
 const ITEM_HEIGHT = 48;
 
@@ -25,16 +39,91 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const VerticalTabs: React.FC<{}> = (props: any) => {
+const useStylesModal = makeStyles((theme: Theme) =>
+  createStyles({
+    grow: {
+      flexGrow: 1
+    },
+    paper1: {
+      position: "absolute",
+      width: 600,
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(4, 6, 6, 8),
+      [theme.breakpoints.down("sm")]: {
+        width: 200,
+        height: 100
+      }
+    },
+    chips: {
+      display: "flex",
+      flexWrap: "wrap"
+    },
+    chip: {
+      margin: 2
+    },
+    formControl: {
+      marginRight: theme.spacing(5),
+      width: "100%"
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+
+    button1: {
+      fontSize: "small"
+    }
+  })
+);
+
+const TabPanel = (props: any) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+      style={{ width: "100%" }}
+    >
+      <Box>{children}</Box>
+    </Typography>
+  );
+};
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
+};
+interface ITabsProps extends RouteComponentProps {
+  project: IProjectInfo[];
+  phases: IPhasesInfo[];
+  clients: IClientInfo[];
+  timeSheet: IProjectTimeSheet[];
+  clientData: () => void;
+  projectData: () => void;
+  phaseData: () => void;
+  timesheetData: () => void;
+}
+
+const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   const classes = useStyles();
+  const classes1 = useStylesModal();
   const [value, setValue] = React.useState(0);
+  const [managementValue, setManagementValue] = React.useState();
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+    if (newValue !== 5) {
+      setValue(newValue);
+    }
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  console.log(open);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -43,7 +132,27 @@ const VerticalTabs: React.FC<{}> = (props: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClose1 = () => {
+    setOpen4(false);
+  };
+  const handleClose2 = () => {
+    setOpen3(false);
+  };
+  useEffect(() => {
+    const path = props.location.pathname;
+    const routesList = routes.map(route => route.layout + route.path);
+    console.log(path, routesList.indexOf(path));
+    setValue(routesList.indexOf(path));
+  }, [props.location.pathname]);
 
+  const [open4, setOpen4] = React.useState(false);
+  const [open3, setOpen3] = React.useState(false);
+  const handleOpen = () => {
+    setOpen4(true);
+  };
+  const handleOpen1 = () => {
+    setOpen3(true);
+  };
   return (
     <div className={classes.root}>
       <Tabs
@@ -71,6 +180,7 @@ const VerticalTabs: React.FC<{}> = (props: any) => {
           label="Management"
           onClick={event => {
             event.preventDefault();
+            setManagementValue(null);
             handleClick(event);
           }}
         >
@@ -96,6 +206,14 @@ const VerticalTabs: React.FC<{}> = (props: any) => {
               onClick={e => {
                 handleClose();
                 history.push(prop.layout + prop.path);
+                setManagementValue(key);
+                setValue(5);
+                if (key === 1) {
+                  handleOpen();
+                }
+                if (key === 2) {
+                  handleOpen1();
+                }
               }}
             >
               {prop.name}
@@ -103,6 +221,52 @@ const VerticalTabs: React.FC<{}> = (props: any) => {
           ))}
         </Menu>
       </Tabs>
+      <TabPanel value={value} index={0}>
+        <DashboardComponent />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <ProjectComponent />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <StatusComponent
+          project={props.project}
+          phases={props.phases}
+          timeSheet={props.timeSheet}
+          clients={props.clients}
+        />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        Item Four
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <ActivityLogComponent />
+      </TabPanel>
+      <TabPanel value={value} index={5}>
+        {managementValue === 1 ? (
+          <AddMember
+            clientsData={props.clientData}
+            clientData={props.clients.map(client => ({
+              clients: client,
+              existence: true
+            }))}
+            open={open4}
+            handleClose={handleClose1}
+            classes={classes1}
+          ></AddMember>
+        ) : null}
+        {managementValue === 3 ? <WorkspaceSettingComponent /> : null}
+        {managementValue === 2 ? (
+          <PhasesModal
+            phaseData={props.phases.map(phase => ({
+              phases: phase,
+              existence: true
+            }))}
+            open={open3}
+            handleClose={handleClose2}
+            classes={classes1}
+          ></PhasesModal>
+        ) : null}
+      </TabPanel>
     </div>
   );
 };

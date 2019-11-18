@@ -7,28 +7,28 @@ var routes = [
     layout: "/dash"
   },
   {
-    path: "/Projects",
+    path: "/projects",
     name: "Projects",
     icon: "nc-icon nc-diamond",
 
     layout: "/dash"
   },
   {
-    path: "/Status",
+    path: "/status",
     name: "Status",
     icon: "nc-icon nc-pin-3",
 
     layout: "/dash"
   },
   {
-    path: "/Reports",
+    path: "/reports",
     name: "Reports",
     icon: "nc-icon nc-bell-55",
 
     layout: "/dash"
   },
   {
-    path: "/activity_Log",
+    path: "/activity-log",
     name: "Activity Log",
     icon: "nc-icon nc-single-02",
 

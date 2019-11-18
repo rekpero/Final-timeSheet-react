@@ -1,0 +1,436 @@
+.timesheet * {
+  box-sizing: border-box;
+}
+
+.timesheet__scale {
+  display: inline-block;
+  margin-bottom: 4px;
+  background: #fff;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  outline: 0;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.timesheet__body,
+.timesheet__heading {
+  display: flex;
+  position: relative;
+}
+
+.timesheet__heading-column {
+  border: 1px solid #ddd;
+  width: 150px;
+  padding: 5px;
+  text-align: center;
+}
+
+.timesheet__heading-column:not(:first-child) {
+  border-left: 0;
+}
+
+.timesheet__heading-column--narrow {
+  width: 150px;
+}
+
+.timesheet__column {
+  position: relative;
+  width: 150px;
+  border-right: 1px solid #ddd;
+  z-index: 699;
+}
+
+.timesheet__column--narrow {
+  width: 150px;
+  border-right: 0;
+  background: #e3e5ef;
+}
+
+.timesheet__item {
+  height: 125px;
+  border-bottom: 1px dotted #ddd;
+}
+
+.timesheet__time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 12px;
+  height: 100%;
+  color: #868686;
+}
+
+.timesheet__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 125px;
+}
+
+.timesheet__overlay-inner {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px;
+  background: #383A48;
+}
+
+.timesheet__overlay-status {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.timesheet__overlay-action {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  color: #383A48;
+  background: #ccced8;
+  padding: 0;
+  font-size: 10px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.timesheet__overlay-play {
+  position: absolute;
+  top: 4px;
+  right: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  color: #383A48;
+  background: #ccced8;
+  padding: 0;
+  font-size: 10px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.timesheet__overlay-edit {
+  position: absolute;
+  top: 4px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  color: #383A48;
+  background: #ccced8;
+  padding: 0;
+  font-size: 10px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.timesheet__overlay:hover .timesheet__overlay-action {
+  opacity: 1;
+  transition: 200ms opacity ease;
+}
+
+.timesheet__overlay:hover .timesheet__overlay-play {
+  opacity: 1;
+  transition: 200ms opacity ease;
+}
+
+.timesheet__overlay:hover .timesheet__overlay-edit {
+  opacity: 1;
+  transition: 200ms opacity ease;
+}
+
+.timesheet__overlay-action--negative {
+  top: 52px;
+}
+
+.timesheet__overlay-time {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 11px;
+}
+
+.timesheet__overlay:hover .timesheet__overlay-resizer {
+  opacity: 1;
+}
+
+.timesheet__overlay-other {
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #ddd;
+  font-size: 11px;
+  margin-top: 0;
+}
+
+.timesheet__overlay-project {
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #ddd;
+  font-size: 14px;
+  margin-top: 0;
+}
+
+.timesheet__overlay-other:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.timesheet__overlay-title {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.timesheet__overlay-resizer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  cursor: ns-resize;
+  opacity: 0;
+  transition: 0.2s opacity;
+  ;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.timesheet__overlay-resizer::before,
+.timesheet__overlay-resizer::after {
+  content: "";
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 20px;
+  height: 1px;
+  background: #ddd;
+}
+
+.timesheet__overlay-resizer::before {
+  margin-bottom: 5px;
+}
+
+.timesheet__overlay--current .timesheet__overlay-inner {
+  background: #58da86;
+}
+
+.timesheet__overlay--current .timesheet__overlay-other {
+  color: #338650;
+}
+
+.timesheet__overlay--current .timesheet__overlay-resizer::before,
+.timesheet__overlay--current .timesheet__overlay-resizer::after {
+  background: #338650;
+}
+
+.timesheet__overlay--current .timesheet__overlay-status {
+  color: #58da86;
+  background: #338650;
+}
+
+.timesheet__overlay--current .timesheet__overlay-action {
+  top: 32px;
+  color: #58da86;
+  background: #338650;
+}
+
+.timesheet__overlay--current .timesheet__overlay-play {
+  top: 32px;
+  color: #58da86;
+  background: #338650;
+}
+
+.timesheet__overlay--current .timesheet__overlay-edit {
+  top: 32px;
+  color: #58da86;
+  background: #338650;
+}
+
+
+.timesheet__overlay--done .timesheet__overlay-inner {
+  background: #ccced8;
+}
+
+.timesheet__overlay--done .timesheet__overlay-resizer::before,
+.timesheet__overlay--done .timesheet__overlay-resizer::after {
+  background: #383A48;
+}
+
+.timesheet__overlay--done .timesheet__overlay-other {
+  color: #383A48;
+}
+
+.timesheet__overlay--done .timesheet__overlay-status {
+  color: #ccced8;
+  background: #383A48;
+}
+
+.timesheet__overlay--done .timesheet__overlay-action {
+  top: 32px;
+  color: #ccced8;
+  background: #383A48;
+}
+
+.timesheet__overlay--done .timesheet__overlay-play {
+  top: 32px;
+  color: #ccced8;
+  background: #383A48;
+}
+
+.timesheet__overlay--done .timesheet__overlay-edit {
+  top: 32px;
+  color: #ccced8;
+  background: #383A48;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-resizer::before,
+.timesheet__overlay--requested .timesheet__overlay-resizer::after {
+  background: #1D3557;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-inner {
+  background: #A8DADC;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-other {
+  color: #1D3557;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-status {
+  color: #A8DADC;
+  background: #1D3557;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-action {
+  top: 4px;
+  color: #A8DADC;
+  background: #1D3557;
+  opacity: 1;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-play {
+  top: 4px;
+  color: #A8DADC;
+  background: #1D3557;
+  opacity: 1;
+}
+
+.timesheet__overlay--requested .timesheet__overlay-edit {
+  top: 4px;
+  color: #A8DADC;
+  background: #1D3557;
+  opacity: 1;
+}
+
+.timesheet__popover {
+  position: absolute;
+  width: 250px;
+  margin-left: 10px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  z-index: 700;
+}
+
+.timesheet__popover::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -21px;
+  top: 70px;
+  border: 10px solid transparent;
+  border-right-color: #ddd;
+}
+
+.timesheet__popover::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -20px;
+  top: 70px;
+  border: 10px solid transparent;
+  border-right-color: #fff;
+}
+
+.timesheet__popover-body {
+  padding: 10px;
+  background: #fff;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.timesheet__popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: #383A48;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.timesheet--disabled .timesheet__overlay-inner {
+  cursor: default;
+}
+
+.timesheet--scaled .timesheet__column,
+.timesheet--scaled .timesheet__heading-column {
+  width: 48px;
+}
+
+.timesheet--scaled .timesheet__heading-column,
+.timesheet--scaled .timesheet__time {
+  font-size: 10px;
+}
+
+.timesheet--scaled .timesheet__item,
+.timesheet--scaled .timesheet__overlay {
+  height: 48px;
+}
+
+.timesheet--scaled .timesheet__heading-column--narrow,
+.timesheet--scaled .timesheet__column--narrow {
+  width: 75px;
+}
+
+.timesheet--scaled .timesheet__overlay-inner {
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+}
+
+.u-spacer {
+  margin-bottom: 8px;
+}
+
+[class*=hint--]:after {
+  z-index: 1000;
+}
