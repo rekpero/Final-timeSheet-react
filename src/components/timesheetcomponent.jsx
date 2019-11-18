@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import Timesheet from "./timesheetcomponents/jsx/timesheet";
 import "./timesheetcomponents/styles/normalize.css";
@@ -11,22 +11,24 @@ import ProjectService from "../services/projectService";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import projectService from "../services/projectService";
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-export default class DashboardComponent extends React.Component {
-  state = {
-    openRegisterTime: false,
-    schedules: {
-      ["Mon " + (moment().date() - moment().day() + 1)]: [],
-      ["Tue " + (moment().date() - moment().day() + 2)]: [],
-      ["Wed " + (moment().date() - moment().day() + 3)]: [],
-      ["Thurs " + (moment().date() - moment().day() + 4)]: [],
-      ["Fri " + (moment().date() - moment().day() + 5)]: [],
-      ["Sat " + (moment().date() - moment().day() + 6)]: [],
-      ["Sun " + (moment().date() - moment().day() + 7)]: []
-    }
-  };
+export default function DashboardComponent(props) {
 
-  componentDidMount() {
+  const [schedules, setSchedules] = useState({
+    ["Mon " + (moment().date() - moment().day() + 1)]: [],
+    ["Tue " + (moment().date() - moment().day() + 2)]: [],
+    ["Wed " + (moment().date() - moment().day() + 3)]: [],
+    ["Thurs " + (moment().date() - moment().day() + 4)]: [],
+    ["Fri " + (moment().date() - moment().day() + 5)]: [],
+    ["Sat " + (moment().date() - moment().day() + 6)]: [],
+    ["Sun " + (moment().date() - moment().day() + 7)]: []
+  })
+
+  useEffect(() => {
+
+  
     ProjectService.getTimeSheetData().subscribe(timesheets => {
       const monday = timesheets.filter(time => {
         return moment(time.date, "YYYY-MM-DD").isSame(
@@ -70,9 +72,8 @@ export default class DashboardComponent extends React.Component {
           "day"
         );
       });
-      this.setState(
+      setSchedules(
         {
-          schedules: {
             ["Mon " + (moment().date() - moment().day() + 1)]:
               monday.length === 0
                 ? []
@@ -347,13 +348,201 @@ export default class DashboardComponent extends React.Component {
                     };
                   })
           }
-        },
-        () => console.log(this.state.schedules)
       );
     });
-  }
+  }, [])
 
-  render() {
+  const setTimer = (day, index) => {
+    const hours = Number.parseInt(
+      moment
+        .utc(
+          schedules[day][index].end.diff(
+            schedules[day][index].start
+          )
+        )
+        .format("HH")
+    );
+    const minutes = Number.parseInt(
+      moment
+        .utc(
+          schedules[day][index].end.diff(
+            schedules[day][index].start
+          )
+        )
+        .format("mm")
+    );
+    const timesheet = {
+      id: schedules[day][index].data.timesheetId,
+      project: schedules[day][index].data.project.name,
+      phase: schedules[day][index].data.phase.name
+    };
+    console.log(hours, minutes, timesheet, true);
+    props.setTimer(hours, minutes, timesheet, true);
+  };
+
+  const openEditTimer = (day, index) => {
+    const schedule = schedules[day][index];
+    console.log(
+      schedule.data.project.name + "/" + schedule.data.project.id,
+      schedule.data.phase.name,
+      schedule.data.note.name,
+      Number.parseInt(
+        moment.utc(schedule.end.diff(schedule.start)).format("HH")
+      ),
+      Number.parseInt(
+        moment.utc(schedule.end.diff(schedule.start)).format("mm")
+      ),
+      moment().format("YYYY") +
+        "-" +
+        moment().format("MM") +
+        "-" +
+        day.split(" ")[1]
+    );
+    props.editTimer(
+      schedule.data.timesheetId,
+      schedule.data.project.name + "/" + schedule.data.project.id,
+      schedule.data.phase.name,
+      schedule.data.note.name,
+      Number.parseInt(
+        moment.utc(schedule.end.diff(schedule.start)).format("HH")
+      ),
+      Number.parseInt(
+        moment.utc(schedule.end.diff(schedule.start)).format("mm")
+      ),
+      moment().format("YYYY") +
+        "-" +
+        moment().format("MM") +
+        "-" +
+        day.split(" ")[1]
+    );
+  };
+
+
+  const handleStore = (day, schedule) => {
+
+    setSchedules({
+        ...schedules,
+        [day]: [...schedules[day], schedule]
+    });
+  };
+
+  const handleUpdate = (day, index, schedule, dest = day) => {
+
+    if (dest === day) {
+      setSchedules(
+        {
+            ...schedules,
+            [day]: schedules[day].map((_, i) => {
+              return i === index ? schedule : _;
+            })
+        }
+      );
+      updateTimer(
+        schedule.data.project,
+        schedule.data.phase.name,
+        Number.parseInt(
+          moment.utc(schedule.end.diff(schedule.start)).format("HH")
+        ),
+        Number.parseInt(
+          moment.utc(schedule.end.diff(schedule.start)).format("mm")
+        ),
+        moment().format("YYYY") +
+          "-" +
+          moment().format("MM") +
+          "-" +
+          day.split(" ")[1],
+        schedule.data.note.name,
+        schedule.data.timesheetId
+      );
+    } else {
+      setSchedules(
+        {
+            ...schedules,
+            [day]: schedules[day].filter((_, i) => i !== index),
+            [dest]: [...schedules[dest], schedule]
+
+        }
+      );
+      updateTimer(
+        schedule.data.project,
+        schedule.data.phase.name,
+        Number.parseInt(
+          moment.utc(schedule.end.diff(schedule.start)).format("HH")
+        ),
+        Number.parseInt(
+          moment.utc(schedule.end.diff(schedule.start)).format("mm")
+        ),
+        moment().format("YYYY") +
+          "-" +
+          moment().format("MM") +
+          "-" +
+          dest.split(" ")[1],
+        schedule.data.note.name,
+        schedule.data.timesheetId
+      );
+    }
+  };
+
+  const updateTimer = (project, phase, hrs, min, date, note, timerId) => {
+    projectService
+      .updateTimesheetData(
+        {
+          project,
+          phase,
+          timeWorked:
+            Number.parseInt(hrs + "") * 60 + Number.parseInt(min + ""),
+          date: moment(new Date(date)).format("YYYY-MM-DD"),
+          note
+        },
+        timerId
+      )
+      .subscribe(data => {
+        console.log(data);
+      });
+  };
+
+  const handleRequestAction = (day, index, action) => {
+
+    if (action) {
+      setSchedules({
+          ...schedules,
+          [day]: schedules[day].map((schedule, i) => {
+            return i === index
+              ? {
+                  ...schedule,
+                  request: false,
+                  requester: null
+                }
+              : schedule;
+          })
+      });
+    } else {
+      setSchedules({
+          ...schedules,
+          [day]: schedules[day].filter((schedule, i) => {
+            return i !== index;
+          })
+      });
+    }
+  };
+
+  const handleDelete = (day, index) => {
+    projectService.deleteTimesheetData(schedules[day][index].data.timesheetId).subscribe((data) => {
+      console.log(data)
+      setSchedules({
+          ...schedules,
+          [day]: schedules[day].filter((schedule, i) => {
+            return i !== index;
+          })
+      });
+    })
+    
+  };
+
+  const theme = useTheme();
+  const match = useMediaQuery(theme.breakpoints.down('sm'));
+  console.log(match)
+
     return (
       <Grid container direction="row" justify="center">
         <Grid container direction="row" spacing={2}>
@@ -426,226 +615,18 @@ export default class DashboardComponent extends React.Component {
                 label: "Hello"
               }
             ]}
-            schedules={this.state.schedules}
-            onStore={this.handleStore}
-            onUpdate={this.handleUpdate}
-            onDelete={this.handleDelete}
-            setTimer={this.setTimer}
-            onRequestAction={this.handleRequestAction}
-            editTimesheet={this.openEditTimer}
+            scaled={match}
+            schedules={schedules}
+            onStore={handleStore}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+            setTimer={setTimer}
+            onRequestAction={handleRequestAction}
+            editTimesheet={openEditTimer}
           />
         </Grid>
       </Grid>
     );
-  }
 
-  setTimer = (day, index) => {
-    const hours = Number.parseInt(
-      moment
-        .utc(
-          this.state.schedules[day][index].end.diff(
-            this.state.schedules[day][index].start
-          )
-        )
-        .format("HH")
-    );
-    const minutes = Number.parseInt(
-      moment
-        .utc(
-          this.state.schedules[day][index].end.diff(
-            this.state.schedules[day][index].start
-          )
-        )
-        .format("mm")
-    );
-    const timesheet = {
-      id: this.state.schedules[day][index].data.timesheetId,
-      project: this.state.schedules[day][index].data.project.name,
-      phase: this.state.schedules[day][index].data.phase.name
-    };
-    console.log(hours, minutes, timesheet, true);
-    this.props.setTimer(hours, minutes, timesheet, true);
-  };
-
-  openEditTimer = (day, index) => {
-    const { schedules } = this.state;
-    const schedule = schedules[day][index];
-    console.log(
-      schedule.data.project.name + "/" + schedule.data.project.id,
-      schedule.data.phase.name,
-      schedule.data.note.name,
-      Number.parseInt(
-        moment.utc(schedule.end.diff(schedule.start)).format("HH")
-      ),
-      Number.parseInt(
-        moment.utc(schedule.end.diff(schedule.start)).format("mm")
-      ),
-      moment().format("YYYY") +
-        "-" +
-        moment().format("MM") +
-        "-" +
-        day.split(" ")[1]
-    );
-    this.props.editTimer(
-      schedule.data.timesheetId,
-      schedule.data.project.name + "/" + schedule.data.project.id,
-      schedule.data.phase.name,
-      schedule.data.note.name,
-      Number.parseInt(
-        moment.utc(schedule.end.diff(schedule.start)).format("HH")
-      ),
-      Number.parseInt(
-        moment.utc(schedule.end.diff(schedule.start)).format("mm")
-      ),
-      moment().format("YYYY") +
-        "-" +
-        moment().format("MM") +
-        "-" +
-        day.split(" ")[1]
-    );
-  };
-
-  handleClose = () => {
-    this.setState({ openRegisterTime: false });
-  };
-
-  handleStore = (day, schedule) => {
-    const { schedules } = this.state;
-
-    this.setState({
-      schedules: {
-        ...schedules,
-        [day]: [...schedules[day], schedule]
-      }
-    });
-  };
-
-  handleUpdate = (day, index, schedule, dest = day) => {
-    const { schedules } = this.state;
-
-    if (dest === day) {
-      this.setState(
-        {
-          schedules: {
-            ...schedules,
-            [day]: schedules[day].map((_, i) => {
-              return i === index ? schedule : _;
-            })
-          }
-        },
-        () => {
-          this.updateTimer(
-            schedule.data.project,
-            schedule.data.phase.name,
-            Number.parseInt(
-              moment.utc(schedule.end.diff(schedule.start)).format("HH")
-            ),
-            Number.parseInt(
-              moment.utc(schedule.end.diff(schedule.start)).format("mm")
-            ),
-            moment().format("YYYY") +
-              "-" +
-              moment().format("MM") +
-              "-" +
-              day.split(" ")[1],
-            schedule.data.note.name,
-            schedule.data.timesheetId
-          );
-        }
-      );
-    } else {
-      this.setState(
-        {
-          schedules: {
-            ...schedules,
-            [day]: schedules[day].filter((_, i) => i !== index),
-            [dest]: [...schedules[dest], schedule]
-          }
-        },
-        () => {
-          this.updateTimer(
-            schedule.data.project,
-            schedule.data.phase.name,
-            Number.parseInt(
-              moment.utc(schedule.end.diff(schedule.start)).format("HH")
-            ),
-            Number.parseInt(
-              moment.utc(schedule.end.diff(schedule.start)).format("mm")
-            ),
-            moment().format("YYYY") +
-              "-" +
-              moment().format("MM") +
-              "-" +
-              dest.split(" ")[1],
-            schedule.data.note.name,
-            schedule.data.timesheetId
-          );
-        }
-      );
-    }
-  };
-
-  updateTimer = (project, phase, hrs, min, date, note, timerId) => {
-    projectService
-      .updateTimesheetData(
-        {
-          project,
-          phase,
-          timeWorked:
-            Number.parseInt(hrs + "") * 60 + Number.parseInt(min + ""),
-          date: moment(new Date(date)).format("YYYY-MM-DD"),
-          note
-        },
-        timerId
-      )
-      .subscribe(data => {
-        console.log(data);
-      });
-  };
-
-  handleRequestAction = (day, index, action) => {
-    const { schedules } = this.state;
-
-    if (action) {
-      this.setState({
-        schedules: {
-          ...schedules,
-          [day]: schedules[day].map((schedule, i) => {
-            return i === index
-              ? {
-                  ...schedule,
-                  request: false,
-                  requester: null
-                }
-              : schedule;
-          })
-        }
-      });
-    } else {
-      this.setState({
-        schedules: {
-          ...schedules,
-          [day]: schedules[day].filter((schedule, i) => {
-            return i !== index;
-          })
-        }
-      });
-    }
-  };
-
-  handleDelete = (day, index) => {
-    const { schedules } = this.state;
-    projectService.deleteTimesheetData(schedules[day][index].data.timesheetId).subscribe((data) => {
-      console.log(data)
-      this.setState({
-        schedules: {
-          ...schedules,
-          [day]: schedules[day].filter((schedule, i) => {
-            return i !== index;
-          })
-        }
-      });
-    })
-    
-  };
+  
 }

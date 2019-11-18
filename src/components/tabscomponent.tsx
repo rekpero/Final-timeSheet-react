@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
@@ -13,8 +13,12 @@ import { Typography, Box } from "@material-ui/core";
 import StatusComponent from "./statuscomponent";
 import ActivityLogComponent from "./activitylogcomponent";
 import WorkspaceSettingComponent from "./workspacesettingcomponent";
-import ProjectComponent from "./projectcomponent";
+import ProjectComponent from "./projectcomponent1";
 import TimesheetComponent from "./timesheetcomponent";
+import { IProjectInfo } from "../model/project";
+import { IClientInfo } from "../model/clients";
+import { IProjectTimeSheet } from "../model/timesheet";
+import EditProjectComponent from "./editprojectcomponent";
 
 const ITEM_HEIGHT = 48;
 
@@ -71,12 +75,16 @@ interface IVerticalTabs extends RouteComponentProps {
     minute: number,
     date: string
   ) => void;
+  project: IProjectInfo[];
+  clients: IClientInfo[];
+  timeSheet: IProjectTimeSheet[];
 }
 
 const VerticalTabs: React.FC<IVerticalTabs> = (props: IVerticalTabs) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [managementValue, setManagementValue] = React.useState();
+  const [urlPath, setUrlPath] = React.useState(props.location.pathname);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     if (newValue !== 5) {
@@ -95,12 +103,17 @@ const VerticalTabs: React.FC<IVerticalTabs> = (props: IVerticalTabs) => {
   };
 
   useEffect(() => {
-    const path = props.location.pathname;
+    var path = props.location.pathname;
+
     const routesList = routes.map(route => route.layout + route.path);
     console.log(path, routesList.indexOf(path));
+    // console.log(path, routesList.indexOf(path));
     setValue(routesList.indexOf(path));
+    setUrlPath(path);
+    // console.log(urlPath);
   }, [props.location.pathname]);
 
+  console.log(props.project);
   return (
     <div className={classes.root}>
       <Tabs
@@ -163,14 +176,44 @@ const VerticalTabs: React.FC<IVerticalTabs> = (props: IVerticalTabs) => {
           ))}
         </Menu>
       </Tabs>
-      <TabPanel value={value} index={0}>
-        <TimesheetComponent
-          setTimer={props.setTimer}
-          editTimer={props.editTimer}
+      <Route
+        path={`${props.match.path}/projects/edit/:id`}
+        exact
+        render={() => {
+          console.log(props.project);
+          return (
+            <EditProjectComponent
+              projects={props.project}
+              clients={props.clients}
+              timeSheets={props.timeSheet}
+            />
+          );
+        }}
+      />
+      {/* <TabPanel value={value} index={0}>
+        <Route
+          path={`${props.match.path}/dashboard`}
+          render={() => (
+            <TimesheetComponent
+              setTimer={props.setTimer}
+              editTimer={props.editTimer}
+            />
+          )}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ProjectComponent />
+        <Route
+          path={`${props.match.path}/projects`}
+          exact
+          render={() => (
+            <ProjectComponent
+              project={props.project}
+              clients={props.clients}
+              timeSheet={props.timeSheet}
+            />
+          )}
+        />
+        
       </TabPanel>
       <TabPanel value={value} index={2}>
         <StatusComponent />
@@ -183,7 +226,7 @@ const VerticalTabs: React.FC<IVerticalTabs> = (props: IVerticalTabs) => {
       </TabPanel>
       <TabPanel value={value} index={5}>
         {managementValue === 3 ? <WorkspaceSettingComponent /> : null}
-      </TabPanel>
+      </TabPanel> */}
     </div>
   );
 };

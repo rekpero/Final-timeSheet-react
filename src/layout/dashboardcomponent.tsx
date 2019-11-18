@@ -167,6 +167,9 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
           {...this.props}
           setTimer={this.setTimer}
           editTimer={this.editTimer}
+          project={this.state.project}
+          clients={this.state.clients}
+          timeSheet={this.state.timeSheet}
         ></VerticalTabs>
         <AppBarComponent
           setTimer={this.setTimerFromModal}

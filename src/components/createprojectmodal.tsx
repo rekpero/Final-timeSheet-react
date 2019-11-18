@@ -27,7 +27,8 @@ import {
   Checkbox,
   ListItemText,
   Input,
-  Chip
+  Chip,
+  Divider
 } from "@material-ui/core";
 import AddMember from "./addmemberclasscomponent";
 import SketchExample from "./color";
@@ -55,8 +56,8 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: theme.shadows[5],
       padding: theme.spacing(4, 6, 6, 8),
       [theme.breakpoints.down("sm")]: {
-        width: 200,
-        height: 100
+        width: 300,
+        height: 650
       }
     },
     chips: {
@@ -67,7 +68,11 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 2
     },
     formControl: {
-      marginRight: theme.spacing(5),
+      width: "100%"
+    },
+    formControl1: {
+      marginLeft: 12,
+      marginTop: 5,
       width: "100%"
     },
     selectEmpty: {
@@ -75,7 +80,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     button1: {
-      fontSize: "small"
+      fontSize: "small",
+      width: 150
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: 600
+    },
+    divider: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2)
     }
   })
 );
@@ -155,34 +169,41 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
       onClose={props.handleClose}
     >
       <div style={modalStyle} className={classes.paper1}>
-        <Typography variant="h4">
-          <FolderIcon /> Create a new Project
-        </Typography>
+        <Grid container direction="row" alignItems="center">
+          <Grid item xs={1}>
+            <FolderIcon />
+          </Grid>
+          <Grid item xs={11}>
+            <Typography variant="h6" className={classes.title}>
+              Create a new project
+            </Typography>
+          </Grid>
+        </Grid>
+        <Divider className={classes.divider} />
 
-        <hr></hr>
-        <div
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
           onClick={e => {
             handleClick();
           }}
         >
-          <Grid container direction="row" alignItems="center">
-            <Grid item xs={10}>
-              <Typography variant="h6">Project Details</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Grid container direction="row" justify="flex-end">
-                {open ? <ExpandLess /> : <ExpandMore />}
-              </Grid>
+          <Grid item xs={10}>
+            <Typography variant="h6">Project Details</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Grid container direction="row" justify="flex-end">
+              {open ? <ExpandLess /> : <ExpandMore />}
             </Grid>
           </Grid>
-        </div>
+        </Grid>
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <Grid container direction="row">
-            <Grid item xs={8}>
+          <Grid container direction="row" alignItems="flex-end">
+            <Grid item xs={10}>
               <TextField
                 id="standard-full-width"
                 label="Name"
-                style={{ margin: 6 }}
                 placeholder="Placeholder"
                 fullWidth
                 margin="normal"
@@ -192,14 +213,16 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
               />
             </Grid>
             <Grid item xs={2}>
-              <SketchExample
-                displayColorPicker={false}
-                color={{ r: "241", g: "112", b: "19", a: "1" }}
-              />
+              <Grid container direction="row" justify="flex-end">
+                <SketchExample
+                  displayColorPicker={false}
+                  color={{ r: "241", g: "112", b: "19", a: "1" }}
+                />
+              </Grid>
             </Grid>
           </Grid>
           <Grid container direction="row">
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="age-native-simple">Client</InputLabel>
                 <Select
@@ -212,7 +235,7 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
                 >
                   {" "}
                   <optgroup label="">
-                    <option value="" />
+                    {/* <option value="" /> */}
                     <option>No Selection</option>
                     <option value="create">Add Client</option>
                   </optgroup>
@@ -232,26 +255,33 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
             </Grid>
           </Grid>
         </Collapse>
-        <hr></hr>
-        <div
+
+        <Divider className={classes.divider} />
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
           onClick={e => {
             handleClick1();
           }}
         >
-          <Grid container direction="row" alignItems="center">
-            <Grid item xs={10}>
-              <Typography variant="h6">Members</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Grid container direction="row" justify="flex-end">
-                {open1 ? <ExpandLess /> : <ExpandMore />}
-              </Grid>
+          <Grid item xs={10}>
+            <Typography variant="h6">Members</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Grid container direction="row" justify="flex-end">
+              {open1 ? <ExpandLess /> : <ExpandMore />}
             </Grid>
           </Grid>
-        </div>
+        </Grid>
         <Collapse in={open1} timeout="auto" unmountOnExit>
-          <Grid container direction="row">
-            <Grid item xs={4}>
+          <Grid
+            container
+            direction="row"
+            alignItems="flex-end"
+            style={{ marginTop: 18 }}
+          >
+            <Grid item xs={6}>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="age-native-simple">Members</InputLabel>
                 <Select native>
@@ -265,42 +295,46 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6}></Grid>
-            <Grid item xs={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className={classes.button1}
-                startIcon={<AddIcon />}
-                onClick={handleClick5}
-              >
-                hourly rate
-              </Button>
+            <Grid item xs={6}>
+              <Grid container direction="row" justify="flex-end">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className={classes.button1}
+                  startIcon={<AddIcon />}
+                  onClick={handleClick5}
+                >
+                  hourly rate
+                </Button>
+              </Grid>
             </Grid>
+            <Grid item xs={2}></Grid>
           </Grid>
           <Collapse in={openRate} timeout="auto" unmountOnExit>
             <TextField></TextField>
           </Collapse>
         </Collapse>
 
-        <hr></hr>
-        <div
+        <Divider className={classes.divider} />
+
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
           onClick={e => {
             handleClick2();
           }}
         >
-          <Grid container direction="row" alignItems="center">
-            <Grid item xs={10}>
-              <Typography variant="h6">Phases </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Grid container direction="row" justify="flex-end">
-                {open2 ? <ExpandLess /> : <ExpandMore />}
-              </Grid>
+          <Grid item xs={10}>
+            <Typography variant="h6">Phases </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Grid container direction="row" justify="flex-end">
+              {open2 ? <ExpandLess /> : <ExpandMore />}
             </Grid>
           </Grid>
-        </div>
+        </Grid>
         <Collapse in={open2} timeout="auto" unmountOnExit>
           <Grid container direction="row">
             <Grid item xs>
@@ -341,30 +375,30 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
           </Grid>
         </Collapse>
 
-        <hr></hr>
-        <div
+        <Divider className={classes.divider} />
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
           onClick={e => {
             handleClick3();
           }}
         >
-          <Grid container direction="row" alignItems="center">
-            <Grid item xs={10}>
-              <Typography variant="h6">Budget</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Grid container direction="row" justify="flex-end">
-                {open3 ? <ExpandLess /> : <ExpandMore />}
-              </Grid>
+          <Grid item xs={10}>
+            <Typography variant="h6">Budget</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Grid container direction="row" justify="flex-end">
+              {open3 ? <ExpandLess /> : <ExpandMore />}
             </Grid>
           </Grid>
-        </div>
+        </Grid>
         <Collapse in={open3} timeout="auto" unmountOnExit>
-          <Grid container direction="row">
-            <Grid item xs={4}>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs>
               <TextField
                 id="standard-full-width"
                 label="hrs"
-                style={{ margin: 6 }}
                 placeholder="Placeholder"
                 fullWidth
                 margin="normal"
@@ -373,9 +407,8 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
                 }}
               />
             </Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={4}>
-              <FormControl className={classes.formControl}>
+            <Grid item xs>
+              <FormControl className={classes.formControl1}>
                 <InputLabel htmlFor="age-native-simple">Members</InputLabel>
                 <Select native>
                   {" "}
@@ -387,12 +420,16 @@ const CreateProjectModal: React.FC<ICreateProjectModalProps> = (
                 </Select>
               </FormControl>
             </Grid>
+            <Grid item xs></Grid>
           </Grid>
         </Collapse>
-        <Grid container direction="row" justify="flex-end"></Grid>
-        <Button variant="contained" className={classes.button1}>
-          Create
-        </Button>
+
+        <Divider className={classes.divider} />
+        <Grid container direction="row" justify="flex-end">
+          <Button variant="contained" className={classes.button1}>
+            Create
+          </Button>
+        </Grid>
       </div>
     </Modal>
   );

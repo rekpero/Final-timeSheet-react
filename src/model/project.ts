@@ -1,9 +1,11 @@
+import { IPhasesInfo } from "./phases";
+
 export interface IProjectInfo {
   id: number;
   name: string;
-  color: string;
+  projectColor: string;
   clientId: number;
   members: { name: string; hourlyrate: string };
-  phases: Array<number>;
-  budget: { hours: number; recurrence: string; dayofWeel: string };
+  phases: IPhasesInfo[];
+  budget: number;
 }

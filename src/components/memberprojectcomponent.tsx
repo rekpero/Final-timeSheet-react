@@ -68,10 +68,6 @@ const MemberProjectComponent: React.FC<{}> = (props: any) => {
 
   return (
     <Paper className={classes.root}>
-      <Grid item xs={7}></Grid>
-      <Button variant="contained" size="large" className={classes.button}>
-        Add new
-      </Button>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>

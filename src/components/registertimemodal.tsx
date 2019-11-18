@@ -60,11 +60,12 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: theme.shadows[5],
       padding: theme.spacing(4, 6, 6, 8),
       [theme.breakpoints.down("sm")]: {
-        width: 200,
-        height: 100
+        width: 250,
+        height: 350
       }
     },
     formControl: {
+      marginTop: theme.spacing(3),
       marginRight: theme.spacing(5),
       width: "100%"
     },
@@ -73,20 +74,25 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     time: {
       marginRight: theme.spacing(1),
-      marginTop: theme.spacing(6),
+      marginTop: theme.spacing(2),
       width: "100%"
     },
     calender: {
-      marginTop: theme.spacing(6),
+      marginTop: theme.spacing(2),
       marginRight: theme.spacing(5),
       width: "100%"
     },
     button: {
-      margin: theme.spacing(3)
+      marginTop: theme.spacing(5),
+      width: "100%"
     },
     title: {
-      fontSize: 28,
-      fontWeight: 600
+      fontSize: 20,
+      fontWeight: 600,
+      marginLeft: theme.spacing(2)
+    },
+    note: {
+      marginTop: theme.spacing(3)
     }
   })
 );
@@ -122,7 +128,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   const handleDateChange = (e: any) => {
     setSelectedDate(e);
   };
-  const handleOpen = () => {
+  const handleOpenProject = () => {
     setOpen(true);
   };
 
@@ -210,10 +216,16 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
       onClose={props.handleClose}
     >
       <div style={modalStyle} className={classes.paper1}>
-        <Typography variant="h6" className={classes.title}>
-          <AddCircleIcon />
-          Register Time
-        </Typography>
+        <Grid container direction="row" alignItems="center">
+          <Grid item xs={1}>
+            <AddCircleIcon />
+          </Grid>
+          <Grid item xs={11}>
+            <Typography variant="h6" className={classes.title}>
+              Register Time
+            </Typography>
+          </Grid>
+        </Grid>
         <Grid container direction="row" spacing={2}>
           <Grid item xs>
             <FormControl className={classes.formControl}>
@@ -222,7 +234,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                 native
                 onChange={e => {
                   if (e.target.value === "create") {
-                    handleOpen();
+                    handleOpenProject();
                   } else handleProjectName(e);
                 }}
                 value={proj}
@@ -326,7 +338,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
         <Grid container direction="row">
           <TextField
             id="standard-full-width"
-            style={{ margin: 8 }}
+            className={classes.note}
             placeholder="Notes"
             fullWidth
             margin="normal"

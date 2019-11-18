@@ -11,17 +11,47 @@ import {
   InputLabel,
   MenuItem
 } from "@material-ui/core";
+import { IProjectInfo } from "../model/project";
+import { IClientInfo } from "../model/clients";
 
-class InfoProjectComponent extends React.Component<RouteComponentProps> {
-  constructor(props: any) {
+interface IInfoProjectProps {
+  project: IProjectInfo;
+  client: IClientInfo;
+}
+interface IInfoProjectState {
+  pname: string;
+  description: string;
+  client: string;
+  budget: number;
+}
+class InfoProjectComponent extends React.Component<
+  IInfoProjectProps,
+  IInfoProjectState
+> {
+  constructor(props: IInfoProjectProps) {
     super(props);
     this.state = {
       pname: "",
       description: "",
       client: "",
-      budget: "",
-      recurrence: ""
+      budget: 0
     };
+  }
+
+  componentDidUpdate() {
+    if (
+      this.props.project !== undefined &&
+      this.props.client !== undefined &&
+      this.state.pname === "" &&
+      this.state.client === "" &&
+      this.state.budget === 0
+    ) {
+      this.setState({
+        pname: this.props.project.name,
+        client: this.props.client.name,
+        budget: this.props.project.budget
+      });
+    }
   }
 
   render() {
@@ -45,6 +75,7 @@ class InfoProjectComponent extends React.Component<RouteComponentProps> {
                   label="Name"
                   margin="normal"
                   style={{ width: "300px" }}
+                  value={this.state.pname}
                   onChange={event =>
                     this.setState({ pname: event.target.value })
                   }
@@ -55,6 +86,7 @@ class InfoProjectComponent extends React.Component<RouteComponentProps> {
                   label="Description"
                   margin="normal"
                   style={{ width: "300px" }}
+                  value={this.state.description}
                   onChange={event =>
                     this.setState({ description: event.target.value })
                   }
@@ -81,6 +113,7 @@ class InfoProjectComponent extends React.Component<RouteComponentProps> {
                   label="Client"
                   margin="normal"
                   style={{ width: "300px" }}
+                  value={this.state.client}
                   onChange={event =>
                     this.setState({ client: event.target.value })
                   }
@@ -91,18 +124,14 @@ class InfoProjectComponent extends React.Component<RouteComponentProps> {
                   label="Budget"
                   margin="normal"
                   style={{ width: "300px" }}
+                  value={this.state.budget}
                   onChange={event =>
-                    this.setState({ budget: event.target.value })
+                    this.setState({
+                      budget: Number.parseInt(event.target.value)
+                    })
                   }
                 />{" "}
                 <br /> <br />
-                <FormControl>
-                  <InputLabel>Recurrence</InputLabel>
-                  <Select id="demo-simple-select" style={{ width: "300px" }}>
-                    <MenuItem value={10}>Weekly</MenuItem>
-                    <MenuItem value={20}>Monthly</MenuItem>
-                  </Select>
-                </FormControl>
               </Grid>
             </Grid>
             <br />
@@ -114,4 +143,4 @@ class InfoProjectComponent extends React.Component<RouteComponentProps> {
   }
 }
 
-export default withRouter(InfoProjectComponent);
+export default InfoProjectComponent;
