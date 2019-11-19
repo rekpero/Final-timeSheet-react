@@ -24,7 +24,7 @@
 
 .timesheet__heading-column {
   border: 1px solid #ddd;
-  width: 150px;
+  width: 120px;
   padding: 5px;
   text-align: center;
 }
@@ -34,18 +34,18 @@
 }
 
 .timesheet__heading-column--narrow {
-  width: 150px;
+  width: 120px;
 }
 
 .timesheet__column {
   position: relative;
-  width: 150px;
+  width: 120px;
   border-right: 1px solid #ddd;
   z-index: 699;
 }
 
 .timesheet__column--narrow {
-  width: 150px;
+  width: 120px;
   border-right: 0;
   background: #e3e5ef;
 }

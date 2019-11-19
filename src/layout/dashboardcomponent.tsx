@@ -8,6 +8,7 @@ import { IProjectInfo } from "../model/project";
 import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
+import Chart from "../components/dougnutChart";
 
 interface IDashboard {
   backgroundColor: string;
@@ -29,12 +30,15 @@ interface IDashboard {
   hour: number;
   minute: number;
   date: string;
+  timeWorked: number;
 }
 
 class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
   intervalHandle: any;
+  // totalTime: number;
   constructor(props: any) {
     super(props);
+    // this.totalTime = 0;
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
@@ -54,9 +58,11 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
       note: "",
       hour: 0,
       minute: 0,
-      date: ""
+      date: "",
+      timeWorked: 0
     };
   }
+  totalTime = 0;
   getProjectData = () => {
     projectService.getProjectInfo().subscribe((projectInfo: IProjectInfo[]) => {
       this.setState({ project: projectInfo });
@@ -80,9 +86,13 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
   getTimeSheetData = () => {
     projectService
       .getTimeSheetData()
-      .subscribe((timeSheetInfo: IProjectTimeSheet[]) =>
-        this.setState({ timeSheet: timeSheetInfo })
-      );
+      .subscribe((timeSheetInfo: IProjectTimeSheet[]) => {
+        this.setState({ timeSheet: timeSheetInfo });
+        timeSheetInfo.map((prop, key) => {
+          this.totalTime += prop.timeWorked;
+          this.setState({ timeWorked: this.totalTime });
+        });
+      });
   };
   componentDidMount() {
     this.getClientData();
@@ -210,6 +220,14 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
           openTimerEdit={this.openTimerEdit}
           closeEditTimer={this.closeTimerEdit}
         ></AppBarComponent>
+        <div className="col-md-6 col-sm-6 py-3">
+          <Chart
+            labels={[" Total Time in hrs"]}
+            chartData={[this.state.timeWorked]}
+            color={["#D32322"]}
+            title={"TimeWorked"}
+          />
+        </div>
       </div>
     );
   }

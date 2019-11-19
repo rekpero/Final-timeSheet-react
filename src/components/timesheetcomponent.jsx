@@ -580,7 +580,7 @@ export default function DashboardComponent(props) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
+        <Grid container direction="row" justify="flex-start" alignItems="center">
           <Timesheet
             request={false}
             requester={{
