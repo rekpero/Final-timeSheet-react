@@ -299,6 +299,21 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
             <WorkspaceSettingComponent />
           )}
         />
+        <Route 
+        path={`${props.match.path}/reports`}
+        exact render = {() => (
+          <ReportCreation
+          project={props.project}
+          phases={props.phases}
+          clients={props.clients}
+          timeSheet={props.timeSheet}
+          classes={classes1}
+        ></ReportCreation>
+        )
+          
+        }
+        />
+        
       </TabPanel>      
       
       

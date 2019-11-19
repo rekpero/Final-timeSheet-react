@@ -86,7 +86,7 @@ const TimerModal: React.FC<ItimerModalProps> = (props: ItimerModalProps) => {
                   </Grid>
                   <Grid item xs={1}></Grid>
                   <Grid item xs={4}>
-                    {prop.phases}
+                    {prop.phase}
                   </Grid>
                   <Grid item xs={1}></Grid>
 

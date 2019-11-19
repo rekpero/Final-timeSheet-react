@@ -30,7 +30,7 @@ class PhaseProjectComponent extends React.Component<
   constructor(props: IPhaseProjectProps) {
     super(props);
     this.state = {
-      stateRows: props.phases.map(phase => {
+      stateRows: this.props.phases.map(phase => {
         const filteredTimeSheet = props.timeSheets.filter(
           time => time.phase === phase.name
         );
@@ -41,7 +41,7 @@ class PhaseProjectComponent extends React.Component<
             filteredTimeSheet.length === 0
               ? 0
               : filteredTimeSheet
-                  .map(time => Number.parseInt(time.timeWorked))
+                  .map(time => time.timeWorked)
                   .reduce((prev, curr) => prev + curr)
         };
       })
@@ -63,7 +63,7 @@ class PhaseProjectComponent extends React.Component<
               filteredTimeSheet.length === 0
                 ? 0
                 : filteredTimeSheet
-                    .map(time => Number.parseInt(time.timeWorked))
+                    .map(time => time.timeWorked)
                     .reduce((prev, curr) => prev + curr)
           };
         })
