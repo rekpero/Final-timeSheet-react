@@ -12,7 +12,7 @@ import { IProjectTimeSheet } from "../model/timesheet";
 interface IDashboard {
   backgroundColor: string;
   activeColor: string;
-  
+
   hours: number;
   minutes: number;
   timesheet: { id: number; project: string; phase: string };
@@ -38,7 +38,7 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
-      
+
       hours: 0,
       minutes: 0,
       timesheet: { id: 0, project: "", phase: "" },

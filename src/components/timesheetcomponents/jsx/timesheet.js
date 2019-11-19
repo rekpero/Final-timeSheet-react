@@ -87,8 +87,8 @@ class Timesheet extends React.Component {
   }
 
   render() {
-    const {times, schedules, editing, edit, recent, now, scaled, hovering, hover} = this.state;
-    const {time, professors, subjects, sections, disabled, corny} = this.props;
+    const {times, schedules, editing, edit, recent, now, hovering, hover} = this.state;
+    const {time, professors, subjects, sections, disabled, corny, scaled} = this.props;
     const height = scaled ? settings.scaled : settings.height;
     const width = scaled ? settings.scaled : settings.width;
 

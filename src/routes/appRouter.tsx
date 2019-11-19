@@ -10,8 +10,7 @@ import EditProjectComponent from "../components/editprojectcomponent";
 const AppRouter: React.FC = () => {
   return (
     <Router>
-      <App>  
-        <Route exact path="/testing" component={EditProjectComponent} />
+      <App>
         <Route exact path="/" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route path="/dash" component={Dashboard} />

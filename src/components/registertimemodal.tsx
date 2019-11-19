@@ -60,42 +60,40 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper1: {
       position: "absolute",
-      width: 400,
+      width: 600,
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(4, 6, 6, 8),
       [theme.breakpoints.down("sm")]: {
-        width: 200,
-        height: 100
+        width: 300,
+        height: 650
       }
     },
     formControl: {
-      marginRight: theme.spacing(5),
       width: "100%"
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
     },
     time: {
       marginRight: theme.spacing(1),
-      marginTop: theme.spacing(6),
+      marginTop: theme.spacing(2),
       width: "100%"
     },
     calender: {
-      marginTop: theme.spacing(6),
+      marginTop: theme.spacing(2),
       marginRight: theme.spacing(5),
       width: "100%"
     },
     button: {
-      margin: theme.spacing(3)
+      marginTop: theme.spacing(5),
+      width: "100%"
     },
-    title: {
+    note: {
+      marginTop: theme.spacing(3),
       fontSize: 28,
       fontWeight: 600
     },
-    button1: {
-      fontSize: "small"
+    grow: {
+      flexGrow: 1
     },
     chips: {
       display: "flex",
@@ -103,6 +101,26 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     chip: {
       margin: 2
+    },
+    formControl1: {
+      marginLeft: 12,
+      marginTop: 5,
+      width: "100%"
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    button1: {
+      fontSize: "small",
+      width: 150
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: 600
+    },
+    divider: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2)
     }
   })
 );
@@ -126,23 +144,21 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   const [selectedDate, setSelectedDate] = React.useState<Date>(
     new Date(moment().toDate())
   );
-  var [hrs, setHrs] = React.useState(0);
-  var [min, setMin] = React.useState(0);
+  const [hrs, setHrs] = React.useState(0);
+  const [min, setMin] = React.useState(0);
   const [openProject, setOpenProject] = React.useState(false);
   const [value, setValue] = React.useState("");
-  const handleDateChange = () => {
-    console.log("Paras");
-  };
-  var [project, setProject] = React.useState("");
-  var [projectId, setProjectId] = React.useState(0);
-  var [phase, setPhase] = React.useState("");
-  var [note, setNote] = React.useState("");
-  var [proj, setProj] = React.useState("");
+  const [projectName, setProjectName] = React.useState("");
+  const [project, setProject] = React.useState();
+  const [projectId, setProjectId] = React.useState(0);
+  const [phase, setPhase] = React.useState("");
+  const [note, setNote] = React.useState("");
+  const [proj, setProj] = React.useState("");
 
   const [open, setOpen] = React.useState(false);
-  // const handleDateChange = (e: any) => {
-  //   setSelectedDate(e);
-  // };
+  const handleDateChange = (e: any) => {
+    setSelectedDate(e);
+  };
   const handleOpenProject = () => {
     setOpenProject(true);
     setValue("");
@@ -159,9 +175,19 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   };
   const handleProjectName = (e: any) => {
     setProj(e.target.value);
-    setProject(e.target.value.split("/")[0]);
-    setProjectId(e.target.value.split("/")[1]);
-    console.log(project);
+    setProjectName(e.target.value.split("/")[0]);
+    setProjectId(Number.parseInt(e.target.value.split("/")[1]));
+    setProject(
+      props.project.filter(
+        proj => proj.id === Number.parseInt(e.target.value.split("/")[1])
+      )[0]
+    );
+    setPhase(
+      props.project.filter(
+        proj => proj.id === Number.parseInt(e.target.value.split("/")[1])
+      )[0].phases[0].name
+    );
+    console.log(project, projectId, project.phases);
   };
   const handlePhaseName = (e: any) => {
     setPhase(e.target.value);
@@ -221,10 +247,10 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
     setPhase(props.phase);
     setNote(props.note);
     setProj(props.projData);
-    console.log(props.hour, props.minute);
+    // console.log(props.hour, props.minute);
   }, [props]);
 
-  console.log(props.project);
+  // console.log(props.project);
   return (
     <Modal
       aria-labelledby="simple-modal-title"
@@ -233,10 +259,16 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
       onClose={props.handleClose}
     >
       <div style={modalStyle} className={classes.paper1}>
-        <Typography variant="h6" className={classes.title}>
-          <AddCircleIcon />
-          Register Time
-        </Typography>
+        <Grid container direction="row" alignItems="center">
+          <Grid item xs={1}>
+            <AddCircleIcon />
+          </Grid>
+          <Grid item xs={11}>
+            <Typography variant="h6" className={classes.title}>
+              Register Time
+            </Typography>
+          </Grid>
+        </Grid>
         <Grid container direction="row" spacing={2}>
           <Grid item xs>
             <FormControl className={classes.formControl}>
@@ -247,7 +279,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                 onChange={e => {
                   if (e.target.value === "create") {
                     handleOpenProject();
-                  }else handleProjectName(e);
+                  } else handleProjectName(e);
                 }}
                 value={proj}
               >
@@ -258,7 +290,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                 </optgroup>
                 <optgroup label="">
                   {props.project.map((prop, key) => {
-                    console.log(prop);
+                    // console.log(prop);
                     return (
                       <option value={prop.name + "/" + prop.id}>
                         {prop.name}
@@ -286,10 +318,16 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="age-native-simple">Phases</InputLabel>
               <Select native onChange={e => handlePhaseName(e)} value={phase}>
-                {props.phases.map((prop, key) => {
-                  // console.log(props.phases);
-                  return <option value={prop.name}>{prop.name}</option>;
-                })}
+                {projectId !== 0
+                  ? project !== undefined
+                    ? project.phases !== undefined
+                      ? project.phases.map((prop: any, key: number) => {
+                          // console.log(props.phases);
+                          return <option value={prop.name}>{prop.name}</option>;
+                        })
+                      : null
+                    : null
+                  : null}
               </Select>
             </FormControl>
           </Grid>
@@ -355,7 +393,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
         <Grid container direction="row">
           <TextField
             id="standard-full-width"
-            style={{ margin: 8 }}
+            className={classes.note}
             placeholder="Notes"
             fullWidth
             margin="normal"

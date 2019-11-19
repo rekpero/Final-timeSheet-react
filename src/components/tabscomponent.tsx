@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
@@ -13,16 +13,17 @@ import { Typography, Box } from "@material-ui/core";
 import StatusComponent from "./statuscomponent";
 import ActivityLogComponent from "./activitylogcomponent";
 import WorkspaceSettingComponent from "./workspacesettingcomponent";
-import ProjectComponent from "./projectcomponent";
+import ProjectComponent from "./projectcomponent1";
 import DashboardComponent from "../layout/dashboardcomponent";
-import { IProjectInfo } from "../model/project";
-import { IProjectTimeSheet } from "../model/timesheet";
-import { IClientInfo } from "../model/clients";
-import { IPhasesInfo } from "../model/phases";
 import AddMember from "./addmemberclasscomponent";
 import PhasesModal from "./managePhases";
 import TimesheetComponent from "./timesheetcomponent";
 import ReportCreation from "./reportComponent";
+import { IProjectInfo } from "../model/project";
+import { IClientInfo } from "../model/clients";
+import { IProjectTimeSheet } from "../model/timesheet";
+import EditProjectComponent from "./editprojectcomponent";
+import { IPhasesInfo } from "../model/phases";
 
 const ITEM_HEIGHT = 48;
 
@@ -133,6 +134,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   const classes1 = useStylesModal();
   const [value, setValue] = React.useState(0);
   const [managementValue, setManagementValue] = React.useState();
+  const [urlPath, setUrlPath] = React.useState(props.location.pathname);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     if (newValue !== 5) {
@@ -156,10 +158,14 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
     setOpen3(false);
   };
   useEffect(() => {
-    const path = props.location.pathname;
+    var path = props.location.pathname;
+
     const routesList = routes.map(route => route.layout + route.path);
     console.log(path, routesList.indexOf(path));
+    // console.log(path, routesList.indexOf(path));
     setValue(routesList.indexOf(path));
+    setUrlPath(path);
+    // console.log(urlPath);
   }, [props.location.pathname]);
 
   const [open4, setOpen4] = React.useState(false);
@@ -238,14 +244,88 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
           ))}
         </Menu>
       </Tabs>
-      <TabPanel value={value} index={0}>
-        <TimesheetComponent
-          setTimer={props.setTimer}
-          editTimer={props.editTimer}
+      <TabPanel>
+      <Route
+        path={`${props.match.path}/dashboard`}
+        render={() => (
+          <TimesheetComponent
+            setTimer={props.setTimer}
+            editTimer={props.editTimer}
+          />
+        )}
+      />
+      <Route
+        path={`${props.match.path}/projects/edit/:id`}
+        exact
+        render={() => {
+          console.log(props.project);
+          return (
+            <EditProjectComponent
+              projects={props.project}
+              clients={props.clients}
+              timeSheets={props.timeSheet}
+            />
+          );
+        }}
+      />
+      <Route
+          path={`${props.match.path}/projects`}
+          exact
+          render={() => (
+            <ProjectComponent
+            clientData={props.clientData}
+            projectData={props.projectData}
+            phaseData={props.phaseData}
+            timesheetData={props.timesheetData}
+            project={props.project}
+            phases={props.phases}
+            timeSheet={props.timeSheet}
+            clients={props.clients}
+            
+            />
+          )}
+        />
+        <Route
+          path={`${props.match.path}/status`}
+          exact
+          render={() => (
+            <StatusComponent />
+          )}
+        />
+        <Route
+          path={`${props.match.path}/workspacesettings`}
+          exact
+          render={() => (
+            <WorkspaceSettingComponent />
+          )}
+        />
+      </TabPanel>      
+      
+      
+      {/* <TabPanel value={value} index={0}>
+        <Route
+          path={`${props.match.path}/dashboard`}
+          render={() => (
+            <TimesheetComponent
+              setTimer={props.setTimer}
+              editTimer={props.editTimer}
+            />
+          )}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ProjectComponent />
+        <Route
+          path={`${props.match.path}/projects`}
+          exact
+          render={() => (
+            <ProjectComponent
+              project={props.project}
+              clients={props.clients}
+              timeSheet={props.timeSheet}
+            />
+          )}
+        />
+        
       </TabPanel>
       <TabPanel value={value} index={2}>
         <StatusComponent />
@@ -275,7 +355,6 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
             classes={classes1}
           ></AddMember>
         ) : null}
-        {managementValue === 3 ? <WorkspaceSettingComponent /> : null}
         {managementValue === 2 ? (
           <PhasesModal
             phaseData={props.phases.map(phase => ({
@@ -288,7 +367,8 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
             phaseDataFunction={props.phaseData}
           ></PhasesModal>
         ) : null}
-      </TabPanel>
+        {managementValue === 3 ? <WorkspaceSettingComponent /> : null}
+      </TabPanel> */}
     </div>
   );
 };

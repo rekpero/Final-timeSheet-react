@@ -21,7 +21,8 @@ import {
   Checkbox,
   ListItemText,
   Input,
-  Chip
+  Chip,
+  Divider
 } from "@material-ui/core";
 
 import SketchExample from "./color";
@@ -52,10 +53,9 @@ interface IProjectState {
   phase: string[];
   SelectedValue: any;
   addedProject: newProject;
-  selectedPhase:string[];
+  selectedPhase: string[];
 }
-interface newProject{
- 
+interface newProject {
   name: string;
   projectColor: { r: string; g: string; b: string; a: string };
   clientId: number;
@@ -68,7 +68,6 @@ class CreateProjectModal extends React.Component<
   ICreateProjectModalProps,
   IProjectState
 > {
-  
   constructor(props: ICreateProjectModalProps) {
     super(props);
     this.state = {
@@ -80,12 +79,15 @@ class CreateProjectModal extends React.Component<
       openRate: false,
       phase: [],
       SelectedValue: "",
-      addedProject: {name:"",projectColor: { r: "", g: "", b: "",a: ""},
-      clientId: 1,
-      members: { name: "", hourlyrate: 1 },
-      phases: [],
-      budget: 1},
-      selectedPhase:[]
+      addedProject: {
+        name: "",
+        projectColor: { r: "", g: "", b: "", a: "" },
+        clientId: 1,
+        members: { name: "", hourlyrate: 1 },
+        phases: [],
+        budget: 1
+      },
+      selectedPhase: []
     };
   }
 
@@ -100,7 +102,7 @@ class CreateProjectModal extends React.Component<
     };
   }
   handleProjectName = (e: any) => {
-    this.state.addedProject.name = e.target.value
+    this.state.addedProject.name = e.target.value;
     this.setState({ addedProject: this.state.addedProject });
   };
 
@@ -112,14 +114,14 @@ class CreateProjectModal extends React.Component<
     this.setState({ open4: false });
   };
   handleMemberRate = (e: any) => {
-    this.state.addedProject.members.hourlyrate= e.target.value;
+    this.state.addedProject.members.hourlyrate = e.target.value;
     this.setState({ addedProject: this.state.addedProject });
   };
 
-  handleBudget =(e: any) => {
+  handleBudget = (e: any) => {
     this.state.addedProject.budget = e.target.value;
-    this.setState({addedProject: this.state.addedProject});
-  }
+    this.setState({ addedProject: this.state.addedProject });
+  };
   handleClientName = (e: any) => {
     this.props.phases.map((prop, key) => {
       if (prop.name === e.target.value) {
@@ -132,7 +134,7 @@ class CreateProjectModal extends React.Component<
     this.state.addedProject.members.name = e.target.value;
     this.setState({ addedProject: this.state.addedProject });
   };
- 
+
   handleClick = () => {
     this.setState({ open: !this.state.open });
   };
@@ -150,31 +152,29 @@ class CreateProjectModal extends React.Component<
   };
 
   handlePhaseName = (e: string[]) => {
-    
-    e.map((prop1,key1)=>{
-      this.state.selectedPhase.push(prop1)
+    e.map((prop1, key1) => {
+      this.state.selectedPhase.push(prop1);
       console.log(prop1);
     });
     this.setState({ addedProject: this.state.addedProject });
-
   };
   handleColor = (e: any) => {
     this.state.addedProject.projectColor = e;
     this.setState({ addedProject: this.state.addedProject });
   };
   pushProject = () => {
-    this.state.selectedPhase.map((prop1,key1)=>{
-    this.props.phases.map((prop,key)=>{
-     
-      if(prop1 === prop.name)
-      {
-        this.state.addedProject.phases.push({name: prop.name,id: prop.id,color: prop.color});
-      }
+    this.state.selectedPhase.map((prop1, key1) => {
+      this.props.phases.map((prop, key) => {
+        if (prop1 === prop.name) {
+          this.state.addedProject.phases.push({
+            name: prop.name,
+            id: prop.id,
+            color: prop.color
+          });
+        }
+      });
     });
-  });
-  this.setState({addedProject: this.state.addedProject});
-
-
+    this.setState({ addedProject: this.state.addedProject });
 
     return projectService
       .postProject(this.state.addedProject)
@@ -195,53 +195,61 @@ class CreateProjectModal extends React.Component<
         onClose={this.props.handleClose}
       >
         <div style={this.getModalStyle()} className={this.props.classes.paper1}>
-          <Typography variant="h4">
-            <FolderIcon /> Create a new Project
-          </Typography>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs={1}>
+              <FolderIcon />
+            </Grid>
+            <Grid item xs={11}>
+              <Typography variant="h6" className={this.props.classes.title}>
+                Create a new project
+              </Typography>
+            </Grid>
+          </Grid>
+          <Divider className={this.props.classes.divider} />
 
-          <hr></hr>
-          <div
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
             onClick={e => {
               this.handleClick();
             }}
           >
-            <Grid container direction="row" alignItems="center">
-              <Grid item xs={10}>
-                <Typography variant="h6">Project Details</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Grid container direction="row" justify="flex-end">
-                  {this.state.open ? <ExpandLess /> : <ExpandMore />}
-                </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6">Project Details</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="row" justify="flex-end">
+                {this.state.open ? <ExpandLess /> : <ExpandMore />}
               </Grid>
             </Grid>
-          </div>
+          </Grid>
           <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-            <Grid container direction="row">
-              <Grid item xs={8}>
+            <Grid container direction="row" alignItems="flex-end">
+              <Grid item xs={10}>
                 <TextField
                   id="standard-full-width"
                   label="Name"
-                  style={{ margin: 6 }}
                   placeholder="Placeholder"
                   fullWidth
                   margin="normal"
                   InputLabelProps={{
                     shrink: true
                   }}
-                  onChange={e => this.handleProjectName(e)}
                 />
               </Grid>
               <Grid item xs={2}>
-                <SketchExample
-                  displayColorPicker={false}
-                  color={{ r: "241", g: "112", b: "19", a: "1" }}
-                  handleColor={e => this.handleColor(e)}
-                />
+                <Grid container direction="row" justify="flex-end">
+                  <SketchExample
+                    displayColorPicker={false}
+                    color={{ r: "241", g: "112", b: "19", a: "1" }}
+                    handleColor={e => this.handleColor(e)}
+                  />
+                </Grid>
               </Grid>
             </Grid>
             <Grid container direction="row">
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <FormControl className={this.props.classes.formControl}>
                   <InputLabel htmlFor="age-native-simple">Client</InputLabel>
                   <Select
@@ -258,7 +266,7 @@ class CreateProjectModal extends React.Component<
                   >
                     {" "}
                     <optgroup label="">
-                      <option value="" />
+                      {/* <option value="" /> */}
                       <option>No Selection</option>
                       <option value="create">Add Client</option>
                     </optgroup>
@@ -268,47 +276,52 @@ class CreateProjectModal extends React.Component<
                         return <option>{prop.name}</option>;
                       })}
                     </optgroup>
+                    <AddMember
+                      clientsData={this.props.clientData}
+                      clientData={this.props.clients.map(client => ({
+                        clients: client,
+                        existence: true
+                      }))}
+                      open={this.state.open4}
+                      handleClose={this.handleClose}
+                      classes={this.props.classes}
+                    ></AddMember>
                   </Select>
                 </FormControl>
-
-                <AddMember
-                  clientsData={this.props.clientData}
-                  clientData={this.props.clients.map(client => ({
-                    clients: client,
-                    existence: true
-                  }))}
-                  open={this.state.open4}
-                  handleClose={this.handleClose}
-                  classes={this.props.classes}
-                />
               </Grid>
             </Grid>
           </Collapse>
-          <hr></hr>
-          <div
+
+          <Divider className={this.props.classes.divider} />
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
             onClick={e => {
               this.handleClick1();
             }}
           >
-            <Grid container direction="row" alignItems="center">
-              <Grid item xs={10}>
-                <Typography variant="h6">Members</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Grid container direction="row" justify="flex-end">
-                  {this.state.open1 ? <ExpandLess /> : <ExpandMore />}
-                </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6">Members</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="row" justify="flex-end">
+                {this.state.open1 ? <ExpandLess /> : <ExpandMore />}
               </Grid>
             </Grid>
-          </div>
+          </Grid>
           <Collapse in={this.state.open1} timeout="auto" unmountOnExit>
-            <Grid container direction="row">
-              <Grid item xs={4}>
+            <Grid
+              container
+              direction="row"
+              alignItems="flex-end"
+              style={{ marginTop: 18 }}
+            >
+              <Grid item xs={6}>
                 <FormControl className={this.props.classes.formControl}>
                   <InputLabel htmlFor="age-native-simple">Members</InputLabel>
                   <Select
                     native
-                    
                     onChange={e => {
                       this.handleMemberName(e);
                     }}
@@ -325,42 +338,46 @@ class CreateProjectModal extends React.Component<
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={6}></Grid>
-              <Grid item xs={2}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className={this.props.classes.button1}
-                  startIcon={<AddIcon />}
-                  onClick={this.handleClick5}
-                >
-                  hourly rate
-                </Button>
+              <Grid item xs={6}>
+                <Grid container direction="row" justify="flex-end">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className={this.props.classes.button1}
+                    startIcon={<AddIcon />}
+                    onClick={this.handleClick5}
+                  >
+                    hourly rate
+                  </Button>
+                </Grid>
               </Grid>
+              <Grid item xs={2}></Grid>
             </Grid>
             <Collapse in={this.state.openRate} timeout="auto" unmountOnExit>
               <TextField onChange={e => this.handleMemberRate(e)}></TextField>
             </Collapse>
           </Collapse>
 
-          <hr></hr>
-          <div
+          <Divider className={this.props.classes.divider} />
+
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
             onClick={e => {
               this.handleClick2();
             }}
           >
-            <Grid container direction="row" alignItems="center">
-              <Grid item xs={10}>
-                <Typography variant="h6">Phases </Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Grid container direction="row" justify="flex-end">
-                  {this.state.open2 ? <ExpandLess /> : <ExpandMore />}
-                </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6">Phases </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="row" justify="flex-end">
+                {this.state.open2 ? <ExpandLess /> : <ExpandMore />}
               </Grid>
             </Grid>
-          </div>
+          </Grid>
           <Collapse in={this.state.open2} timeout="auto" unmountOnExit>
             <Grid container direction="row">
               <Grid item xs>
@@ -373,23 +390,25 @@ class CreateProjectModal extends React.Component<
             </Grid>
           </Collapse>
 
-          <hr></hr>
-          <div
+          <Divider className={this.props.classes.divider} />
+
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
             onClick={e => {
               this.handleClick3();
             }}
           >
-            <Grid container direction="row" alignItems="center">
-              <Grid item xs={10}>
-                <Typography variant="h6">Budget</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Grid container direction="row" justify="flex-end">
-                  {this.state.open3 ? <ExpandLess /> : <ExpandMore />}
-                </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6">Budget</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="row" justify="flex-end">
+                {this.state.open3 ? <ExpandLess /> : <ExpandMore />}
               </Grid>
             </Grid>
-          </div>
+          </Grid>
           <Collapse in={this.state.open3} timeout="auto" unmountOnExit>
             <Grid container direction="row">
               <Grid item xs={4}>
@@ -409,14 +428,16 @@ class CreateProjectModal extends React.Component<
               <Grid item xs={2}></Grid>
             </Grid>
           </Collapse>
-          <Grid container direction="row" justify="flex-end"></Grid>
-          <Button
-            variant="contained"
-            className={this.props.classes.button1}
-            onClick={e => this.pushProject()}
-          >
-            Create
-          </Button>
+          <Divider className={this.props.classes.divider} />
+          <Grid container direction="row" justify="flex-end">
+            <Button
+              variant="contained"
+              className={this.props.classes.button1}
+              onClick={e => this.pushProject()}
+            >
+              Create
+            </Button>
+          </Grid>
         </div>
       </Modal>
     );
