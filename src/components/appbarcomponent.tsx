@@ -134,7 +134,7 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
             open={open1}
             handleClose={handleClose1}
           ></EnteriesModal>
-          <TimerModal open={open2} handleClose={handleClose2}></TimerModal>
+          <TimerModal data={props.timeSheet} open={open2} handleClose={handleClose2}></TimerModal>
         </IconButton>
         <IconButton color="inherit">
           <CheckCircleOutlineIcon

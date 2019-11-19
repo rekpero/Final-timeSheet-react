@@ -247,7 +247,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                 onChange={e => {
                   if (e.target.value === "create") {
                     handleOpenProject();
-                  }
+                  }else handleProjectName(e);
                 }}
                 value={proj}
               >

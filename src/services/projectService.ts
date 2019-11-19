@@ -111,6 +111,30 @@ class ProjectService {
       );
     });
   };
+
+  public postPhase = (data: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/phases`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(data)
+        })
+      );
+    });
+  };
+
+  public deletePhases = (id: string): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/phases/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "DELETE"
+        })
+      );
+    });
+  };
+
   public postProject = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(

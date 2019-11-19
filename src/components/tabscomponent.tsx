@@ -22,6 +22,7 @@ import { IPhasesInfo } from "../model/phases";
 import AddMember from "./addmemberclasscomponent";
 import PhasesModal from "./managePhases";
 import TimesheetComponent from "./timesheetcomponent";
+import ReportCreation from "./reportComponent";
 
 const ITEM_HEIGHT = 48;
 
@@ -250,7 +251,13 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
         <StatusComponent />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <ReportCreation
+          project={props.project}
+          phases={props.phases}
+          clients={props.clients}
+          timeSheet={props.timeSheet}
+          classes={classes1}
+        ></ReportCreation>
       </TabPanel>
       <TabPanel value={value} index={4}>
         <ActivityLogComponent />
@@ -278,6 +285,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
             open={open3}
             handleClose={handleClose2}
             classes={classes1}
+            phaseDataFunction={props.phaseData}
           ></PhasesModal>
         ) : null}
       </TabPanel>
