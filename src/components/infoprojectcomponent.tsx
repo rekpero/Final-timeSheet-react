@@ -17,6 +17,9 @@ import { IClientInfo } from "../model/clients";
 interface IInfoProjectProps {
   project: IProjectInfo;
   client: IClientInfo;
+  changeProjectName: (name: string) => void;
+  changeProjectDescription: (decription: string) => void;
+  changeProjectBudget: (budget: number) => void;
 }
 interface IInfoProjectState {
   pname: string;
@@ -54,6 +57,25 @@ class InfoProjectComponent extends React.Component<
     }
   }
 
+  handleProjectName = (e: any) => {
+    this.setState({ pname: e.target.value }, () => {
+      this.props.changeProjectName(this.state.pname);
+      console.log(this.state.pname);
+    });
+  };
+
+  handleProjectDescription = (e: any) => {
+    this.setState({ description: e.target.value }, () =>
+      this.props.changeProjectDescription(this.state.description)
+    );
+  };
+
+  handleProjectBudget = (e: any) => {
+    this.setState({ budget: Number.parseInt(e.target.value) }, () =>
+      this.props.changeProjectBudget(this.state.budget)
+    );
+  };
+
   render() {
     return (
       <Box px={10}>
@@ -76,9 +98,7 @@ class InfoProjectComponent extends React.Component<
                   margin="normal"
                   style={{ width: "300px" }}
                   value={this.state.pname}
-                  onChange={event =>
-                    this.setState({ pname: event.target.value })
-                  }
+                  onChange={event => this.handleProjectName(event)}
                 />{" "}
                 <br />
                 <TextField
@@ -87,9 +107,7 @@ class InfoProjectComponent extends React.Component<
                   margin="normal"
                   style={{ width: "300px" }}
                   value={this.state.description}
-                  onChange={event =>
-                    this.setState({ description: event.target.value })
-                  }
+                  onChange={event => this.handleProjectDescription(event)}
                 />
               </Grid>
             </Grid>
@@ -114,9 +132,7 @@ class InfoProjectComponent extends React.Component<
                   margin="normal"
                   style={{ width: "300px" }}
                   value={this.state.client}
-                  onChange={event =>
-                    this.setState({ client: event.target.value })
-                  }
+                  disabled
                 />{" "}
                 <br />
                 <TextField
@@ -125,11 +141,7 @@ class InfoProjectComponent extends React.Component<
                   margin="normal"
                   style={{ width: "300px" }}
                   value={this.state.budget}
-                  onChange={event =>
-                    this.setState({
-                      budget: Number.parseInt(event.target.value)
-                    })
-                  }
+                  onChange={event => this.handleProjectBudget(event)}
                 />{" "}
                 <br /> <br />
               </Grid>

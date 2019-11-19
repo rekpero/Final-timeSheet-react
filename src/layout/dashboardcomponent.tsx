@@ -1,6 +1,6 @@
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
 
+import { RouteComponentProps } from "react-router-dom";
 import VerticalTabs from "../components/tabscomponent";
 import AppBarComponent from "../components/appbarcomponent";
 import projectService from "../services/projectService";
@@ -12,8 +12,7 @@ import { IProjectTimeSheet } from "../model/timesheet";
 interface IDashboard {
   backgroundColor: string;
   activeColor: string;
-  List1: Array<string>;
-  List2: Array<string>;
+
   hours: number;
   minutes: number;
   timesheet: { id: number; project: string; phase: string };
@@ -39,8 +38,7 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
-      List1: ["Paras", "Kumar", "soni"],
-      List2: ["Paras", "Kumar", "soni"],
+
       hours: 0,
       minutes: 0,
       timesheet: { id: 0, project: "", phase: "" },
@@ -59,27 +57,38 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
       date: ""
     };
   }
-  componentDidMount() {
-    projectService
-      .getProjectInfo()
-      .subscribe((projectInfo: IProjectInfo[]) =>
-        this.setState({ project: projectInfo })
-      );
+  getProjectData = () => {
+    projectService.getProjectInfo().subscribe((projectInfo: IProjectInfo[]) => {
+      this.setState({ project: projectInfo });
+      console.log(projectInfo);
+    });
+  };
+  getClientData = () => {
     projectService
       .getClientData()
       .subscribe((clientData: IClientInfo[]) =>
         this.setState({ clients: clientData })
       );
+  };
+  getPhaseData = () => {
     projectService
       .getPhasesInfo()
       .subscribe((phasesInfo: IPhasesInfo[]) =>
         this.setState({ phases: phasesInfo })
       );
+  };
+  getTimeSheetData = () => {
     projectService
       .getTimeSheetData()
       .subscribe((timeSheetInfo: IProjectTimeSheet[]) =>
         this.setState({ timeSheet: timeSheetInfo })
       );
+  };
+  componentDidMount() {
+    this.getClientData();
+    this.getPhaseData();
+    this.getProjectData();
+    this.getTimeSheetData();
   }
 
   tick = () => {
@@ -165,13 +174,22 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
       <div>
         <VerticalTabs
           {...this.props}
+          project={this.state.project}
+          phases={this.state.phases}
+          timeSheet={this.state.timeSheet}
+          clients={this.state.clients}
+          clientData={this.getClientData}
+          projectData={this.getProjectData}
+          phaseData={this.getPhaseData}
+          timesheetData={this.getTimeSheetData}
           setTimer={this.setTimer}
           editTimer={this.editTimer}
-          project={this.state.project}
-          clients={this.state.clients}
-          timeSheet={this.state.timeSheet}
         ></VerticalTabs>
         <AppBarComponent
+          clientData={this.getClientData}
+          projectData={this.getProjectData}
+          phaseData={this.getPhaseData}
+          timesheetData={this.getTimeSheetData}
           setTimer={this.setTimerFromModal}
           hrs={this.state.hours}
           min={this.state.minutes}

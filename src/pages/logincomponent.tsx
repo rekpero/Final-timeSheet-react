@@ -56,7 +56,7 @@ class Login extends React.Component<RouteComponentProps> {
           </Grid>
           <Grid container spacing={3} direction="row" justify="center">
             <Grid item xs={6}>
-              <Link to="/dash" className="text-white">
+              <Link to="/dash/dashboard" className="text-white">
                 <Button variant="contained" size="large" color="primary">
                   Login
                 </Button>

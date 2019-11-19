@@ -60,6 +60,10 @@ interface IAppBarProps {
   phases: IPhasesInfo[];
   clients: IClientInfo[];
   timeSheet: IProjectTimeSheet[];
+  clientData: () => void;
+  projectData: () => void;
+  phaseData: () => void;
+  timesheetData: () => void;
   timerId: number;
   projData: string;
   phase: string;
@@ -73,8 +77,15 @@ interface IAppBarProps {
 }
 const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   const classes = useStyles();
+  const [showTimer, setTimer] = React.useState(false);
+  var [hrs, setHrs] = React.useState(0);
+  var [min, setMin] = React.useState(0);
+  const [openRegisterModal, setOpenRegisterModal] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
+  const handleOpen = () => {
+    setOpenRegisterModal(true);
+  };
   const handleOpen1 = () => {
     setOpen1(true);
   };
@@ -87,10 +98,14 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   const handleClose2 = () => {
     setOpen2(false);
   };
+  const handleCloseModal = () => {
+    setOpenRegisterModal(false);
+  };
   // const showTimerPaper = () => {
   //   setTimer(props.showTimer);
   // };
 
+  console.log(props.project);
   return (
     <AppBar position="fixed" color="primary" className={classes.appBar}>
       <Toolbar>
@@ -136,6 +151,10 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
         </IconButton>
       </Toolbar>
       <RegisterTimeModal
+        clientData={props.clientData}
+        projectData={props.projectData}
+        phaseData={props.phaseData}
+        timesheetData={props.timesheetData}
         open={props.editTimerOpen}
         handleClose={props.closeEditTimer}
         buttonClicked={props.setTimer}

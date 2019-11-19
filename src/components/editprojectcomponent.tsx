@@ -65,6 +65,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     "&:hover": {
       backgroundColor: "darkgreen"
     }
+  },
+  rootPhase: {
+    width: "70%",
+    overflowX: "auto",
+    marginLeft: "15%"
+  },
+  table: {
+    maxWidth: "100%"
+  },
+  rootMember: {
+    width: "70%",
+    overflowX: "auto",
+    marginLeft: "15%"
   }
 }));
 interface RouteParams {
@@ -89,15 +102,36 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
     setValue(newValue);
   };
 
+  const changeProjectName = (name: string) => {
+    project.name = name;
+    setProject(project);
+    console.log(project);
+  };
+
+  const changeProjectDescription = (description: string) => {
+    project.description = description;
+    setProject(project);
+    console.log(project);
+  };
+
+  const changeProjectBudget = (budget: number) => {
+    project.budget = budget;
+    setProject(project);
+    console.log(project);
+  };
+
   useEffect(() => {
     console.log(props.projects);
-    const project = props.projects.filter(proj => {
-      return proj.id === Number.parseInt(props.match.params.id);
-    })[0];
-    const client = props.clients.filter(cl => cl.id === project.clientId)[0];
-    // console.log(Number.parseInt(props.match.params.id));
-    setProject(project);
-    setClient(client);
+    if (props.projects.length !== 0 && props.clients.length !== 0) {
+      const project = props.projects.filter(proj => {
+        return proj.id === Number.parseInt(props.match.params.id);
+      })[0];
+
+      const client = props.clients.filter(cl => cl.id === project.clientId)[0];
+      // console.log(Number.parseInt(props.match.params.id));
+      setProject(project);
+      setClient(client);
+    }
     console.log(project, client);
   }, [props]);
 
@@ -120,16 +154,27 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
       </AppBar>
       <div className={classes.tablePanel}>
         <TabPanel value={value} index={0}>
-          <InfoProjectComponent project={project} client={client} />
+          <InfoProjectComponent
+            project={project}
+            client={client}
+            changeProjectName={changeProjectName}
+            changeProjectDescription={changeProjectDescription}
+            changeProjectBudget={changeProjectBudget}
+          />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <PhaseProjectComponent
             phases={project !== undefined ? project.phases : []}
             timeSheets={props.timeSheets}
+            classes={classes}
           />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <MemberProjectComponent />
+          <MemberProjectComponent
+            project={project}
+            timeSheets={props.timeSheets}
+            classes={classes}
+          />
         </TabPanel>
       </div>
     </div>

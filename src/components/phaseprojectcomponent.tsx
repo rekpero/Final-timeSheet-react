@@ -13,57 +13,24 @@ import { IPhasesInfo } from "../model/phases";
 import { IProjectTimeSheet } from "../model/timesheet";
 import moment from "moment";
 
-const useStyles = makeStyles({
-  root: {
-    width: "70%",
-    overflowX: "auto",
-    marginLeft: "15%"
-  },
-  table: {
-    maxWidth: "100%"
-  }
-});
-
-function createData(
-  cbox: boolean,
-  name: string,
-  budget: number,
-  project: number
-) {
-  return { cbox, name, budget, project };
+interface IPhaseProjectState {
+  stateRows: { cbox: boolean; name: string; timeTracked: number }[];
 }
 
 interface IPhaseProjectProps {
   phases: IPhasesInfo[];
   timeSheets: IProjectTimeSheet[];
+  classes: any;
 }
 
-const PhaseProjectComponent: React.FC<IPhaseProjectProps> = (
-  props: IPhaseProjectProps
-) => {
-  const classes = useStyles();
-
-  const [stateRows, setStateRows] = useState(
-    props.phases.map(phase => {
-      const filteredTimeSheet = props.timeSheets.filter(
-        time => time.phase === phase.name
-      );
-      return {
-        cbox: true,
-        name: phase.name,
-        timeTracked:
-          filteredTimeSheet.length === 0
-            ? 0
-            : filteredTimeSheet
-                .map(time => Number.parseInt(time.timeWorked))
-                .reduce((prev, curr) => prev + curr)
-      };
-    })
-  );
-
-  useEffect(() => {
-    setStateRows(
-      props.phases.map(phase => {
+class PhaseProjectComponent extends React.Component<
+  IPhaseProjectProps,
+  IPhaseProjectState
+> {
+  constructor(props: IPhaseProjectProps) {
+    super(props);
+    this.state = {
+      stateRows: props.phases.map(phase => {
         const filteredTimeSheet = props.timeSheets.filter(
           time => time.phase === phase.name
         );
@@ -78,25 +45,48 @@ const PhaseProjectComponent: React.FC<IPhaseProjectProps> = (
                   .reduce((prev, curr) => prev + curr)
         };
       })
-    );
-  }, [props]);
+    };
+  }
 
-  const handleChange = (e: any, i: number) => {
-    console.log(i, stateRows[i].cbox);
-    stateRows[i].cbox = !stateRows[i].cbox;
-    setStateRows(stateRows);
-    console.log(i, stateRows);
-  };
-
-  const deletePhase = (i: number) => {
-    if (stateRows.length !== 0) {
-      stateRows.splice(i, 1);
+  componentDidUpdate() {
+    if (this.props.phases.length !== 0 && this.state.stateRows.length === 0) {
+      console.log(this.props.phases);
+      this.setState({
+        stateRows: this.props.phases.map(phase => {
+          const filteredTimeSheet = this.props.timeSheets.filter(
+            time => time.phase === phase.name
+          );
+          return {
+            cbox: true,
+            name: phase.name,
+            timeTracked:
+              filteredTimeSheet.length === 0
+                ? 0
+                : filteredTimeSheet
+                    .map(time => Number.parseInt(time.timeWorked))
+                    .reduce((prev, curr) => prev + curr)
+          };
+        })
+      });
     }
-    setStateRows(stateRows);
-    console.log(stateRows);
+  }
+
+  handleChange = (e: any, i: number) => {
+    console.log(i, this.state.stateRows[i].cbox);
+    this.state.stateRows[i].cbox = !this.state.stateRows[i].cbox;
+    this.setState({ stateRows: this.state.stateRows });
+    console.log(i, this.state.stateRows);
   };
 
-  const getTimeFromMins = (mins: number) => {
+  deletePhase = (i: number) => {
+    if (this.state.stateRows.length !== 0) {
+      this.state.stateRows.splice(i, 1);
+    }
+    this.setState({ stateRows: this.state.stateRows });
+    console.log(this.state.stateRows);
+  };
+
+  getTimeFromMins = (mins: number) => {
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
     if (mins >= 24 * 60 || mins < 0) {
@@ -113,43 +103,53 @@ const PhaseProjectComponent: React.FC<IPhaseProjectProps> = (
       .format("hh:mm");
   };
 
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Active</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Time Tracked</TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {stateRows.map((row, i) => (
-            <TableRow key={row.name} hover>
-              <TableCell>
-                <Checkbox
-                  value={row.cbox}
-                  checked={row.cbox}
-                  inputProps={{ "aria-labelledby": "checkbox in table" }}
-                  color="primary"
-                  onClick={e => handleChange(e, i)}
-                />
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell>{getTimeFromMins(row.timeTracked)}</TableCell>
-              <TableCell>
-                <IconButton aria-label="delete" onClick={e => deletePhase(i)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+  render() {
+    return (
+      <Paper className={this.props.classes.root}>
+        <Table className={this.props.classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Active</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Time Tracked</TableCell>
+              <TableCell></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
-};
+          </TableHead>
+          <TableBody>
+            {this.state.stateRows.map(
+              (
+                row: { cbox: boolean; name: string; timeTracked: number },
+                i: number
+              ) => (
+                <TableRow key={row.name} hover>
+                  <TableCell>
+                    <Checkbox
+                      value={row.cbox}
+                      checked={row.cbox}
+                      inputProps={{ "aria-labelledby": "checkbox in table" }}
+                      color="primary"
+                      onClick={e => this.handleChange(e, i)}
+                    />
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell>{this.getTimeFromMins(row.timeTracked)}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={e => this.deletePhase(i)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              )
+            )}
+          </TableBody>
+        </Table>
+      </Paper>
+    );
+  }
+}
 export default PhaseProjectComponent;

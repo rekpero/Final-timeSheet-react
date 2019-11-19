@@ -33,9 +33,11 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { IProjectInfo } from "../model/project";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
+import { IPhasesInfo } from "../model/phases";
 import moment from "moment";
 import EditIcon from "@material-ui/icons/Edit";
 import history from "../services/history";
+import CreateProjectModal from "./createprojectmodal";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -64,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       width: "100%"
     },
-    button: {
+    buttonProject: {
       margin: theme.spacing(1)
     },
     table: {
@@ -74,47 +76,81 @@ const useStyles = makeStyles((theme: Theme) =>
     tableRow: {
       paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(2)
+    },
+    paper1: {
+      position: "absolute",
+      width: 600,
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(4, 6, 6, 8),
+      [theme.breakpoints.down("sm")]: {
+        width: 300,
+        height: 650
+      }
+    },
+    time: {
+      marginRight: theme.spacing(1),
+      marginTop: theme.spacing(2),
+      width: "100%"
+    },
+    calender: {
+      marginTop: theme.spacing(2),
+      marginRight: theme.spacing(5),
+      width: "100%"
+    },
+    button: {
+      marginTop: theme.spacing(5),
+      width: "100%"
+    },
+    note: {
+      marginTop: theme.spacing(3),
+      fontSize: 28,
+      fontWeight: 600
+    },
+    grow: {
+      flexGrow: 1
+    },
+    chips: {
+      display: "flex",
+      flexWrap: "wrap"
+    },
+    chip: {
+      margin: 2
+    },
+    formControl1: {
+      marginLeft: 12,
+      marginTop: 5,
+      width: "100%"
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    button1: {
+      fontSize: "small",
+      width: 150
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: 600
+    },
+    divider: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2)
     }
   })
 );
 
-const client = [
-  {
-    value: "all clients",
-    label: "All Clients"
-  },
-  {
-    value: "no client",
-    label: "No Client"
-  }
-];
-const show = [
-  {
-    value: "all active projects",
-    label: "All Active Projects"
-  },
-  {
-    value: "all archive projects",
-    label: "All Archive Projects"
-  }
-];
-const newproject = [
-  {
-    value: "create new project",
-    label: "Create New Project",
-    option: "one"
-  },
-  {
-    value: "manage new project",
-    label: "Manage New Project",
-    option: "multiple"
-  }
-];
 
 interface IProjectComponentProps {
   project: IProjectInfo[];
+  phases: IPhasesInfo[];
   clients: IClientInfo[];
   timeSheet: IProjectTimeSheet[];
+  clientData: () => void;
+  projectData: () => void;
+  phaseData: () => void;
+  timesheetData: () => void;
 }
 const ProjectComponent: React.FC<IProjectComponentProps> = (
   props: IProjectComponentProps
@@ -129,6 +165,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [filteredProject, setFilteredProject] = React.useState(props.project);
   const [clientFilter, setClientFilter] = React.useState("");
+  const [openProject, setOpenProject] = React.useState(false);
 
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen);
@@ -251,7 +288,13 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
     setFilteredProject(props.project);
   }, [props.project]);
 
-  console.log(filteredProject);
+  const openNewProject = () => {
+    setOpenProject(true);
+  } 
+  const handleCloseCreateProject = () => {
+    setOpenProject(false);
+  };
+
   return (
     <Paper className={classes.root}>
       {selected.length > 0 ? (
@@ -347,7 +390,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                         id="menu-list-grow"
                         onKeyDown={handleListKeyDown}
                       >
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={openNewProject}>
                           Create a new project
                         </MenuItem>
                         <Divider />
@@ -360,6 +403,19 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                 </Grow>
               )}
             </Popper>
+            <CreateProjectModal
+                  clientData={props.clientData}
+                  projectData={props.projectData}
+                  phaseData={props.phaseData}
+                  timesheetData={props.timesheetData}
+                  project={props.project}
+                  phases={props.phases}
+                  timeSheet={props.timeSheet}
+                  clients={props.clients}
+                  openCreateProjectModal={openProject}
+                  handleClose={handleCloseCreateProject}
+                  classes={classes}
+                ></CreateProjectModal>
           </Grid>
         </Grid>
       )}
