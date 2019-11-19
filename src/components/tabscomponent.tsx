@@ -13,7 +13,7 @@ import { Typography, Box } from "@material-ui/core";
 import StatusComponent from "./statuscomponent";
 import ActivityLogComponent from "./activitylogcomponent";
 import WorkspaceSettingComponent from "./workspacesettingcomponent";
-import ProjectComponent from "./projectcomponent1";
+import ProjectComponent from "./projectcomponent";
 import DashboardComponent from "../layout/dashboardcomponent";
 import AddMember from "./addmemberclasscomponent";
 import PhasesModal from "./managePhases";
