@@ -11,41 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import dp from "../assets/images/dp.png";
 import Grid from "@material-ui/core/Grid";
-
-const projects = [
-  {
-    id: 1,
-    name: "AT&T Project",
-    projectColor: "#f2f3f4",
-    clientId: 1,
-    members: {
-      name: "ModiModi",
-      hourlyrate: 40
-    },
-    phases: [1, 2, 3, 4],
-    budget: {
-      hours: 12,
-      recurrence: "weekly",
-      dayOfWeek: "Monday"
-    }
-  },
-  {
-    id: 2,
-    name: "AT&T Project 2",
-    projectColor: "#f2f3f4",
-    clientId: 1,
-    members: {
-      name: "ModiModi",
-      hourlyrate: 40
-    },
-    phases: [1, 2, 3, 4],
-    budget: {
-      hours: 10,
-      recurrence: "weekly",
-      dayOfWeek: "Monday"
-    }
-  }
-];
+import { IProjectInfo } from "../model/project";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,7 +38,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const StatusOverviewComponent: React.FC<{}> = (props: any) => {
+interface IStatusOverviewComponent {
+  projects: IProjectInfo[];
+}
+const StatusOverviewComponent: React.FC<IStatusOverviewComponent> = (
+  props: IStatusOverviewComponent
+) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -100,10 +71,10 @@ const StatusOverviewComponent: React.FC<{}> = (props: any) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          {projects
+          {props.projects
             .map(project => ({
               name: project.name,
-              time: project.budget.hours
+              time: project.budget
             }))
             .map((project, i) => (
               <Grid container spacing={2} key={i}>

@@ -1,6 +1,11 @@
 import React from "react";
 
-import { RouteComponentProps } from "react-router-dom";
+import {
+  RouteComponentProps,
+  withRouter,
+  BrowserRouter as Router,
+  Route
+} from "react-router-dom";
 import VerticalTabs from "../components/tabscomponent";
 import AppBarComponent from "../components/appbarcomponent";
 import projectService from "../services/projectService";
@@ -8,6 +13,14 @@ import { IProjectInfo } from "../model/project";
 import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
+import TimesheetComponent from "../components/timesheetcomponent";
+import EditProjectComponent from "../components/editprojectcomponent";
+import StatusComponent from "../components/statuscomponent";
+import ActivityLogComponent from "../components/activitylogcomponent";
+import WorkspaceSettingComponent from "../components/workspacesettingcomponent";
+import ProjectComponent from "../components/projectcomponent";
+import AddMember from "../components/addmemberclasscomponent";
+import PhasesModal from "../components/managePhases";
 
 interface IDashboard {
   backgroundColor: string;
@@ -31,7 +44,7 @@ interface IDashboard {
   date: string;
 }
 
-class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
+class Dashboard extends React.Component<{}, IDashboard> {
   intervalHandle: any;
   constructor(props: any) {
     super(props);
@@ -172,19 +185,76 @@ class Dashboard extends React.Component<RouteComponentProps, IDashboard> {
   render() {
     return (
       <div>
-        <VerticalTabs
-          {...this.props}
-          project={this.state.project}
-          phases={this.state.phases}
-          timeSheet={this.state.timeSheet}
-          clients={this.state.clients}
-          clientData={this.getClientData}
-          projectData={this.getProjectData}
-          phaseData={this.getPhaseData}
-          timesheetData={this.getTimeSheetData}
-          setTimer={this.setTimer}
-          editTimer={this.editTimer}
-        ></VerticalTabs>
+        <Router>
+          <VerticalTabs
+            project={this.state.project}
+            phases={this.state.phases}
+            timeSheet={this.state.timeSheet}
+            clients={this.state.clients}
+            clientData={this.getClientData}
+            projectData={this.getProjectData}
+            phaseData={this.getPhaseData}
+            timesheetData={this.getTimeSheetData}
+            setTimer={this.setTimer}
+            editTimer={this.editTimer}
+          >
+            <Route
+              path={`dash/dashboard`}
+              render={() => (
+                <TimesheetComponent
+                  setTimer={this.setTimer}
+                  editTimer={this.editTimer}
+                />
+              )}
+            />
+            <Route
+              path={`dash/projects/edit/:id`}
+              exact
+              render={() => {
+                return (
+                  <EditProjectComponent
+                    projects={this.state.project}
+                    clients={this.state.clients}
+                    timeSheets={this.state.timeSheet}
+                  />
+                );
+              }}
+            />
+            <Route
+              path={`dash/projects`}
+              exact
+              render={() => (
+                <ProjectComponent
+                  clientData={this.getClientData}
+                  projectData={this.getProjectData}
+                  phaseData={this.getPhaseData}
+                  timesheetData={this.getTimeSheetData}
+                  project={this.state.project}
+                  phases={this.state.phases}
+                  timeSheet={this.state.timeSheet}
+                  clients={this.state.clients}
+                />
+              )}
+            />
+            <Route
+              path={`dash/status`}
+              exact
+              render={() => (
+                <StatusComponent
+                  project={this.state.project}
+                  phases={this.state.phases}
+                  timeSheet={this.state.timeSheet}
+                  clients={this.state.clients}
+                />
+              )}
+            />
+            <Route
+              path={`dash/workspacesettings`}
+              exact
+              render={() => <WorkspaceSettingComponent />}
+            />
+          </VerticalTabs>
+        </Router>
         <AppBarComponent
           clientData={this.getClientData}
           projectData={this.getProjectData}

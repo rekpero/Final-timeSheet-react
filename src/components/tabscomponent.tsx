@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { RouteComponentProps, Route } from "react-router-dom";
+import { RouteComponentProps, Route, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
@@ -103,6 +103,7 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 interface ITabsProps extends RouteComponentProps {
+  children: any;
   project: IProjectInfo[];
   phases: IPhasesInfo[];
   clients: IClientInfo[];
@@ -243,64 +244,8 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
           ))}
         </Menu>
       </Tabs>
-      <TabPanel>
-      <Route
-        path={`${props.match.path}/dashboard`}
-        render={() => (
-          <TimesheetComponent
-            setTimer={props.setTimer}
-            editTimer={props.editTimer}
-          />
-        )}
-      />
-      <Route
-        path={`${props.match.path}/projects/edit/:id`}
-        exact
-        render={() => {
-          console.log(props.project);
-          return (
-            <EditProjectComponent
-              projects={props.project}
-              clients={props.clients}
-              timeSheets={props.timeSheet}
-            />
-          );
-        }}
-      />
-      <Route
-          path={`${props.match.path}/projects`}
-          exact
-          render={() => (
-            <ProjectComponent
-            clientData={props.clientData}
-            projectData={props.projectData}
-            phaseData={props.phaseData}
-            timesheetData={props.timesheetData}
-            project={props.project}
-            phases={props.phases}
-            timeSheet={props.timeSheet}
-            clients={props.clients}
-            
-            />
-          )}
-        />
-        <Route
-          path={`${props.match.path}/status`}
-          exact
-          render={() => (
-            <StatusComponent />
-          )}
-        />
-        <Route
-          path={`${props.match.path}/workspacesettings`}
-          exact
-          render={() => (
-            <WorkspaceSettingComponent />
-          )}
-        />
-      </TabPanel>      
-      
-      
+      <TabPanel>{props.children}</TabPanel>
+
       {/* <TabPanel value={value} index={0}>
         <Route
           path={`${props.match.path}/dashboard`}
@@ -365,4 +310,4 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   );
 };
 
-export default VerticalTabs;
+export default withRouter(VerticalTabs);

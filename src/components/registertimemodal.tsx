@@ -42,7 +42,6 @@ interface IRegisterTimeModalProps {
   phases: IPhasesInfo[];
   clients: IClientInfo[];
   timeSheet: IProjectTimeSheet[];
-
   clientData: () => void;
   projectData: () => void;
   phaseData: () => void;
@@ -155,7 +154,6 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
   const [note, setNote] = React.useState("");
   const [proj, setProj] = React.useState("");
 
-  const [open, setOpen] = React.useState(false);
   const handleDateChange = (e: any) => {
     setSelectedDate(e);
   };
@@ -242,8 +240,13 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
     );
     setHrs(props.hour);
     setMin(props.minute);
-    setProject(props.projData.split("/")[0]);
+    setProjectName(props.projData.split("/")[0]);
     setProjectId(Number.parseInt(props.projData.split("/")[1]));
+    setProject(
+      props.project.filter(
+        proj => proj.id === Number.parseInt(props.projData.split("/")[1])
+      )[0]
+    );
     setPhase(props.phase);
     setNote(props.note);
     setProj(props.projData);

@@ -7,6 +7,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import history from "../services/history";
+import { IProjectInfo } from "../model/project";
+import { IProjectTimeSheet } from "../model/timesheet";
+import moment from "moment";
 
 const useStyles = makeStyles({
   root: {
@@ -19,19 +22,28 @@ const useStyles = makeStyles({
   }
 });
 
-function createData(name: string, project: number, budget: number) {
-  return { name, project, budget };
+interface IStatusMemberProps {
+  members: string[];
+  projects: IProjectInfo[];
+  timesheets: IProjectTimeSheet[];
 }
 
-const rows = [
-  createData("Sherry", 159, 6.0),
-  createData("Rohan Saini", 237, 9.0),
-  createData("Paras", 262, 16.0)
-];
-
-const StatusMembersComponent: React.FC<{}> = (props: any) => {
+const StatusMembersComponent: React.FC<IStatusMemberProps> = (
+  props: IStatusMemberProps
+) => {
   const classes = useStyles();
+  const getTimeFromMins = (mins: number) => {
+    // do not include the first validation check if you want, for example,
+    // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
 
+    var h = (mins / 60) | 0,
+      m = mins % 60 | 0;
+    return moment
+      .utc()
+      .hours(h)
+      .minutes(m)
+      .format("hh:mm");
+  };
   return (
     <Paper className={classes.root}>
       <Table className={classes.table} aria-label="simple table">
@@ -49,21 +61,48 @@ const StatusMembersComponent: React.FC<{}> = (props: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow
-              key={row.name}
-              hover
-              onClick={e => {
-                history.push("/dash");
-              }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.project}</TableCell>
-              <TableCell align="right">{row.budget}</TableCell>
-            </TableRow>
-          ))}
+          {props.members
+            .map((member: string) => ({
+              name: member,
+              project:
+                props.projects !== undefined
+                  ? props.projects.filter(
+                      (project: IProjectInfo) => project.members.name === member
+                    ).length
+                  : 0,
+              time:
+                props.timesheets !== undefined
+                  ? props.timesheets.filter(
+                      (time: IProjectTimeSheet) =>
+                        time.project.members.name === member
+                    ).length !== 0
+                    ? props.timesheets
+                        .filter(
+                          (time: IProjectTimeSheet) =>
+                            time.project.members.name === member
+                        )
+                        .map((time: IProjectTimeSheet) =>
+                          Number.parseInt(time.timeWorked)
+                        )
+                        .reduce((prev, curr) => prev + curr)
+                    : 0
+                  : 0
+            }))
+            .map(row => (
+              <TableRow
+                key={row.name}
+                hover
+                onClick={e => {
+                  history.push("/dash");
+                }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.project}</TableCell>
+                <TableCell align="right">{getTimeFromMins(row.time)}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </Paper>

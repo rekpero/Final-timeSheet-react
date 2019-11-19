@@ -10,6 +10,10 @@ import StatusProject from "./statusprojectcomponent";
 import StatusMembers from "./statusmemberscomponent";
 import StatusClients from "./statusclientscomponent";
 import StatusPhases from "./statusphasescomponent";
+import { IProjectInfo } from "../model/project";
+import { IClientInfo } from "../model/clients";
+import { IProjectTimeSheet } from "../model/timesheet";
+import { IPhasesInfo } from "../model/phases";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -53,7 +57,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const StatusComponent: React.FC<{}> = (props: any) => {
+interface IStatusComponentProps {
+  project: IProjectInfo[];
+  phases: IPhasesInfo[];
+  clients: IClientInfo[];
+  timeSheet: IProjectTimeSheet[];
+}
+
+const StatusComponent: React.FC<IStatusComponentProps> = (
+  props: IStatusComponentProps
+) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -78,20 +91,30 @@ const StatusComponent: React.FC<{}> = (props: any) => {
       </AppBar>
       <div className={classes.tablePanel}>
         <TabPanel value={value} index={0}>
-          {StatusOverview}
+          <StatusOverview projects={props.project} />
         </TabPanel>
       </div>
       <TabPanel value={value} index={1}>
-        {StatusProject}
+        <StatusProject projects={props.project} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {StatusMembers}
+        <StatusMembers
+          members={props.project
+            .map(proj => proj.members.name)
+            .filter(
+              (member: string, index: number) =>
+                props.project.map(proj => proj.members.name).indexOf(member) ===
+                index
+            )}
+          projects={props.project}
+          timesheets={props.timeSheet}
+        />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        {StatusClients}
+        <StatusClients clients={props.clients} timesheets={props.timeSheet} />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        {StatusPhases}
+        <StatusPhases phases={props.phases} timesheet={props.timeSheet} />
       </TabPanel>
     </div>
   );

@@ -6,7 +6,10 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import history from "../services/history";
+import { IPhasesInfo } from "../model/phases";
+import { IProjectTimeSheet } from "../model/timesheet";
+import moment from "moment";
+
 const useStyles = makeStyles({
   root: {
     width: "70%",
@@ -18,47 +21,63 @@ const useStyles = makeStyles({
   }
 });
 
-function createData(name: string, project: number) {
-  return { name, project };
+interface IStatusPhasesProps {
+  phases: IPhasesInfo[];
+  timesheet: IProjectTimeSheet[];
 }
-
-const rows = [
-  createData("Development", 9),
-  createData("Testing", 7),
-  createData("Design", 2)
-];
-
-const StatusPhasesComponent: React.FC<{}> = (props: any) => {
+const StatusPhasesComponent: React.FC<IStatusPhasesProps> = (
+  props: IStatusPhasesProps
+) => {
   const classes = useStyles();
+  const getTimeFromMins = (mins: number) => {
+    // do not include the first validation check if you want, for example,
+    // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
 
+    var h = (mins / 60) | 0,
+      m = mins % 60 | 0;
+    return moment
+      .utc()
+      .hours(h)
+      .minutes(m)
+      .format("hh:mm");
+  };
   return (
     <Paper className={classes.root}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>
-              <h4>Project</h4>
+              <h4>Phase</h4>
             </TableCell>
             <TableCell align="right">
-              <h4>Budget</h4>
+              <h4>Time</h4>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow
-              key={row.name}
-              hover
-              onClick={e => {
-                history.push("/dash");
-              }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.project}</TableCell>
-            </TableRow>
-          ))}
+          {props.phases.map(row => {
+            const filtered = props.timesheet.filter(
+              (time: IProjectTimeSheet) => time.phase === row.name
+            );
+            return (
+              <TableRow key={row.name} hover>
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">
+                  {getTimeFromMins(
+                    filtered.length === 0
+                      ? 0
+                      : filtered
+                          .map((time: IProjectTimeSheet) =>
+                            Number.parseInt(time.timeWorked)
+                          )
+                          .reduce((prev, curr) => prev + curr)
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </Paper>

@@ -141,7 +141,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
 interface IProjectComponentProps {
   project: IProjectInfo[];
   phases: IPhasesInfo[];
@@ -239,11 +238,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
   const getTimeFromMins = (mins: number) => {
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
-    if (mins >= 24 * 60 || mins < 0) {
-      throw new RangeError(
-        "Valid input should be greater than or equal to 0 and less than 1440."
-      );
-    }
+
     var h = (mins / 60) | 0,
       m = mins % 60 | 0;
     return moment
@@ -290,7 +285,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
 
   const openNewProject = () => {
     setOpenProject(true);
-  } 
+  };
   const handleCloseCreateProject = () => {
     setOpenProject(false);
   };
@@ -404,18 +399,18 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
               )}
             </Popper>
             <CreateProjectModal
-                  clientData={props.clientData}
-                  projectData={props.projectData}
-                  phaseData={props.phaseData}
-                  timesheetData={props.timesheetData}
-                  project={props.project}
-                  phases={props.phases}
-                  timeSheet={props.timeSheet}
-                  clients={props.clients}
-                  openCreateProjectModal={openProject}
-                  handleClose={handleCloseCreateProject}
-                  classes={classes}
-                ></CreateProjectModal>
+              clientData={props.clientData}
+              projectData={props.projectData}
+              phaseData={props.phaseData}
+              timesheetData={props.timesheetData}
+              project={props.project}
+              phases={props.phases}
+              timeSheet={props.timeSheet}
+              clients={props.clients}
+              openCreateProjectModal={openProject}
+              handleClose={handleCloseCreateProject}
+              classes={classes}
+            ></CreateProjectModal>
           </Grid>
         </Grid>
       )}

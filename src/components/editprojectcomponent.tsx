@@ -13,6 +13,7 @@ import { IProjectInfo } from "../model/project";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
+import { IPhasesInfo } from "../model/phases";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -120,6 +121,13 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
     console.log(project);
   };
 
+  const updateProjectPhase = (phases: string[]) => {
+    project.phases = project.phases.filter((phase: IPhasesInfo) =>
+      phases.indexOf(phase.name)
+    );
+    console.log(project);
+  };
+
   useEffect(() => {
     console.log(props.projects);
     if (props.projects.length !== 0 && props.clients.length !== 0) {
@@ -167,6 +175,7 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
             phases={project !== undefined ? project.phases : []}
             timeSheets={props.timeSheets}
             classes={classes}
+            updatePhase={updateProjectPhase}
           />
         </TabPanel>
         <TabPanel value={value} index={2}>

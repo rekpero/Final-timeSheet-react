@@ -6,7 +6,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import history from "../services/history";
+import { IProjectInfo } from "../model/project";
+
 const useStyles = makeStyles({
   root: {
     width: "70%",
@@ -17,18 +18,12 @@ const useStyles = makeStyles({
     maxWidth: "100%"
   }
 });
-
-function createData(name: string, project: number) {
-  return { name, project };
+interface IStatusProjectComponent {
+  projects: IProjectInfo[];
 }
-
-const rows = [
-  createData("AT&T Dev", 159),
-  createData("AT&T Maintenance", 237),
-  createData("Metlife Marketing", 262)
-];
-
-const StatusProjectComponent: React.FC<{}> = (props: any) => {
+const StatusProjectComponent: React.FC<IStatusProjectComponent> = (
+  props: IStatusProjectComponent
+) => {
   const classes = useStyles();
 
   return (
@@ -45,20 +40,19 @@ const StatusProjectComponent: React.FC<{}> = (props: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow
-              key={row.name}
-              hover
-              onClick={e => {
-                history.push("/dash");
-              }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.project}</TableCell>
-            </TableRow>
-          ))}
+          {props.projects
+            .map((proj: IProjectInfo) => ({
+              name: proj.name,
+              budget: proj.budget
+            }))
+            .map((row: { name: string; budget: number }) => (
+              <TableRow key={row.name} hover>
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.budget}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </Paper>

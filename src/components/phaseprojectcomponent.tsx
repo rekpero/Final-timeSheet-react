@@ -21,6 +21,7 @@ interface IPhaseProjectProps {
   phases: IPhasesInfo[];
   timeSheets: IProjectTimeSheet[];
   classes: any;
+  updatePhase: (phase: string[]) => void;
 }
 
 class PhaseProjectComponent extends React.Component<
@@ -82,7 +83,7 @@ class PhaseProjectComponent extends React.Component<
     if (this.state.stateRows.length !== 0) {
       this.state.stateRows.splice(i, 1);
     }
-    this.setState({ stateRows: this.state.stateRows });
+    this.setState({ stateRows: this.state.stateRows }, () => this.props.updatePhase(this.state.stateRows.map(row => row.name)));
     console.log(this.state.stateRows);
   };
 
