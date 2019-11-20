@@ -38,10 +38,7 @@ import moment from "moment";
 import EditIcon from "@material-ui/icons/Edit";
 import history from "../services/history";
 import CreateProjectModal from "./createprojectmodal";
-<<<<<<< HEAD
 import projectService from "../services/projectService";
-=======
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;

@@ -70,6 +70,7 @@ class MemberProjectComponent extends React.Component<
               this.props.project === undefined
                 ? 0
                 : this.props.project.members.hourlyrate,
+
             timetracked:
               this.props.timeSheets.length === 0
                 ? 0

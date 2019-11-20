@@ -48,7 +48,8 @@ class InviteMember extends React.Component<INewMemberProps, INewMemberState> {
     this.setState({ number: this.state.number });
   };
   loadEmailName = (e: any, key: number) => {
-    this.state.number[key].message = "Would You join me ?";
+    this.state.number[key].message =
+      "Please Join me in my new project. **This is a system generated message, please do not reply.**";
     this.state.number[key].Email = e.target.value;
     this.setState({ number: this.state.number });
   };

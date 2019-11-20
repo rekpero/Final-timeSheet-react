@@ -1,7 +1,7 @@
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-
+import logo from "../asset/img/logo.png";
 import Toolbar from "@material-ui/core/Toolbar";
 
 import AddIcon from "@material-ui/icons/Add";
@@ -13,7 +13,7 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Fab from "@material-ui/core/Fab";
 
 import RegisterTimeModal from "./registertimemodal";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Grid } from "@material-ui/core";
 import EnteriesModal from "./enteriesmodal";
 import TimerModal from "./timercomponent";
 import TimerPaper from "./timerpaper";
@@ -109,6 +109,18 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   return (
     <AppBar position="fixed" color="primary" className={classes.appBar}>
       <Toolbar>
+        <img src={logo} style={{ marginLeft: 25 }} width="48" height="48"></img>
+        <Grid
+          container
+          alignItems="center"
+          style={{ color: "white", width: 200, fontWeight: 550, fontSize: 24 }}
+        >
+          {" "}
+          <div style={{ fontFamily: "Helvetica", marginLeft: 35 }}>
+            {" "}
+            TIMESHEET{" "}
+          </div>{" "}
+        </Grid>
         <Fab
           color="secondary"
           aria-label="add"
