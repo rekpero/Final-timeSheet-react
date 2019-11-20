@@ -235,6 +235,7 @@ class CreateProjectModal extends React.Component<
                 <TextField
                   id="standard-full-width"
                   label="Name"
+                  type="text"
                   placeholder="Placeholder"
                   fullWidth
                   margin="normal"
@@ -365,7 +366,10 @@ class CreateProjectModal extends React.Component<
               <Grid item xs={2}></Grid>
             </Grid>
             <Collapse in={this.state.openRate} timeout="auto" unmountOnExit>
-              <TextField onChange={e => this.handleMemberRate(e)}></TextField>
+              <TextField
+                type="number"
+                onChange={e => this.handleMemberRate(e)}
+              ></TextField>
             </Collapse>
           </Collapse>
 
@@ -428,6 +432,7 @@ class CreateProjectModal extends React.Component<
                   style={{ margin: 6 }}
                   placeholder="Placeholder"
                   fullWidth
+                  type="number"
                   margin="normal"
                   InputLabelProps={{
                     shrink: true

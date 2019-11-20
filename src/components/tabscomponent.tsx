@@ -29,6 +29,7 @@ import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 import EditProjectComponent from "./editprojectcomponent";
 import { IPhasesInfo } from "../model/phases";
+import InviteMember from "./addNewMembermodal";
 
 const ITEM_HEIGHT = 48;
 
@@ -163,6 +164,9 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   const handleClose2 = () => {
     setOpen3(false);
   };
+  const handleClose5 = () => {
+    setOpen5(false);
+  };
   useEffect(() => {
     var path = props.location.pathname;
     const routesList = routes.map(route => route.layout + route.path);
@@ -172,7 +176,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
     setUrlPath(path);
     console.log(urlPath);
   }, [props.location.pathname]);
-
+  const [open5, setOpen5] = React.useState(false);
   const [open4, setOpen4] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
   const handleOpen = () => {
@@ -180,6 +184,9 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   };
   const handleOpen1 = () => {
     setOpen3(true);
+  };
+  const handleOpen0 = () => {
+    setOpen5(true);
   };
   return (
     <div className={classes.root}>
@@ -235,6 +242,9 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
                 handleClose();
                 history.push(prop.layout + prop.path);
                 setManagementValue(key);
+                if (key === 0) {
+                  handleOpen0();
+                }
                 if (key === 1) {
                   handleOpen();
                 } else if (key === 2) {
@@ -351,6 +361,13 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
         <ActivityLogComponent />
       </TabPanel>
       <TabPanel value={value} index={5}>
+        {managementValue === 0 ? (
+          <InviteMember
+            open={open5}
+            handleClose={handleClose5}
+            classes={classes1}
+          ></InviteMember>
+        ) : null}
         {managementValue === 1 ? (
           <AddMember
             clientsData={props.clientData}

@@ -342,6 +342,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                     // value={values.weight}
                     onChange={handleTimeHrs}
                     value={hrs}
+                    type="number"
                     endAdornment={
                       <InputAdornment position="end">h</InputAdornment>
                     }
@@ -358,6 +359,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
                     id="standard-adornment-weight"
                     // value={values.weight}
                     value={min}
+                    type="number"
                     onChange={handleTimeMinutes}
                     endAdornment={
                       <InputAdornment position="end">m</InputAdornment>
