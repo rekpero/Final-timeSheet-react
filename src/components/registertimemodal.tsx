@@ -209,6 +209,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
         .subscribe(data => {
           console.log(data);
           props.handleClose();
+          props.timesheetData();
         });
     } else {
       projectService
@@ -223,6 +224,7 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
         .subscribe(data => {
           console.log(data);
           props.handleClose();
+          props.timesheetData();
         });
     }
   };

@@ -27,327 +27,306 @@ export default function DashboardComponent(props) {
   });
 
   useEffect(() => {
-    ProjectService.getTimeSheetData().subscribe(timesheets => {
-      const monday = timesheets.filter(time => {
-        return moment(time.date, "YYYY-MM-DD").isSame(
-          moment().subtract(moment().day() - 1, "days"),
-          "day"
-        );
-      });
-      const tuesday = timesheets.filter(time => {
-        return moment(time.date, "YYYY-MM-DD").isSame(
-          moment().subtract(moment().day() - 2, "days"),
-          "day"
-        );
-      });
-      const wednesday = timesheets.filter(time => {
-        return moment(time.date, "YYYY-MM-DD").isSame(
-          moment().subtract(moment().day() - 3, "days"),
-          "day"
-        );
-      });
-      const thursday = timesheets.filter(time => {
-        return moment(time.date, "YYYY-MM-DD").isSame(
-          moment().subtract(moment().day() - 4, "days"),
-          "day"
-        );
-      });
-      const friday = timesheets.filter(time => {
-        return moment(time.date, "YYYY-MM-DD").isSame(
-          moment().subtract(moment().day() - 5, "days"),
-          "day"
-        );
-      });
-      const saturday = timesheets.filter(time => {
-        return moment(time.date, "YYYY-MM-DD").isSame(
-          moment().subtract(moment().day() - 6, "days"),
-          "day"
-        );
-      });
-      const sunday = timesheets.filter(time => {
-        return moment(time.date, "YYYY-MM-DD").isSame(
-          moment().subtract(moment().day() - 7, "days"),
-          "day"
-        );
-      });
-      setSchedules({
-        ["Mon " + (moment().date() - moment().day() + 1)]:
-          monday.length === 0
-            ? []
-            : monday.map((time, index) => {
-                console.log(
-                  moment("10:00 am", "hh:mm a")
-                    .add(
-                      monday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : monday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .toString()
-                );
-                return {
-                  start: moment("10:00 am", "hh:mm a").add(
+    const timesheets = props.timeSheet;
+    const monday = timesheets.filter(time => {
+      return moment(time.date, "YYYY-MM-DD").isSame(
+        moment().subtract(moment().day() - 1, "days"),
+        "day"
+      );
+    });
+    const tuesday = timesheets.filter(time => {
+      return moment(time.date, "YYYY-MM-DD").isSame(
+        moment().subtract(moment().day() - 2, "days"),
+        "day"
+      );
+    });
+    const wednesday = timesheets.filter(time => {
+      return moment(time.date, "YYYY-MM-DD").isSame(
+        moment().subtract(moment().day() - 3, "days"),
+        "day"
+      );
+    });
+    const thursday = timesheets.filter(time => {
+      return moment(time.date, "YYYY-MM-DD").isSame(
+        moment().subtract(moment().day() - 4, "days"),
+        "day"
+      );
+    });
+    const friday = timesheets.filter(time => {
+      return moment(time.date, "YYYY-MM-DD").isSame(
+        moment().subtract(moment().day() - 5, "days"),
+        "day"
+      );
+    });
+    const saturday = timesheets.filter(time => {
+      return moment(time.date, "YYYY-MM-DD").isSame(
+        moment().subtract(moment().day() - 6, "days"),
+        "day"
+      );
+    });
+    const sunday = timesheets.filter(time => {
+      return moment(time.date, "YYYY-MM-DD").isSame(
+        moment().subtract(moment().day() - 7, "days"),
+        "day"
+      );
+    });
+    setSchedules({
+      ["Mon " + (moment().date() - moment().day() + 1)]:
+        monday.length === 0
+          ? []
+          : monday.map((time, index) => {
+              // console.log(
+              //   moment("10:00 am", "hh:mm a")
+              //     .add(
+              //       monday.filter((val, i) => i < index).length === 0
+              //         ? 0
+              //         : monday
+              //             .filter((val, i) => i < index)
+              //             .map(time => time.timeWorked)
+              //             .reduce(
+              //               (prev, curr) => prev + curr
+              //             ),
+              //       "m"
+              //     )
+              //     .toString()
+              // );
+              return {
+                start: moment("10:00 am", "hh:mm a").add(
+                  monday.filter((val, i) => i < index).length === 0
+                    ? 0
+                    : monday
+                        .filter((val, i) => i < index)
+                        .map(time => time.timeWorked)
+                        .reduce((prev, curr) => prev + curr),
+                  "m"
+                ),
+                end: moment("10:00 am", "hh:mm a")
+                  .add(
                     monday.filter((val, i) => i < index).length === 0
                       ? 0
                       : monday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
-                          .reduce(
-                            (prev, curr) => prev.timeWorked + curr.timeWorked
-                          ),
+                          .reduce((prev, curr) => prev + curr),
                     "m"
-                  ),
-                  end: moment("10:00 am", "hh:mm a")
-                    .add(
-                      monday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : monday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .add(time.timeWorked, "m"),
-                  data: {
-                    phase: { name: time.phase },
-                    project: time.project,
-                    note: { name: time.note },
-                    timesheetId: time.id
-                  }
-                };
-              }),
-        ["Tue " + (moment().date() - moment().day() + 2)]:
-          tuesday.length === 0
-            ? []
-            : tuesday.map((time, index) => {
-                return {
-                  start: moment("10:00 am", "hh:mm a").add(
+                  )
+                  .add(time.timeWorked, "m"),
+                data: {
+                  phase: { name: time.phase },
+                  project: time.project,
+                  note: { name: time.note },
+                  timesheetId: time.id
+                }
+              };
+            }),
+      ["Tue " + (moment().date() - moment().day() + 2)]:
+        tuesday.length === 0
+          ? []
+          : tuesday.map((time, index) => {
+              return {
+                start: moment("10:00 am", "hh:mm a").add(
+                  tuesday.filter((val, i) => i < index).length === 0
+                    ? 0
+                    : tuesday
+                        .filter((val, i) => i < index)
+                        .map(time => time.timeWorked)
+                        .reduce((prev, curr) => prev + curr),
+                  "m"
+                ),
+                end: moment("10:00 am", "hh:mm a")
+                  .add(
                     tuesday.filter((val, i) => i < index).length === 0
                       ? 0
                       : tuesday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
-                          .reduce(
-                            (prev, curr) => prev.timeWorked + curr.timeWorked
-                          ),
+                          .reduce((prev, curr) => prev + curr),
                     "m"
-                  ),
-                  end: moment("10:00 am", "hh:mm a")
-                    .add(
-                      tuesday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : tuesday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .add(time.timeWorked, "m"),
-                  data: {
-                    phase: { name: time.phase },
-                    project: time.project,
-                    note: { name: time.note },
-                    timesheetId: time.id
-                  }
-                };
-              }),
-        ["Wed " + (moment().date() - moment().day() + 3)]:
-          wednesday.length === 0
-            ? []
-            : wednesday.map((time, index) => {
-                return {
-                  start: moment("10:00 am", "hh:mm a").add(
+                  )
+                  .add(time.timeWorked, "m"),
+                data: {
+                  phase: { name: time.phase },
+                  project: time.project,
+                  note: { name: time.note },
+                  timesheetId: time.id
+                }
+              };
+            }),
+      ["Wed " + (moment().date() - moment().day() + 3)]:
+        wednesday.length === 0
+          ? []
+          : wednesday.map((time, index) => {
+              // console.log(
+              //   wednesday.filter((val, i) => i < index).length === 0
+              //     ? 0
+              //     : wednesday
+              //         .filter((val, i) => i < index)
+              //         .map(time => time.timeWorked)
+              //         .reduce((prev, curr) => prev + curr)
+              // );
+              return {
+                start: moment("10:00 am", "hh:mm a").add(
+                  wednesday.filter((val, i) => i < index).length === 0
+                    ? 0
+                    : wednesday
+                        .filter((val, i) => i < index)
+                        .map(time => time.timeWorked)
+                        .reduce((prev, curr) => prev + curr),
+                  "m"
+                ),
+                end: moment("10:00 am", "hh:mm a")
+                  .add(
                     wednesday.filter((val, i) => i < index).length === 0
                       ? 0
                       : wednesday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
-                          .reduce(
-                            (prev, curr) => prev.timeWorked + curr.timeWorked
-                          ),
+                          .reduce((prev, curr) => prev + curr),
                     "m"
-                  ),
-                  end: moment("10:00 am", "hh:mm a")
-                    .add(
-                      wednesday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : wednesday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .add(time.timeWorked, "m"),
-                  data: {
-                    phase: { name: time.phase },
-                    project: time.project,
-                    note: { name: time.note },
-                    timesheetId: time.id
-                  }
-                };
-              }),
-        ["Thurs " + (moment().date() - moment().day() + 4)]:
-          thursday.length === 0
-            ? []
-            : thursday.map((time, index) => {
-                return {
-                  start: moment("10:00 am", "hh:mm a").add(
+                  )
+                  .add(time.timeWorked, "m"),
+                data: {
+                  phase: { name: time.phase },
+                  project: time.project,
+                  note: { name: time.note },
+                  timesheetId: time.id
+                }
+              };
+            }),
+      ["Thurs " + (moment().date() - moment().day() + 4)]:
+        thursday.length === 0
+          ? []
+          : thursday.map((time, index) => {
+              return {
+                start: moment("10:00 am", "hh:mm a").add(
+                  thursday.filter((val, i) => i < index).length === 0
+                    ? 0
+                    : thursday
+                        .filter((val, i) => i < index)
+                        .map(time => time.timeWorked)
+                        .reduce((prev, curr) => prev + curr),
+                  "m"
+                ),
+                end: moment("10:00 am", "hh:mm a")
+                  .add(
                     thursday.filter((val, i) => i < index).length === 0
                       ? 0
                       : thursday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
-                          .reduce(
-                            (prev, curr) => prev.timeWorked + curr.timeWorked
-                          ),
+                          .reduce((prev, curr) => prev + curr),
                     "m"
-                  ),
-                  end: moment("10:00 am", "hh:mm a")
-                    .add(
-                      thursday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : thursday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .add(time.timeWorked, "m"),
-                  data: {
-                    phase: { name: time.phase },
-                    project: time.project,
-                    note: { name: time.note },
-                    timesheetId: time.id
-                  }
-                };
-              }),
-        ["Fri " + (moment().date() - moment().day() + 5)]:
-          friday.length === 0
-            ? []
-            : friday.map((time, index) => {
-                return {
-                  start: moment("10:00 am", "hh:mm a").add(
+                  )
+                  .add(time.timeWorked, "m"),
+                data: {
+                  phase: { name: time.phase },
+                  project: time.project,
+                  note: { name: time.note },
+                  timesheetId: time.id
+                }
+              };
+            }),
+      ["Fri " + (moment().date() - moment().day() + 5)]:
+        friday.length === 0
+          ? []
+          : friday.map((time, index) => {
+              return {
+                start: moment("10:00 am", "hh:mm a").add(
+                  friday.filter((val, i) => i < index).length === 0
+                    ? 0
+                    : friday
+                        .filter((val, i) => i < index)
+                        .map(time => time.timeWorked)
+                        .reduce((prev, curr) => prev + curr),
+                  "m"
+                ),
+                end: moment("10:00 am", "hh:mm a")
+                  .add(
                     friday.filter((val, i) => i < index).length === 0
                       ? 0
                       : friday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
-                          .reduce(
-                            (prev, curr) => prev.timeWorked + curr.timeWorked
-                          ),
+                          .reduce((prev, curr) => prev + curr),
                     "m"
-                  ),
-                  end: moment("10:00 am", "hh:mm a")
-                    .add(
-                      friday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : friday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .add(time.timeWorked, "m"),
-                  data: {
-                    phase: { name: time.phase },
-                    project: time.project,
-                    note: { name: time.note },
-                    timesheetId: time.id
-                  }
-                };
-              }),
-        ["Sat " + (moment().date() - moment().day() + 6)]:
-          saturday.length === 0
-            ? []
-            : saturday.map((time, index) => {
-                return {
-                  start: moment("10:00 am", "hh:mm a").add(
+                  )
+                  .add(time.timeWorked, "m"),
+                data: {
+                  phase: { name: time.phase },
+                  project: time.project,
+                  note: { name: time.note },
+                  timesheetId: time.id
+                }
+              };
+            }),
+      ["Sat " + (moment().date() - moment().day() + 6)]:
+        saturday.length === 0
+          ? []
+          : saturday.map((time, index) => {
+              return {
+                start: moment("10:00 am", "hh:mm a").add(
+                  saturday.filter((val, i) => i < index).length === 0
+                    ? 0
+                    : saturday
+                        .filter((val, i) => i < index)
+                        .map(time => time.timeWorked)
+                        .reduce((prev, curr) => prev + curr),
+                  "m"
+                ),
+                end: moment("10:00 am", "hh:mm a")
+                  .add(
                     saturday.filter((val, i) => i < index).length === 0
                       ? 0
                       : saturday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
-                          .reduce(
-                            (prev, curr) => prev.timeWorked + curr.timeWorked
-                          ),
+                          .reduce((prev, curr) => prev + curr),
                     "m"
-                  ),
-                  end: moment("10:00 am", "hh:mm a")
-                    .add(
-                      saturday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : saturday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .add(time.timeWorked, "m"),
-                  data: {
-                    phase: { name: time.phase },
-                    project: time.project,
-                    note: { name: time.note },
-                    timesheetId: time.id
-                  }
-                };
-              }),
-        ["Sun " + (moment().date() - moment().day() + 7)]:
-          sunday.length === 0
-            ? []
-            : sunday.map((time, index) => {
-                return {
-                  start: moment("10:00 am", "hh:mm a").add(
+                  )
+                  .add(time.timeWorked, "m"),
+                data: {
+                  phase: { name: time.phase },
+                  project: time.project,
+                  note: { name: time.note },
+                  timesheetId: time.id
+                }
+              };
+            }),
+      ["Sun " + (moment().date() - moment().day() + 7)]:
+        sunday.length === 0
+          ? []
+          : sunday.map((time, index) => {
+              return {
+                start: moment("10:00 am", "hh:mm a").add(
+                  sunday.filter((val, i) => i < index).length === 0
+                    ? 0
+                    : sunday
+                        .filter((val, i) => i < index)
+                        .map(time => time.timeWorked)
+                        .reduce((prev, curr) => prev + curr),
+                  "m"
+                ),
+                end: moment("10:00 am", "hh:mm a")
+                  .add(
                     sunday.filter((val, i) => i < index).length === 0
                       ? 0
                       : sunday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
-                          .reduce(
-                            (prev, curr) => prev.timeWorked + curr.timeWorked
-                          ),
+                          .reduce((prev, curr) => prev + curr),
                     "m"
-                  ),
-                  end: moment("10:00 am", "hh:mm a")
-                    .add(
-                      sunday.filter((val, i) => i < index).length === 0
-                        ? 0
-                        : sunday
-                            .filter((val, i) => i < index)
-                            .map(time => time.timeWorked)
-                            .reduce(
-                              (prev, curr) => prev.timeWorked + curr.timeWorked
-                            ),
-                      "m"
-                    )
-                    .add(time.timeWorked, "m"),
-                  data: {
-                    phase: { name: time.phase },
-                    project: time.project,
-                    note: { name: time.note },
-                    timesheetId: time.id
-                  }
-                };
-              })
-      });
+                  )
+                  .add(time.timeWorked, "m"),
+                data: {
+                  phase: { name: time.phase },
+                  project: time.project,
+                  note: { name: time.note },
+                  timesheetId: time.id
+                }
+              };
+            })
     });
-  }, []);
+  }, [props.timeSheet]);
 
   const setTimer = (day, index) => {
     const hours = Number.parseInt(

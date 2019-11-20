@@ -315,6 +315,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
           editTimer={props.editTimer}
           timeWorked={props.timeWorked}
           timesheetData={props.timesheetData}
+          timeSheet={props.timeSheet}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>

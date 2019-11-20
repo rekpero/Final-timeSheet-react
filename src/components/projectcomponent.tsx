@@ -302,8 +302,19 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
         updatedClient
       );
       deletedProjectId.forEach(value => {
+        projectService.deleteProject(value + "").subscribe(data => {
+          props.projectData();
+          console.log(data);
+        });
+      });
+      deletedTimesheetId.forEach(value => {
         projectService
-          .deleteProject(value + "")
+          .deleteTimesheetData(value)
+          .subscribe(data => console.log(data));
+      });
+      updatedClient.forEach(value => {
+        projectService
+          .updateClient(value, value.id)
           .subscribe(data => console.log(data));
       });
     }

@@ -129,7 +129,7 @@ class ProjectService {
   public updateClient = (update: any, id: number): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/client/${id}`, {
+        fetch(`http://localhost:3500/clients/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "PUT",
           body: JSON.stringify(update)
