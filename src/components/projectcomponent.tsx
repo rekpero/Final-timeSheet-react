@@ -141,7 +141,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
 interface IProjectComponentProps {
   project: IProjectInfo[];
   phases: IPhasesInfo[];
@@ -290,7 +289,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
 
   const openNewProject = () => {
     setOpenProject(true);
-  } 
+  };
   const handleCloseCreateProject = () => {
     setOpenProject(false);
   };
@@ -404,18 +403,18 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
               )}
             </Popper>
             <CreateProjectModal
-                  clientData={props.clientData}
-                  projectData={props.projectData}
-                  phaseData={props.phaseData}
-                  timesheetData={props.timesheetData}
-                  project={props.project}
-                  phases={props.phases}
-                  timeSheet={props.timeSheet}
-                  clients={props.clients}
-                  openCreateProjectModal={openProject}
-                  handleClose={handleCloseCreateProject}
-                  classes={classes}
-                ></CreateProjectModal>
+              clientData={props.clientData}
+              projectData={props.projectData}
+              phaseData={props.phaseData}
+              timesheetData={props.timesheetData}
+              project={props.project}
+              phases={props.phases}
+              timeSheet={props.timeSheet}
+              clients={props.clients}
+              openCreateProjectModal={openProject}
+              handleClose={handleCloseCreateProject}
+              classes={classes}
+            ></CreateProjectModal>
           </Grid>
         </Grid>
       )}
@@ -475,7 +474,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                       ? 0
                       : props.timeSheet
                           .filter(time => time.project.id === proj.id)
-                          .map(time => Number.parseInt(time.timeWorked + ""))
+                          .map(time => time.timeWorked)
                           .reduce((prev, curr) => prev + curr);
                   // console.log(
                   //   props.clients.filter(cl => cl.id === proj.clientId)[0].name
