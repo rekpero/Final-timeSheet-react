@@ -129,7 +129,7 @@ class Dashboard extends React.Component<{}, IDashboard> {
         this.setState({ timeSheet: timeSheetInfo });
         timeSheetInfo.map((prop, key) => {
           this.totalTime += prop.timeWorked;
-          this.setState({ timeWorked: this.totalTime });
+          this.setState({ timeWorked: this.totalTime / 60 });
         });
       });
   };

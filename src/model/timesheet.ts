@@ -1,5 +1,4 @@
 import { IProjectInfo } from "./project";
-import { IPhasesInfo } from "./phases";
 
 export interface IProjectTimeSheet {
   id: number;

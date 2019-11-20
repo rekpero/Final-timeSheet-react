@@ -53,6 +53,17 @@ class ProjectService {
       }
     );
   };
+  public inviteClients = (data: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:4000/invite`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(data)
+        })
+      );
+    });
+  };
 
   public getPhasesInfo = (): Observable<IPhasesInfo[]> => {
     return defer(() =>

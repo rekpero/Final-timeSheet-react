@@ -30,6 +30,7 @@ import { IProjectTimeSheet } from "../model/timesheet";
 import EditProjectComponent from "./editprojectcomponent";
 import { IPhasesInfo } from "../model/phases";
 import ProjectDetailsComponent from "./projectdetailscomponent";
+import InviteMember from "./addNewMembermodal";
 
 const ITEM_HEIGHT = 48;
 
@@ -166,6 +167,9 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   const handleClose2 = () => {
     setOpen3(false);
   };
+  const handleClose5 = () => {
+    setOpen5(false);
+  };
   useEffect(() => {
     var path = props.location.pathname;
     const routesList = routes.map(route => route.layout + route.path);
@@ -175,7 +179,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
     setUrlPath(path);
     console.log(urlPath);
   }, [props.location.pathname]);
-
+  const [open5, setOpen5] = React.useState(false);
   const [open4, setOpen4] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
   const handleOpen = () => {
@@ -188,6 +192,9 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
     setProjectId(id);
     setProjectState(state);
     console.log(id, state);
+  };
+  const handleOpen0 = () => {
+    setOpen5(true);
   };
   return (
     <div className={classes.root}>
@@ -241,14 +248,17 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
               key={prop.name}
               onClick={e => {
                 handleClose();
-                history.push(prop.layout + prop.path);
+
                 setManagementValue(key);
-                if (key === 1) {
+                if (key === 0) {
+                  handleOpen0();
+                } else if (key === 1) {
                   handleOpen();
                 } else if (key === 2) {
                   handleOpen1();
                 } else {
                   setValue(5);
+                  history.push(prop.layout + prop.path);
                 }
               }}
             >
@@ -315,6 +325,13 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
         <ActivityLogComponent />
       </TabPanel>
       <TabPanel value={value} index={5}>
+        {managementValue === 0 ? (
+          <InviteMember
+            open={open5}
+            handleClose={handleClose5}
+            classes={classes1}
+          ></InviteMember>
+        ) : null}
         {managementValue === 1 ? (
           <AddMember
             clientsData={props.clientData}

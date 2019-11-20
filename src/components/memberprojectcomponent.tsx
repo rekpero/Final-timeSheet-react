@@ -70,6 +70,7 @@ class MemberProjectComponent extends React.Component<
               this.props.project === undefined
                 ? 0
                 : this.props.project.members.hourlyrate,
+
             timetracked:
               this.props.timeSheets.length === 0
                 ? 0
@@ -97,6 +98,19 @@ class MemberProjectComponent extends React.Component<
     this.setState({ stateRows: this.state.stateRows, deleted: true }, () =>
       console.log(this.state.stateRows)
     );
+  };
+
+  getTimeFromMins = (mins: number) => {
+    // do not include the first validation check if you want, for example,
+    // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
+    console.log(mins);
+    if (mins === 0) return "00:00";
+    let h = (mins / 60) | 0,
+      m = mins % 60 | 0;
+    let hour = h < 10 ? "0" + h : h;
+    let min = m < 10 ? "0" + m : m;
+    let time = hour + ":" + min;
+    return time;
   };
 
   render() {
@@ -130,7 +144,9 @@ class MemberProjectComponent extends React.Component<
                 </TableCell>
                 <TableCell align="right">{row.budget}</TableCell>
                 <TableCell align="right">{row.hourlyrate}</TableCell>
-                <TableCell align="right">{row.timetracked}</TableCell>
+                <TableCell align="right">
+                  {this.getTimeFromMins(row.timetracked)}
+                </TableCell>
                 <TableCell>
                   <IconButton
                     aria-label="delete"

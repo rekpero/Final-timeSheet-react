@@ -22,13 +22,6 @@ var managementRoutes = [
     name: "Workspace Settings",
 
     layout: "/dash"
-  },
-
-  {
-    path: "/importdata",
-    name: "Import Data",
-
-    layout: "/dash"
   }
 ];
 export default managementRoutes;
