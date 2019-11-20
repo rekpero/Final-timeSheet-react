@@ -38,7 +38,10 @@ import moment from "moment";
 import EditIcon from "@material-ui/icons/Edit";
 import history from "../services/history";
 import CreateProjectModal from "./createprojectmodal";
+<<<<<<< HEAD
 import projectService from "../services/projectService";
+=======
+>>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -166,6 +169,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
   const [filteredProject, setFilteredProject] = React.useState(props.project);
   const [clientFilter, setClientFilter] = React.useState("");
   const [openProject, setOpenProject] = React.useState(false);
+<<<<<<< HEAD
 
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen);
@@ -218,6 +222,60 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
     setSelected(newSelected);
   };
 
+=======
+
+  const handleToggle = () => {
+    setOpen(prevOpen => !prevOpen);
+  };
+
+  const handleClose = (event: React.MouseEvent<EventTarget>) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelecteds = props.project.map(n => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected: string[] = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+>>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
@@ -239,8 +297,16 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
   const getTimeFromMins = (mins: number) => {
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
+<<<<<<< HEAD
 
     if (mins === 0) return "00:00";
+=======
+    if (mins >= 24 * 60 || mins < 0) {
+      throw new RangeError(
+        "Valid input should be greater than or equal to 0 and less than 1440."
+      );
+    }
+>>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
     var h = (mins / 60) | 0,
       m = mins % 60 | 0;
     return moment
@@ -266,6 +332,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
     setSearch(e.target.value);
   };
 
+<<<<<<< HEAD
   const handleDeleteProject = () => {
     if (
       window.confirm(
@@ -319,6 +386,8 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
       });
     }
   };
+=======
+>>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
   const filterProjectByClient = (e: any) => {
     e.target.value === "no"
       ? setFilteredProject(props.project.filter(proj => proj.clientId === -1))
@@ -357,7 +426,11 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
           <Grid item xs>
             <Grid container direction="row" justify="flex-end">
               <Tooltip title="Delete">
+<<<<<<< HEAD
                 <IconButton aria-label="delete" onClick={handleDeleteProject}>
+=======
+                <IconButton aria-label="delete">
+>>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
@@ -391,11 +464,15 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                 </optgroup>
                 <optgroup label="">
                   {props.clients.map((cl, key) => {
+<<<<<<< HEAD
                     return (
                       <option value={cl.id} key={key}>
                         {cl.name}
                       </option>
                     );
+=======
+                    return <option value={cl.id}>{cl.name}</option>;
+>>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
                   })}
                 </optgroup>
               </Select>

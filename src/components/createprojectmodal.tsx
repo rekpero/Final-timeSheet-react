@@ -29,6 +29,8 @@ import SketchExample from "./color";
 import AddIcon from "@material-ui/icons/Add";
 import AddMember from "./addmemberclasscomponent";
 import MenuItemComponent from "./menuItem";
+import classes from "*.module.sass";
+import InviteMember from "./addNewMembermodal";
 
 interface ICreateProjectModalProps {
   openCreateProjectModal: boolean;
@@ -50,6 +52,7 @@ interface IProjectState {
   open3: boolean;
   open4: boolean;
   openRate: boolean;
+  openAddMemberModal: boolean;
   phase: string[];
   SelectedValue: any;
   SelectedValue1: any;
@@ -78,6 +81,7 @@ class CreateProjectModal extends React.Component<
       open3: false,
       open4: false,
       openRate: false,
+      openAddMemberModal: false,
       phase: [],
       SelectedValue: "",
       SelectedValue1: "",
@@ -92,6 +96,10 @@ class CreateProjectModal extends React.Component<
       selectedPhase: []
     };
   }
+  handleOpenInvitation = () => {
+    console.log("Paras");
+    this.setState({ openAddMemberModal: true });
+  };
 
   getModalStyle() {
     const top = 50;
@@ -283,6 +291,11 @@ class CreateProjectModal extends React.Component<
                         return <option key={key}>{prop.name}</option>;
                       })}
                     </optgroup>
+                    <InviteMember
+                      open={this.state.openAddMemberModal}
+                      classes={this.props.classes}
+                      handleClose={this.handleOpenInvitation}
+                    ></InviteMember>
                     <AddMember
                       clientsData={this.props.clientData}
                       clientData={this.props.clients.map(client => ({
@@ -331,12 +344,17 @@ class CreateProjectModal extends React.Component<
                     native
                     value={this.state.SelectedValue1}
                     onChange={e => {
-                      this.handleMemberName(e);
-                      this.setState({ SelectedValue1: e.target.value });
+                      if (e.target.value === "new") {
+                        this.handleOpenInvitation();
+                      } else if (e.target.value) {
+                        this.handleMemberName(e);
+                        this.setState({ SelectedValue1: e.target.value });
+                      }
                     }}
                   >
                     {" "}
                     <optgroup label="">
+                      <option value="new">Add New Member</option>
                       {this.props.project.map((prop, key) => {
                         console.log(prop);
                         return (
