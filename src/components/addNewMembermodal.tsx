@@ -3,14 +3,9 @@ import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 
 import { Grid, Modal, Typography, Button, TextField } from "@material-ui/core";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-<<<<<<< HEAD
 import projectService from "../services/projectService";
 interface INewMemberState {
   number: [{ Email: string; name: string; message: string }];
-=======
-interface INewMemberState {
-  number: [{ Email: string; name: string }];
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
 }
 interface INewMemberProps {
   open: boolean;
@@ -22,11 +17,7 @@ class InviteMember extends React.Component<INewMemberProps, INewMemberState> {
   constructor(props: INewMemberProps) {
     super(props);
     this.state = {
-<<<<<<< HEAD
       number: [{ Email: "", name: "", message: "" }]
-=======
-      number: [{ Email: "", name: "" }]
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
     };
   }
 
@@ -46,17 +37,12 @@ class InviteMember extends React.Component<INewMemberProps, INewMemberState> {
   addRow = () => {
     this.state.number.push({
       Email: "",
-<<<<<<< HEAD
       name: "",
       message: ""
-=======
-      name: ""
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
     });
     return this.setState({ number: this.state.number });
   };
 
-<<<<<<< HEAD
   deleteRecord = (key: number) => {
     this.state.number.splice(key, 1);
     this.setState({ number: this.state.number });
@@ -76,16 +62,6 @@ class InviteMember extends React.Component<INewMemberProps, INewMemberState> {
       projectService.inviteClients(prop).subscribe(() => console.log("done"));
     });
   };
-=======
-  deleteRecord = (e: any, key: number) => {};
-  loadEmailName = (e: any, key: number) => {
-    console.log(e.target.value);
-  };
-  loadName = (e: any, key: number) => {
-    console.log(e.target.value);
-  };
-
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
   render() {
     return (
       <Modal
@@ -134,38 +110,26 @@ class InviteMember extends React.Component<INewMemberProps, INewMemberState> {
                     <TextField
                       id="standard-uncontrolled"
                       value={prop.Email}
-<<<<<<< HEAD
                       type="email"
-=======
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
                       onChange={e => this.loadEmailName(e, key)}
                     />
                   </Grid>
                   <Grid item xs={5}>
                     <TextField
                       id="standard-uncontrolled"
-<<<<<<< HEAD
                       value={prop.name}
-=======
-                      value={prop.Email}
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
                       onChange={e => this.loadName(e, key)}
                     />
                   </Grid>
                   <Grid item xs={2}>
                     <DeleteOutlineIcon
-<<<<<<< HEAD
                       onClick={e => this.deleteRecord(key)}
-=======
-                      onClick={e => this.deleteRecord(e, key)}
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
                     ></DeleteOutlineIcon>
                   </Grid>
                 </Grid>
               </div>
             );
           })}
-<<<<<<< HEAD
           <hr></hr>
           <Grid container direction="row" alignItems="center">
             <Grid item xs={10}></Grid>
@@ -180,8 +144,6 @@ class InviteMember extends React.Component<INewMemberProps, INewMemberState> {
               </Button>
             </Grid>
           </Grid>
-=======
->>>>>>> 7e86e2ba8ad49a25c260b746f5c489368c86b9cd
         </div>
       </Modal>
     );
