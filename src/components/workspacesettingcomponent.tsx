@@ -7,17 +7,39 @@ import {
   Typography,
   Box,
   Paper,
-  Divider
+  Divider,
+  FormControl,
+  InputLabel,
+  Select
 } from "@material-ui/core";
-
-class WorkspaceSettingComponent extends React.Component<RouteComponentProps> {
+interface IWorkspaceSettingState {
+  currency: string;
+  wname: string;
+  options: string[];
+}
+class WorkspaceSettingComponent extends React.Component<
+  RouteComponentProps,
+  IWorkspaceSettingState
+> {
   constructor(props: any) {
     super(props);
     this.state = {
-      currency: "",
-      wname: ""
+      currency:
+        sessionStorage.getItem("currency") !== null
+          ? sessionStorage.getItem("currency") + ""
+          : "USD",
+      wname:
+        sessionStorage.getItem("wname") !== null
+          ? sessionStorage.getItem("wname") + ""
+          : "",
+      options: ["USD", "RS"]
     };
   }
+
+  saveSettings = () => {
+    sessionStorage.setItem("currency", this.state.currency);
+    sessionStorage.setItem("wname", this.state.wname);
+  };
 
   render() {
     return (
@@ -30,15 +52,14 @@ class WorkspaceSettingComponent extends React.Component<RouteComponentProps> {
           </Grid>
           <Grid item xs={4}>
             <Grid container direction="row" justify="flex-end">
-              <Link
-                to="/dash"
-                className="text-white"
-                style={{ textDecoration: "none" }}
+              <Button
+                variant="contained"
+                size="large"
+                color="primary"
+                onClick={this.saveSettings}
               >
-                <Button variant="contained" size="large" color="primary">
-                  Save
-                </Button>
-              </Link>
+                Save
+              </Button>
             </Grid>
           </Grid>
         </Grid>
@@ -46,7 +67,7 @@ class WorkspaceSettingComponent extends React.Component<RouteComponentProps> {
         <Box mt={2}>
           <Paper>
             <Box p={1}>
-              <Grid container direction="row">
+              <Grid container direction="row" alignItems="center">
                 <Grid item xs={3}>
                   <Box m={2} textAlign="left">
                     Currency
@@ -58,18 +79,26 @@ class WorkspaceSettingComponent extends React.Component<RouteComponentProps> {
                   </Box>
                 </Grid>
                 <Grid item xs={5}>
-                  <TextField
-                    id="standard-basic"
-                    label="Currency"
-                    margin="normal"
-                    onChange={event =>
-                      this.setState({ currency: event.target.value })
-                    }
-                  />
+                  <FormControl>
+                    <InputLabel htmlFor="age-native-simple">
+                      Currency
+                    </InputLabel>
+                    <Select
+                      native
+                      value={this.state.currency}
+                      onChange={(event: any) =>
+                        this.setState({ currency: event.target.value })
+                      }
+                    >
+                      {this.state.options.map((prop, key) => {
+                        return <option value={prop}>{prop}</option>;
+                      })}
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
               <Divider />
-              <Grid container direction="row">
+              <Grid container direction="row" alignItems="center">
                 <Grid item xs={3}>
                   <Box m={2} textAlign="left">
                     Name
@@ -84,6 +113,7 @@ class WorkspaceSettingComponent extends React.Component<RouteComponentProps> {
                     id="standard-basic"
                     label="Workspace name"
                     margin="normal"
+                    value={this.state.wname}
                     onChange={event =>
                       this.setState({ wname: event.target.value })
                     }

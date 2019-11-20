@@ -31,7 +31,7 @@ class PhaseProjectComponent extends React.Component<
   constructor(props: IPhaseProjectProps) {
     super(props);
     this.state = {
-      stateRows: props.phases.map(phase => {
+      stateRows: this.props.phases.map(phase => {
         const filteredTimeSheet = props.timeSheets.filter(
           time => time.phase === phase.name
         );
@@ -42,7 +42,7 @@ class PhaseProjectComponent extends React.Component<
             filteredTimeSheet.length === 0
               ? 0
               : filteredTimeSheet
-                  .map(time => Number.parseInt(time.timeWorked))
+                  .map(time => time.timeWorked)
                   .reduce((prev, curr) => prev + curr)
         };
       })
@@ -64,7 +64,7 @@ class PhaseProjectComponent extends React.Component<
               filteredTimeSheet.length === 0
                 ? 0
                 : filteredTimeSheet
-                    .map(time => Number.parseInt(time.timeWorked))
+                    .map(time => time.timeWorked)
                     .reduce((prev, curr) => prev + curr)
           };
         })
@@ -83,18 +83,16 @@ class PhaseProjectComponent extends React.Component<
     if (this.state.stateRows.length !== 0) {
       this.state.stateRows.splice(i, 1);
     }
-    this.setState({ stateRows: this.state.stateRows }, () => this.props.updatePhase(this.state.stateRows.map(row => row.name)));
+    this.setState({ stateRows: this.state.stateRows }, () =>
+      this.props.updatePhase(this.state.stateRows.map(row => row.name))
+    );
     console.log(this.state.stateRows);
   };
 
   getTimeFromMins = (mins: number) => {
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
-    if (mins >= 24 * 60 || mins < 0) {
-      throw new RangeError(
-        "Valid input should be greater than or equal to 0 and less than 1440."
-      );
-    }
+    if (mins === 0) return "00:00";
     var h = (mins / 60) | 0,
       m = mins % 60 | 0;
     return moment

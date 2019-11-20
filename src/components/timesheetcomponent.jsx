@@ -11,11 +11,11 @@ import ProjectService from "../services/projectService";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import projectService from "../services/projectService";
-import { useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Chart from "./dougnutChart";
 
 export default function DashboardComponent(props) {
-
   const [schedules, setSchedules] = useState({
     ["Mon " + (moment().date() - moment().day() + 1)]: [],
     ["Tue " + (moment().date() - moment().day() + 2)]: [],
@@ -24,11 +24,9 @@ export default function DashboardComponent(props) {
     ["Fri " + (moment().date() - moment().day() + 5)]: [],
     ["Sat " + (moment().date() - moment().day() + 6)]: [],
     ["Sun " + (moment().date() - moment().day() + 7)]: []
-  })
+  });
 
   useEffect(() => {
-
-  
     ProjectService.getTimeSheetData().subscribe(timesheets => {
       const monday = timesheets.filter(time => {
         return moment(time.date, "YYYY-MM-DD").isSame(
@@ -72,303 +70,279 @@ export default function DashboardComponent(props) {
           "day"
         );
       });
-      setSchedules(
-        {
-            ["Mon " + (moment().date() - moment().day() + 1)]:
-              monday.length === 0
-                ? []
-                : monday.map((time, index) => {
-                    return {
-                      start: moment("10:00 am", "hh:mm a").add(
-                        monday.filter((val, i) => i < index).length === 0
-                          ? 0
-                          : monday
-                              .filter((val, i) => i < index)
-                              .map(time => time.timeWorked)
-                              .reduce(
-                                (prev, curr) =>
-                                  prev.timeWorked + curr.timeWorked
-                              ),
-                        "m"
-                      ),
-                      end: moment("10:00 am", "hh:mm a")
-                        .add(
-                          monday.filter((val, i) => i < index).length === 0
-                            ? 0
-                            : monday
-                                .filter((val, i) => i < index)
-                                .map(time => time.timeWorked)
-                                .reduce(
-                                  (prev, curr) =>
-                                    prev.timeWorked + curr.timeWorked
-                                ),
-                          "m"
-                        )
-                        .add(time.timeWorked, "m"),
-                      data: {
-                        phase: { name: time.phase },
-                        project: time.project,
-                        note: { name: time.note },
-                        timesheetId: time.id
-                      }
-                    };
-                  }),
-            ["Tue " + (moment().date() - moment().day() + 2)]:
-              tuesday.length === 0
-                ? []
-                : tuesday.map((time, index) => {
-                    return {
-                      start: moment("10:00 am", "hh:mm a").add(
-                        monday.filter((val, i) => i < index).length === 0
-                          ? 0
-                          : monday
-                              .filter((val, i) => i < index)
-                              .map(time => time.timeWorked)
-                              .reduce(
-                                (prev, curr) =>
-                                  prev.timeWorked + curr.timeWorked
-                              ),
-                        "m"
-                      ),
-                      end: moment("10:00 am", "hh:mm a")
-                        .add(
-                          monday.filter((val, i) => i < index).length === 0
-                            ? 0
-                            : monday
-                                .filter((val, i) => i < index)
-                                .map(time => time.timeWorked)
-                                .reduce(
-                                  (prev, curr) =>
-                                    prev.timeWorked + curr.timeWorked
-                                ),
-                          "m"
-                        )
-                        .add(time.timeWorked, "m"),
-                      data: {
-                        phase: { name: time.phase },
-                        project: time.project,
-                        note: { name: time.note },
-                        timesheetId: time.id
-                      }
-                    };
-                  }),
-            ["Wed " + (moment().date() - moment().day() + 3)]:
-              wednesday.length === 0
-                ? []
-                : wednesday.map((time, index) => {
-                    return {
-                      start: moment("10:00 am", "hh:mm a").add(
-                        monday.filter((val, i) => i < index).length === 0
-                          ? 0
-                          : monday
-                              .filter((val, i) => i < index)
-                              .map(time => time.timeWorked)
-                              .reduce(
-                                (prev, curr) =>
-                                  prev.timeWorked + curr.timeWorked
-                              ),
-                        "m"
-                      ),
-                      end: moment("10:00 am", "hh:mm a")
-                        .add(
-                          monday.filter((val, i) => i < index).length === 0
-                            ? 0
-                            : monday
-                                .filter((val, i) => i < index)
-                                .map(time => time.timeWorked)
-                                .reduce(
-                                  (prev, curr) =>
-                                    prev.timeWorked + curr.timeWorked
-                                ),
-                          "m"
-                        )
-                        .add(time.timeWorked, "m"),
-                      data: {
-                        phase: { name: time.phase },
-                        project: time.project,
-                        note: { name: time.note },
-                        timesheetId: time.id
-                      }
-                    };
-                  }),
-            ["Thurs " + (moment().date() - moment().day() + 4)]:
-              thursday.length === 0
-                ? []
-                : thursday.map((time, index) => {
-                    return {
-                      start: moment("10:00 am", "hh:mm a").add(
-                        monday.filter((val, i) => i < index).length === 0
-                          ? 0
-                          : monday
-                              .filter((val, i) => i < index)
-                              .map(time => time.timeWorked)
-                              .reduce(
-                                (prev, curr) =>
-                                  prev.timeWorked + curr.timeWorked
-                              ),
-                        "m"
-                      ),
-                      end: moment("10:00 am", "hh:mm a")
-                        .add(
-                          monday.filter((val, i) => i < index).length === 0
-                            ? 0
-                            : monday
-                                .filter((val, i) => i < index)
-                                .map(time => time.timeWorked)
-                                .reduce(
-                                  (prev, curr) =>
-                                    prev.timeWorked + curr.timeWorked
-                                ),
-                          "m"
-                        )
-                        .add(time.timeWorked, "m"),
-                      data: {
-                        phase: { name: time.phase },
-                        project: time.project,
-                        note: { name: time.note },
-                        timesheetId: time.id
-                      }
-                    };
-                  }),
-            ["Fri " + (moment().date() - moment().day() + 5)]:
-              friday.length === 0
-                ? []
-                : friday.map((time, index) => {
-                    return {
-                      start: moment("10:00 am", "hh:mm a").add(
-                        monday.filter((val, i) => i < index).length === 0
-                          ? 0
-                          : monday
-                              .filter((val, i) => i < index)
-                              .map(time => time.timeWorked)
-                              .reduce(
-                                (prev, curr) =>
-                                  prev.timeWorked + curr.timeWorked
-                              ),
-                        "m"
-                      ),
-                      end: moment("10:00 am", "hh:mm a")
-                        .add(
-                          monday.filter((val, i) => i < index).length === 0
-                            ? 0
-                            : monday
-                                .filter((val, i) => i < index)
-                                .map(time => time.timeWorked)
-                                .reduce(
-                                  (prev, curr) =>
-                                    prev.timeWorked + curr.timeWorked
-                                ),
-                          "m"
-                        )
-                        .add(time.timeWorked, "m"),
-                      data: {
-                        phase: { name: time.phase },
-                        project: time.project,
-                        note: { name: time.note },
-                        timesheetId: time.id
-                      }
-                    };
-                  }),
-            ["Sat " + (moment().date() - moment().day() + 6)]:
-              saturday.length === 0
-                ? []
-                : saturday.map((time, index) => {
-                    return {
-                      start: moment("10:00 am", "hh:mm a").add(
-                        monday.filter((val, i) => i < index).length === 0
-                          ? 0
-                          : monday
-                              .filter((val, i) => i < index)
-                              .map(time => time.timeWorked)
-                              .reduce(
-                                (prev, curr) =>
-                                  prev.timeWorked + curr.timeWorked
-                              ),
-                        "m"
-                      ),
-                      end: moment("10:00 am", "hh:mm a")
-                        .add(
-                          monday.filter((val, i) => i < index).length === 0
-                            ? 0
-                            : monday
-                                .filter((val, i) => i < index)
-                                .map(time => time.timeWorked)
-                                .reduce(
-                                  (prev, curr) =>
-                                    prev.timeWorked + curr.timeWorked
-                                ),
-                          "m"
-                        )
-                        .add(time.timeWorked, "m"),
-                      data: {
-                        phase: { name: time.phase },
-                        project: time.project,
-                        note: { name: time.note },
-                        timesheetId: time.id
-                      }
-                    };
-                  }),
-            ["Sun " + (moment().date() - moment().day() + 7)]:
-              sunday.length === 0
-                ? []
-                : sunday.map((time, index) => {
-                    return {
-                      start: moment("10:00 am", "hh:mm a").add(
-                        monday.filter((val, i) => i < index).length === 0
-                          ? 0
-                          : monday
-                              .filter((val, i) => i < index)
-                              .map(time => time.timeWorked)
-                              .reduce(
-                                (prev, curr) =>
-                                  prev.timeWorked + curr.timeWorked
-                              ),
-                        "m"
-                      ),
-                      end: moment("10:00 am", "hh:mm a")
-                        .add(
-                          monday.filter((val, i) => i < index).length === 0
-                            ? 0
-                            : monday
-                                .filter((val, i) => i < index)
-                                .map(time => time.timeWorked)
-                                .reduce(
-                                  (prev, curr) =>
-                                    prev.timeWorked + curr.timeWorked
-                                ),
-                          "m"
-                        )
-                        .add(time.timeWorked, "m"),
-                      data: {
-                        phase: { name: time.phase },
-                        project: time.project,
-                        note: { name: time.note },
-                        timesheetId: time.id
-                      }
-                    };
-                  })
-          }
-      );
+      setSchedules({
+        ["Mon " + (moment().date() - moment().day() + 1)]:
+          monday.length === 0
+            ? []
+            : monday.map((time, index) => {
+                return {
+                  start: moment("10:00 am", "hh:mm a").add(
+                    monday.filter((val, i) => i < index).length === 0
+                      ? 0
+                      : monday
+                          .filter((val, i) => i < index)
+                          .map(time => time.timeWorked)
+                          .reduce(
+                            (prev, curr) => prev.timeWorked + curr.timeWorked
+                          ),
+                    "m"
+                  ),
+                  end: moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .add(time.timeWorked, "m"),
+                  data: {
+                    phase: { name: time.phase },
+                    project: time.project,
+                    note: { name: time.note },
+                    timesheetId: time.id
+                  }
+                };
+              }),
+        ["Tue " + (moment().date() - moment().day() + 2)]:
+          tuesday.length === 0
+            ? []
+            : tuesday.map((time, index) => {
+                return {
+                  start: moment("10:00 am", "hh:mm a").add(
+                    monday.filter((val, i) => i < index).length === 0
+                      ? 0
+                      : monday
+                          .filter((val, i) => i < index)
+                          .map(time => time.timeWorked)
+                          .reduce(
+                            (prev, curr) => prev.timeWorked + curr.timeWorked
+                          ),
+                    "m"
+                  ),
+                  end: moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .add(time.timeWorked, "m"),
+                  data: {
+                    phase: { name: time.phase },
+                    project: time.project,
+                    note: { name: time.note },
+                    timesheetId: time.id
+                  }
+                };
+              }),
+        ["Wed " + (moment().date() - moment().day() + 3)]:
+          wednesday.length === 0
+            ? []
+            : wednesday.map((time, index) => {
+                return {
+                  start: moment("10:00 am", "hh:mm a").add(
+                    monday.filter((val, i) => i < index).length === 0
+                      ? 0
+                      : monday
+                          .filter((val, i) => i < index)
+                          .map(time => time.timeWorked)
+                          .reduce(
+                            (prev, curr) => prev.timeWorked + curr.timeWorked
+                          ),
+                    "m"
+                  ),
+                  end: moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .add(time.timeWorked, "m"),
+                  data: {
+                    phase: { name: time.phase },
+                    project: time.project,
+                    note: { name: time.note },
+                    timesheetId: time.id
+                  }
+                };
+              }),
+        ["Thurs " + (moment().date() - moment().day() + 4)]:
+          thursday.length === 0
+            ? []
+            : thursday.map((time, index) => {
+                return {
+                  start: moment("10:00 am", "hh:mm a").add(
+                    monday.filter((val, i) => i < index).length === 0
+                      ? 0
+                      : monday
+                          .filter((val, i) => i < index)
+                          .map(time => time.timeWorked)
+                          .reduce(
+                            (prev, curr) => prev.timeWorked + curr.timeWorked
+                          ),
+                    "m"
+                  ),
+                  end: moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .add(time.timeWorked, "m"),
+                  data: {
+                    phase: { name: time.phase },
+                    project: time.project,
+                    note: { name: time.note },
+                    timesheetId: time.id
+                  }
+                };
+              }),
+        ["Fri " + (moment().date() - moment().day() + 5)]:
+          friday.length === 0
+            ? []
+            : friday.map((time, index) => {
+                return {
+                  start: moment("10:00 am", "hh:mm a").add(
+                    monday.filter((val, i) => i < index).length === 0
+                      ? 0
+                      : monday
+                          .filter((val, i) => i < index)
+                          .map(time => time.timeWorked)
+                          .reduce(
+                            (prev, curr) => prev.timeWorked + curr.timeWorked
+                          ),
+                    "m"
+                  ),
+                  end: moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .add(time.timeWorked, "m"),
+                  data: {
+                    phase: { name: time.phase },
+                    project: time.project,
+                    note: { name: time.note },
+                    timesheetId: time.id
+                  }
+                };
+              }),
+        ["Sat " + (moment().date() - moment().day() + 6)]:
+          saturday.length === 0
+            ? []
+            : saturday.map((time, index) => {
+                return {
+                  start: moment("10:00 am", "hh:mm a").add(
+                    monday.filter((val, i) => i < index).length === 0
+                      ? 0
+                      : monday
+                          .filter((val, i) => i < index)
+                          .map(time => time.timeWorked)
+                          .reduce(
+                            (prev, curr) => prev.timeWorked + curr.timeWorked
+                          ),
+                    "m"
+                  ),
+                  end: moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .add(time.timeWorked, "m"),
+                  data: {
+                    phase: { name: time.phase },
+                    project: time.project,
+                    note: { name: time.note },
+                    timesheetId: time.id
+                  }
+                };
+              }),
+        ["Sun " + (moment().date() - moment().day() + 7)]:
+          sunday.length === 0
+            ? []
+            : sunday.map((time, index) => {
+                return {
+                  start: moment("10:00 am", "hh:mm a").add(
+                    monday.filter((val, i) => i < index).length === 0
+                      ? 0
+                      : monday
+                          .filter((val, i) => i < index)
+                          .map(time => time.timeWorked)
+                          .reduce(
+                            (prev, curr) => prev.timeWorked + curr.timeWorked
+                          ),
+                    "m"
+                  ),
+                  end: moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .add(time.timeWorked, "m"),
+                  data: {
+                    phase: { name: time.phase },
+                    project: time.project,
+                    note: { name: time.note },
+                    timesheetId: time.id
+                  }
+                };
+              })
+      });
     });
-  }, [])
+  }, []);
 
   const setTimer = (day, index) => {
     const hours = Number.parseInt(
       moment
-        .utc(
-          schedules[day][index].end.diff(
-            schedules[day][index].start
-          )
-        )
+        .utc(schedules[day][index].end.diff(schedules[day][index].start))
         .format("HH")
     );
     const minutes = Number.parseInt(
       moment
-        .utc(
-          schedules[day][index].end.diff(
-            schedules[day][index].start
-          )
-        )
+        .utc(schedules[day][index].end.diff(schedules[day][index].start))
         .format("mm")
     );
     const timesheet = {
@@ -417,26 +391,21 @@ export default function DashboardComponent(props) {
     );
   };
 
-
   const handleStore = (day, schedule) => {
-
     setSchedules({
-        ...schedules,
-        [day]: [...schedules[day], schedule]
+      ...schedules,
+      [day]: [...schedules[day], schedule]
     });
   };
 
   const handleUpdate = (day, index, schedule, dest = day) => {
-
     if (dest === day) {
-      setSchedules(
-        {
-            ...schedules,
-            [day]: schedules[day].map((_, i) => {
-              return i === index ? schedule : _;
-            })
-        }
-      );
+      setSchedules({
+        ...schedules,
+        [day]: schedules[day].map((_, i) => {
+          return i === index ? schedule : _;
+        })
+      });
       updateTimer(
         schedule.data.project,
         schedule.data.phase.name,
@@ -455,14 +424,11 @@ export default function DashboardComponent(props) {
         schedule.data.timesheetId
       );
     } else {
-      setSchedules(
-        {
-            ...schedules,
-            [day]: schedules[day].filter((_, i) => i !== index),
-            [dest]: [...schedules[dest], schedule]
-
-        }
-      );
+      setSchedules({
+        ...schedules,
+        [day]: schedules[day].filter((_, i) => i !== index),
+        [dest]: [...schedules[dest], schedule]
+      });
       updateTimer(
         schedule.data.project,
         schedule.data.phase.name,
@@ -498,135 +464,147 @@ export default function DashboardComponent(props) {
       )
       .subscribe(data => {
         console.log(data);
+        props.timesheetData();
       });
   };
 
   const handleRequestAction = (day, index, action) => {
-
     if (action) {
       setSchedules({
-          ...schedules,
-          [day]: schedules[day].map((schedule, i) => {
-            return i === index
-              ? {
-                  ...schedule,
-                  request: false,
-                  requester: null
-                }
-              : schedule;
-          })
+        ...schedules,
+        [day]: schedules[day].map((schedule, i) => {
+          return i === index
+            ? {
+                ...schedule,
+                request: false,
+                requester: null
+              }
+            : schedule;
+        })
       });
     } else {
       setSchedules({
-          ...schedules,
-          [day]: schedules[day].filter((schedule, i) => {
-            return i !== index;
-          })
+        ...schedules,
+        [day]: schedules[day].filter((schedule, i) => {
+          return i !== index;
+        })
       });
     }
   };
 
   const handleDelete = (day, index) => {
-    projectService.deleteTimesheetData(schedules[day][index].data.timesheetId).subscribe((data) => {
-      console.log(data)
-      setSchedules({
+    projectService
+      .deleteTimesheetData(schedules[day][index].data.timesheetId)
+      .subscribe(data => {
+        console.log(data);
+        setSchedules({
           ...schedules,
           [day]: schedules[day].filter((schedule, i) => {
             return i !== index;
           })
+        });
+        props.timesheetData();
       });
-    })
-    
   };
 
   const theme = useTheme();
-  const match = useMediaQuery(theme.breakpoints.down('sm'));
-  console.log(match)
+  const match = useMediaQuery(theme.breakpoints.down("sm"));
+  console.log(match);
 
-    return (
-      <Grid container direction="row" justify="center">
-        <Grid container direction="row" spacing={2}>
-          <Grid item xs={6}>
-            <Grid container direction="row" justify="flex-start">
-              <Box my={3} mx={5}>
-                <Typography variant="h5">
-                  {moment().format("MMMM")} {moment().format("YYYY")}
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid item xs={6}>
-            <Grid
-              container
-              direction="row"
-              justify="flex-end"
-              alignItems="center"
-            >
-              <Box my={3} mx={5}>
-                <ButtonGroup
-                  variant="contained"
-                  size="small"
-                  aria-label="small contained button group"
-                >
-                  <Button>
-                    <ArrowBackIosIcon fontSize="medium"></ArrowBackIosIcon>
-                  </Button>
-                  <Button>Today</Button>
-                  <Button>
-                    <ArrowForwardIosIcon fontSize="medium"></ArrowForwardIosIcon>
-                  </Button>
-                </ButtonGroup>
-              </Box>
-            </Grid>
+  return (
+    <Grid container direction="row" justify="center">
+      <Grid container direction="row" spacing={2}>
+        <Grid item xs={6}>
+          <Grid container direction="row" justify="flex-start">
+            <Box my={3} mx={5}>
+              <Typography variant="h5">
+                {moment().format("MMMM")} {moment().format("YYYY")}
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-          <Timesheet
-            request={false}
-            requester={{
-              id: 1,
-              department: {
-                name: "CSIT"
-              },
-              user: {
-                name: "Winner Gatchalian"
-              }
-            }}
-            time={{
-              start: "10:00 AM",
-              end: "10:00 PM",
-              increment: { hours: 1, minutes: 0 }
-            }}
-            sections={[
-              {
-                value: 1,
-                label: "Hello"
-              }
-            ]}
-            subjects={[
-              {
-                value: 1,
-                label: "Hello"
-              }
-            ]}
-            professors={[
-              {
-                value: 1,
-                label: "Hello"
-              }
-            ]}
-            scaled={match}
-            schedules={schedules}
-            onStore={handleStore}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
-            setTimer={setTimer}
-            onRequestAction={handleRequestAction}
-            editTimesheet={openEditTimer}
+        <Grid item xs={6}>
+          <Grid
+            container
+            direction="row"
+            justify="flex-end"
+            alignItems="center"
+          >
+            <Box my={3} mx={5}>
+              <ButtonGroup
+                variant="contained"
+                size="small"
+                aria-label="small contained button group"
+              >
+                <Button>
+                  <ArrowBackIosIcon fontSize="medium"></ArrowBackIosIcon>
+                </Button>
+                <Button>Today</Button>
+                <Button>
+                  <ArrowForwardIosIcon fontSize="medium"></ArrowForwardIosIcon>
+                </Button>
+              </ButtonGroup>
+            </Box>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid container direction="row" spacing={2}>
+        <Grid item xs={9}>
+          <Grid container direction="row" justify="center">
+            <Timesheet
+              request={false}
+              requester={{
+                id: 1,
+                department: {
+                  name: "CSIT"
+                },
+                user: {
+                  name: "Winner Gatchalian"
+                }
+              }}
+              time={{
+                start: "10:00 AM",
+                end: "10:00 PM",
+                increment: { hours: 1, minutes: 0 }
+              }}
+              sections={[
+                {
+                  value: 1,
+                  label: "Hello"
+                }
+              ]}
+              subjects={[
+                {
+                  value: 1,
+                  label: "Hello"
+                }
+              ]}
+              professors={[
+                {
+                  value: 1,
+                  label: "Hello"
+                }
+              ]}
+              scaled={match}
+              schedules={schedules}
+              onStore={handleStore}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+              setTimer={setTimer}
+              onRequestAction={handleRequestAction}
+              editTimesheet={openEditTimer}
+            />
+          </Grid>
+        </Grid>
+        <Grid item xs={3}>
+          <Chart
+            labels={[" Total Time in hrs"]}
+            chartData={[props.timeWorked]}
+            color={["#D32322"]}
+            title={"TimeWorked"}
           />
         </Grid>
       </Grid>
-    );
-
-  
+    </Grid>
+  );
 }

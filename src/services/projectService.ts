@@ -18,40 +18,6 @@ class ProjectService {
     );
   };
 
-  public postTimesheetData = (timesheet: any): Observable<any> => {
-    return defer(() => {
-      return from<Promise<any>>(
-        fetch(`http://localhost:3500/timesheet`, {
-          headers: { "Content-Type": "application/json; charset=utf-8" },
-          method: "POST",
-          body: JSON.stringify(timesheet)
-        })
-      );
-    });
-  };
-
-  public updateTimesheetData = (update: any, id: number): Observable<any> => {
-    return defer(() => {
-      return from<Promise<any>>(
-        fetch(`http://localhost:3500/timesheet/${id}`, {
-          headers: { "Content-Type": "application/json; charset=utf-8" },
-          method: "PUT",
-          body: JSON.stringify(update)
-        })
-      );
-    });
-  };
-
-  public deleteTimesheetData = (id: number): Observable<any> => {
-    return defer(() => {
-      return from<Promise<any>>(
-        fetch(`http://localhost:3500/timesheet/${id}`, {
-          method: "DELETE"
-        })
-      );
-    });
-  };
-
   public getClientData = (): Observable<IClientInfo[]> => {
     return defer(() =>
       // for lazy loading
@@ -100,6 +66,18 @@ class ProjectService {
     );
   };
 
+  public postTimesheetData = (timesheet: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(timesheet)
+        })
+      );
+    });
+  };
+
   public postClient = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
@@ -111,6 +89,19 @@ class ProjectService {
       );
     });
   };
+
+  public postPhase = (data: any): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/phases`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "POST",
+          body: JSON.stringify(data)
+        })
+      );
+    });
+  };
+
   public postProject = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
@@ -118,6 +109,62 @@ class ProjectService {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(data)
+        })
+      );
+    });
+  };
+
+  public updateTimesheetData = (update: any, id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "PUT",
+          body: JSON.stringify(update)
+        })
+      );
+    });
+  };
+
+  public updateClient = (update: any, id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/client/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "PUT",
+          body: JSON.stringify(update)
+        })
+      );
+    });
+  };
+
+  public deleteTimesheetData = (id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/timesheet/${id}`, {
+          method: "DELETE"
+        })
+      );
+    });
+  };
+
+  public deletePhases = (id: string): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/phases/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "DELETE"
+        })
+      );
+    });
+  };
+
+  public deleteProject = (id: string): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/project/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "DELETE"
         })
       );
     });

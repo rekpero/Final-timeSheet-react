@@ -52,8 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "100%"
   },
   tablePanel: {
-    marginLeft: "7%",
-    marginTop: "7%"
+    marginTop: theme.spacing(3)
   }
 }));
 

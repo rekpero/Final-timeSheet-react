@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { RouteComponentProps, Route, withRouter } from "react-router-dom";
+import {
+  RouteComponentProps,
+  Route,
+  withRouter,
+  Switch
+} from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
@@ -18,6 +23,7 @@ import DashboardComponent from "../layout/dashboardcomponent";
 import AddMember from "./addmemberclasscomponent";
 import PhasesModal from "./managePhases";
 import TimesheetComponent from "./timesheetcomponent";
+import ReportCreation from "./reportComponent";
 import { IProjectInfo } from "../model/project";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
@@ -103,11 +109,11 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 interface ITabsProps extends RouteComponentProps {
-  children: any;
   project: IProjectInfo[];
   phases: IPhasesInfo[];
   clients: IClientInfo[];
   timeSheet: IProjectTimeSheet[];
+  timeWorked: number;
   clientData: () => void;
   projectData: () => void;
   phaseData: () => void;
@@ -159,13 +165,12 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   };
   useEffect(() => {
     var path = props.location.pathname;
-
     const routesList = routes.map(route => route.layout + route.path);
     console.log(path, routesList.indexOf(path));
     // console.log(path, routesList.indexOf(path));
     setValue(routesList.indexOf(path));
     setUrlPath(path);
-    // console.log(urlPath);
+    console.log(urlPath);
   }, [props.location.pathname]);
 
   const [open4, setOpen4] = React.useState(false);
@@ -230,12 +235,12 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
                 handleClose();
                 history.push(prop.layout + prop.path);
                 setManagementValue(key);
-                setValue(5);
                 if (key === 1) {
                   handleOpen();
-                }
-                if (key === 2) {
+                } else if (key === 2) {
                   handleOpen1();
+                } else {
+                  setValue(5);
                 }
               }}
             >
@@ -244,38 +249,102 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
           ))}
         </Menu>
       </Tabs>
-      <TabPanel>{props.children}</TabPanel>
-
-      {/* <TabPanel value={value} index={0}>
-        <Route
-          path={`${props.match.path}/dashboard`}
-          render={() => (
-            <TimesheetComponent
-              setTimer={props.setTimer}
-              editTimer={props.editTimer}
-            />
-          )}
+      {/* <TabPanel>
+        <Switch>
+          <Route
+            path={`dash/dashboard`}
+            render={() => (
+              <TimesheetComponent
+                setTimer={props.setTimer}
+                editTimer={props.editTimer}
+                timeWorked={props.timeWorked}
+              />
+            )}
+          />
+          <Route
+            path={`dash/projects/edit/:id`}
+            exact
+            render={() => {
+              return (
+                <EditProjectComponent
+                  projects={props.project}
+                  clients={props.clients}
+                  timeSheets={props.timeSheet}
+                />
+              );
+            }}
+          />
+          <Route
+            path={`dash/projects`}
+            exact
+            render={() => (/*
+              <ProjectComponent
+                clientData={props.clientData}
+                projectData={props.projectData}
+                phaseData={props.phaseData}
+                timesheetData={props.timesheetData}
+                project={props.project}
+                phases={props.phases}
+                timeSheet={props.timeSheet}
+                clients={props.clients}
+              />
+            )}
+          />
+          <Route
+            path={`dash/status`}
+            exact
+            render={() => (
+              <StatusComponent
+                project={props.project}
+                phases={props.phases}
+                timeSheet={props.timeSheet}
+                clients={props.clients}
+              />
+            )}
+          />
+          <Route
+            path={`dash/workspacesettings`}
+            exact
+            render={() => <WorkspaceSettingComponent />}
+          />
+        </Switch>
+      </TabPanel> */}
+      <TabPanel value={value} index={0}>
+        <TimesheetComponent
+          setTimer={props.setTimer}
+          editTimer={props.editTimer}
+          timeWorked={props.timeWorked}
+          timesheetData={props.timesheetData}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Route
-          path={`${props.match.path}/projects`}
-          exact
-          render={() => (
-            <ProjectComponent
-              project={props.project}
-              clients={props.clients}
-              timeSheet={props.timeSheet}
-            />
-          )}
+        <ProjectComponent
+          clientData={props.clientData}
+          projectData={props.projectData}
+          phaseData={props.phaseData}
+          timesheetData={props.timesheetData}
+          project={props.project}
+          phases={props.phases}
+          timeSheet={props.timeSheet}
+          clients={props.clients}
         />
-        
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <StatusComponent />
+        <StatusComponent
+          project={props.project}
+          phases={props.phases}
+          timeSheet={props.timeSheet}
+          clients={props.clients}
+        />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <ReportCreation
+          project={props.project}
+          phases={props.phases}
+          clients={props.clients}
+          timeSheet={props.timeSheet}
+          classes={classes1}
+        ></ReportCreation>
       </TabPanel>
       <TabPanel value={value} index={4}>
         <ActivityLogComponent />
@@ -302,10 +371,11 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
             open={open3}
             handleClose={handleClose2}
             classes={classes1}
+            phaseDataFunction={props.phaseData}
           ></PhasesModal>
         ) : null}
         {managementValue === 3 ? <WorkspaceSettingComponent /> : null}
-      </TabPanel> */}
+      </TabPanel>
     </div>
   );
 };

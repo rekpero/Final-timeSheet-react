@@ -1,19 +1,22 @@
 import React from "react";
 import Modal from "@material-ui/core/Modal";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Paper } from "@material-ui/core";
 import TimerIcon from "@material-ui/icons/Timer";
-
+import { IProjectTimeSheet } from "../model/timesheet";
 interface ItimerModalProps {
   open: boolean;
   handleClose: () => void;
+  data: IProjectTimeSheet[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper1: {
       position: "absolute",
-      width: 400,
+      width: 450,
+      maxHeight: 600,
+      overflowY: "auto",
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
@@ -22,6 +25,16 @@ const useStyles = makeStyles((theme: Theme) =>
         width: 200,
         height: 100
       }
+    },
+    paper2: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2),
+      width: 400,
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(3)
+      //   padding: theme.spacing(4, 6, 6, 8),
     },
 
     selectEmpty: {
@@ -61,10 +74,38 @@ const TimerModal: React.FC<ItimerModalProps> = (props: ItimerModalProps) => {
             <TimerIcon />
           </Grid>
           <Grid item xs={9}>
-            <Typography variant="h6">Timers</Typography>
+            <Typography variant="h6">Enteries</Typography>
           </Grid>
         </Grid>
         <hr></hr>
+
+        {props.data.map((prop, key) => {
+          return (
+            <div>
+              <Paper className={classes.paper2}>
+                <Grid container direction="row" alignItems="center">
+                  <Grid item xs={4}>
+                    {" "}
+                    {prop.project.name}
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={4}>
+                    {prop.phase}
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+
+                  <Grid item xs={2}>
+                    {(
+                      (prop.project.budget * 60 - prop.timeWorked) /
+                      60
+                    ).toFixed(2)}{" "}
+                    Minutes Left
+                  </Grid>
+                </Grid>
+              </Paper>
+            </div>
+          );
+        })}
       </div>
     </Modal>
   );

@@ -74,7 +74,7 @@ class MemberProjectComponent extends React.Component<
               this.props.timeSheets.length === 0
                 ? 0
                 : this.props.timeSheets
-                    .map(time => Number.parseInt(time.timeWorked))
+                    .map(time => time.timeWorked)
                     .reduce((prev, curr) => prev + curr)
           }
         ]

@@ -52,6 +52,7 @@ interface IProjectState {
   openRate: boolean;
   phase: string[];
   SelectedValue: any;
+  SelectedValue1: any;
   addedProject: newProject;
   selectedPhase: string[];
 }
@@ -79,6 +80,7 @@ class CreateProjectModal extends React.Component<
       openRate: false,
       phase: [],
       SelectedValue: "",
+      SelectedValue1: "",
       addedProject: {
         name: "",
         projectColor: { r: "", g: "", b: "", a: "" },
@@ -131,6 +133,8 @@ class CreateProjectModal extends React.Component<
     this.setState({ addedProject: this.state.addedProject });
   };
   handleMemberName = (e: any) => {
+    // this.state.SelectedValue1= e.target.value;
+    console.log("entered");
     this.state.addedProject.members.name = e.target.value;
     this.setState({ addedProject: this.state.addedProject });
   };
@@ -164,6 +168,7 @@ class CreateProjectModal extends React.Component<
   };
   pushProject = () => {
     this.state.selectedPhase.map((prop1, key1) => {
+      console.log(prop1);
       this.props.phases.map((prop, key) => {
         if (prop1 === prop.name) {
           this.state.addedProject.phases.push({
@@ -236,6 +241,7 @@ class CreateProjectModal extends React.Component<
                   InputLabelProps={{
                     shrink: true
                   }}
+                  onChange={e => this.handleProjectName(e)}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -273,7 +279,7 @@ class CreateProjectModal extends React.Component<
                     <optgroup label="">
                       {this.props.clients.map((prop, key) => {
                         console.log(prop);
-                        return <option>{prop.name}</option>;
+                        return <option key={key}>{prop.name}</option>;
                       })}
                     </optgroup>
                     <AddMember
@@ -322,8 +328,10 @@ class CreateProjectModal extends React.Component<
                   <InputLabel htmlFor="age-native-simple">Members</InputLabel>
                   <Select
                     native
+                    value={this.state.SelectedValue1}
                     onChange={e => {
                       this.handleMemberName(e);
+                      this.setState({ SelectedValue1: e.target.value });
                     }}
                   >
                     {" "}
@@ -331,7 +339,9 @@ class CreateProjectModal extends React.Component<
                       {this.props.project.map((prop, key) => {
                         console.log(prop);
                         return (
-                          <option value={prop.name}>{prop.members.name}</option>
+                          <option value={prop.members.name}>
+                            {prop.members.name}
+                          </option>
                         );
                       })}
                     </optgroup>

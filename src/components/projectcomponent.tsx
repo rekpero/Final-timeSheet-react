@@ -239,6 +239,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
 
+    if (mins === 0) return "00:00";
     var h = (mins / 60) | 0,
       m = mins % 60 | 0;
     return moment
@@ -264,6 +265,43 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
     setSearch(e.target.value);
   };
 
+  const handleDeleteProject = () => {
+    if (
+      window.confirm(
+        `Do you want to delete ${
+          selected.length > 1 ? "these" : "this"
+        } project? Any data related to this project will be deleted.`
+      )
+    ) {
+      const deletedProject = selected.map(
+        (proj: string) =>
+          props.project.filter((p: IProjectInfo) => p.name === proj)[0]
+      );
+      const deletedProjectId = deletedProject.map((p: IProjectInfo) => p.id);
+      const deletedTimesheet = props.timeSheet.filter(
+        (time: IProjectTimeSheet) =>
+          deletedProjectId.indexOf(time.project.id) !== -1
+      );
+      const deletedTimesheetId =
+        deletedTimesheet.length === 0
+          ? []
+          : deletedTimesheet.map((time: IProjectTimeSheet) => time.id);
+      const updatedClient = props.clients.map((client: IClientInfo) => ({
+        ...client,
+        noOfProjects:
+          client.noOfProjects -
+          deletedProject.filter((p: IProjectInfo) => p.clientId === client.id)
+            .length
+      }));
+      console.log(
+        deletedProject,
+        deletedProjectId,
+        deletedTimesheet,
+        deletedTimesheetId,
+        updatedClient
+      );
+    }
+  };
   const filterProjectByClient = (e: any) => {
     e.target.value === "no"
       ? setFilteredProject(props.project.filter(proj => proj.clientId === -1))
@@ -302,7 +340,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
           <Grid item xs>
             <Grid container direction="row" justify="flex-end">
               <Tooltip title="Delete">
-                <IconButton aria-label="delete">
+                <IconButton aria-label="delete" onClick={handleDeleteProject}>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
@@ -470,7 +508,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                       ? 0
                       : props.timeSheet
                           .filter(time => time.project.id === proj.id)
-                          .map(time => Number.parseInt(time.timeWorked))
+                          .map(time => time.timeWorked)
                           .reduce((prev, curr) => prev + curr);
                   // console.log(
                   //   props.clients.filter(cl => cl.id === proj.clientId)[0].name

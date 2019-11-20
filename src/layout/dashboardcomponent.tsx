@@ -6,6 +6,8 @@ import {
   BrowserRouter as Router,
   Route
 } from "react-router-dom";
+
+import PropTypes from "prop-types";
 import VerticalTabs from "../components/tabscomponent";
 import AppBarComponent from "../components/appbarcomponent";
 import projectService from "../services/projectService";
@@ -13,6 +15,7 @@ import { IProjectInfo } from "../model/project";
 import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
+import { Typography, Box } from "@material-ui/core";
 import TimesheetComponent from "../components/timesheetcomponent";
 import EditProjectComponent from "../components/editprojectcomponent";
 import StatusComponent from "../components/statuscomponent";
@@ -42,12 +45,39 @@ interface IDashboard {
   hour: number;
   minute: number;
   date: string;
+  timeWorked: number;
 }
+
+const TabPanel = (props: any) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+      style={{ width: "100%" }}
+    >
+      <Box>{children}</Box>
+    </Typography>
+  );
+};
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
+};
 
 class Dashboard extends React.Component<{}, IDashboard> {
   intervalHandle: any;
+  // totalTime: number;
   constructor(props: any) {
     super(props);
+    // this.totalTime = 0;
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
@@ -67,9 +97,11 @@ class Dashboard extends React.Component<{}, IDashboard> {
       note: "",
       hour: 0,
       minute: 0,
-      date: ""
+      date: "",
+      timeWorked: 0
     };
   }
+  totalTime = 0;
   getProjectData = () => {
     projectService.getProjectInfo().subscribe((projectInfo: IProjectInfo[]) => {
       this.setState({ project: projectInfo });
@@ -93,9 +125,13 @@ class Dashboard extends React.Component<{}, IDashboard> {
   getTimeSheetData = () => {
     projectService
       .getTimeSheetData()
-      .subscribe((timeSheetInfo: IProjectTimeSheet[]) =>
-        this.setState({ timeSheet: timeSheetInfo })
-      );
+      .subscribe((timeSheetInfo: IProjectTimeSheet[]) => {
+        this.setState({ timeSheet: timeSheetInfo });
+        timeSheetInfo.map((prop, key) => {
+          this.totalTime += prop.timeWorked;
+          this.setState({ timeWorked: this.totalTime });
+        });
+      });
   };
   componentDidMount() {
     this.getClientData();
@@ -185,76 +221,19 @@ class Dashboard extends React.Component<{}, IDashboard> {
   render() {
     return (
       <div>
-        <Router>
-          <VerticalTabs
-            project={this.state.project}
-            phases={this.state.phases}
-            timeSheet={this.state.timeSheet}
-            clients={this.state.clients}
-            clientData={this.getClientData}
-            projectData={this.getProjectData}
-            phaseData={this.getPhaseData}
-            timesheetData={this.getTimeSheetData}
-            setTimer={this.setTimer}
-            editTimer={this.editTimer}
-          >
-            <Route
-              path={`dash/dashboard`}
-              render={() => (
-                <TimesheetComponent
-                  setTimer={this.setTimer}
-                  editTimer={this.editTimer}
-                />
-              )}
-            />
-            <Route
-              path={`dash/projects/edit/:id`}
-              exact
-              render={() => {
-                return (
-                  <EditProjectComponent
-                    projects={this.state.project}
-                    clients={this.state.clients}
-                    timeSheets={this.state.timeSheet}
-                  />
-                );
-              }}
-            />
-            <Route
-              path={`dash/projects`}
-              exact
-              render={() => (
-                <ProjectComponent
-                  clientData={this.getClientData}
-                  projectData={this.getProjectData}
-                  phaseData={this.getPhaseData}
-                  timesheetData={this.getTimeSheetData}
-                  project={this.state.project}
-                  phases={this.state.phases}
-                  timeSheet={this.state.timeSheet}
-                  clients={this.state.clients}
-                />
-              )}
-            />
-            <Route
-              path={`dash/status`}
-              exact
-              render={() => (
-                <StatusComponent
-                  project={this.state.project}
-                  phases={this.state.phases}
-                  timeSheet={this.state.timeSheet}
-                  clients={this.state.clients}
-                />
-              )}
-            />
-            <Route
-              path={`dash/workspacesettings`}
-              exact
-              render={() => <WorkspaceSettingComponent />}
-            />
-          </VerticalTabs>
-        </Router>
+        <VerticalTabs
+          project={this.state.project}
+          phases={this.state.phases}
+          timeSheet={this.state.timeSheet}
+          clients={this.state.clients}
+          clientData={this.getClientData}
+          projectData={this.getProjectData}
+          phaseData={this.getPhaseData}
+          timesheetData={this.getTimeSheetData}
+          setTimer={this.setTimer}
+          editTimer={this.editTimer}
+          timeWorked={this.state.timeWorked}
+        ></VerticalTabs>
         <AppBarComponent
           clientData={this.getClientData}
           projectData={this.getProjectData}
@@ -280,6 +259,12 @@ class Dashboard extends React.Component<{}, IDashboard> {
           openTimerEdit={this.openTimerEdit}
           closeEditTimer={this.closeTimerEdit}
         ></AppBarComponent>
+        {/* <TimesheetComponent
+          setTimer={this.setTimer}
+          editTimer={this.editTimer}
+          timeWorked={this.state.timeWorked}
+          timesheetData={this.getTimeSheetData}
+        /> */}
       </div>
     );
   }
