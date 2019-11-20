@@ -38,6 +38,7 @@ import moment from "moment";
 import EditIcon from "@material-ui/icons/Edit";
 import history from "../services/history";
 import CreateProjectModal from "./createprojectmodal";
+import projectService from "../services/projectService";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -300,6 +301,11 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
         deletedTimesheetId,
         updatedClient
       );
+      deletedProjectId.forEach(value => {
+        projectService
+          .deleteProject(value + "")
+          .subscribe(data => console.log(data));
+      });
     }
   };
   const filterProjectByClient = (e: any) => {
@@ -374,7 +380,11 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                 </optgroup>
                 <optgroup label="">
                   {props.clients.map((cl, key) => {
-                    return <option value={cl.id}>{cl.name}</option>;
+                    return (
+                      <option value={cl.id} key={key}>
+                        {cl.name}
+                      </option>
+                    );
                   })}
                 </optgroup>
               </Select>

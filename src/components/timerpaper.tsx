@@ -5,7 +5,7 @@ import { Grid, Paper } from "@material-ui/core";
 interface ITimerPaperProps {
   hrs: number;
   minutes: number;
-  timesheet: { id: number; project: string; phase: string };
+  timesheet: { id: number; project: any; phase: string };
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,12 +34,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TimerPaper: React.FC<ITimerPaperProps> = (props: ITimerPaperProps) => {
   const classes = useStyles();
+
+  console.log(props.hrs, props.minutes, props.timesheet);
   return (
     <div>
       <Paper className={classes.paper1}>
         <Grid container direction="row" spacing={2} alignItems="center">
           <Grid item xs>
-            <div className={classes.project}>{props.timesheet.project}</div>
+            <div className={classes.project}>
+              {props.timesheet.project.name}
+            </div>
             <div className={classes.phase}>{props.timesheet.phase}</div>
           </Grid>
           <Grid item xs className={classes.time}>

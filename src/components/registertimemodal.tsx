@@ -175,17 +175,12 @@ const RegisterTimeModal: React.FC<IRegisterTimeModalProps> = (
     setProj(e.target.value);
     setProjectName(e.target.value.split("/")[0]);
     setProjectId(Number.parseInt(e.target.value.split("/")[1]));
-    setProject(
-      props.project.filter(
-        proj => proj.id === Number.parseInt(e.target.value.split("/")[1])
-      )[0]
+    const filteredProj = props.project.filter(
+      proj => proj.id === Number.parseInt(e.target.value.split("/")[1])
     );
-    setPhase(
-      props.project.filter(
-        proj => proj.id === Number.parseInt(e.target.value.split("/")[1])
-      )[0].phases[0].name
-    );
-    console.log(project, projectId, project.phases);
+    setProject(filteredProj.length === 0 ? {} : filteredProj[0]);
+    setPhase(filteredProj.length === 0 ? "" : filteredProj[0].phases[0].name);
+    // console.log(project, projectId, project.phases);
   };
   const handlePhaseName = (e: any) => {
     setPhase(e.target.value);

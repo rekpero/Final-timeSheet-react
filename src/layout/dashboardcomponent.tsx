@@ -259,12 +259,6 @@ class Dashboard extends React.Component<{}, IDashboard> {
           openTimerEdit={this.openTimerEdit}
           closeEditTimer={this.closeTimerEdit}
         ></AppBarComponent>
-        {/* <TimesheetComponent
-          setTimer={this.setTimer}
-          editTimer={this.editTimer}
-          timeWorked={this.state.timeWorked}
-          timesheetData={this.getTimeSheetData}
-        /> */}
       </div>
     );
   }
