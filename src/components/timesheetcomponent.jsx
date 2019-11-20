@@ -75,6 +75,21 @@ export default function DashboardComponent(props) {
           monday.length === 0
             ? []
             : monday.map((time, index) => {
+                console.log(
+                  moment("10:00 am", "hh:mm a")
+                    .add(
+                      monday.filter((val, i) => i < index).length === 0
+                        ? 0
+                        : monday
+                            .filter((val, i) => i < index)
+                            .map(time => time.timeWorked)
+                            .reduce(
+                              (prev, curr) => prev.timeWorked + curr.timeWorked
+                            ),
+                      "m"
+                    )
+                    .toString()
+                );
                 return {
                   start: moment("10:00 am", "hh:mm a").add(
                     monday.filter((val, i) => i < index).length === 0
@@ -114,9 +129,9 @@ export default function DashboardComponent(props) {
             : tuesday.map((time, index) => {
                 return {
                   start: moment("10:00 am", "hh:mm a").add(
-                    monday.filter((val, i) => i < index).length === 0
+                    tuesday.filter((val, i) => i < index).length === 0
                       ? 0
-                      : monday
+                      : tuesday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
                           .reduce(
@@ -126,9 +141,9 @@ export default function DashboardComponent(props) {
                   ),
                   end: moment("10:00 am", "hh:mm a")
                     .add(
-                      monday.filter((val, i) => i < index).length === 0
+                      tuesday.filter((val, i) => i < index).length === 0
                         ? 0
-                        : monday
+                        : tuesday
                             .filter((val, i) => i < index)
                             .map(time => time.timeWorked)
                             .reduce(
@@ -151,9 +166,9 @@ export default function DashboardComponent(props) {
             : wednesday.map((time, index) => {
                 return {
                   start: moment("10:00 am", "hh:mm a").add(
-                    monday.filter((val, i) => i < index).length === 0
+                    wednesday.filter((val, i) => i < index).length === 0
                       ? 0
-                      : monday
+                      : wednesday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
                           .reduce(
@@ -163,9 +178,9 @@ export default function DashboardComponent(props) {
                   ),
                   end: moment("10:00 am", "hh:mm a")
                     .add(
-                      monday.filter((val, i) => i < index).length === 0
+                      wednesday.filter((val, i) => i < index).length === 0
                         ? 0
-                        : monday
+                        : wednesday
                             .filter((val, i) => i < index)
                             .map(time => time.timeWorked)
                             .reduce(
@@ -188,9 +203,9 @@ export default function DashboardComponent(props) {
             : thursday.map((time, index) => {
                 return {
                   start: moment("10:00 am", "hh:mm a").add(
-                    monday.filter((val, i) => i < index).length === 0
+                    thursday.filter((val, i) => i < index).length === 0
                       ? 0
-                      : monday
+                      : thursday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
                           .reduce(
@@ -200,9 +215,9 @@ export default function DashboardComponent(props) {
                   ),
                   end: moment("10:00 am", "hh:mm a")
                     .add(
-                      monday.filter((val, i) => i < index).length === 0
+                      thursday.filter((val, i) => i < index).length === 0
                         ? 0
-                        : monday
+                        : thursday
                             .filter((val, i) => i < index)
                             .map(time => time.timeWorked)
                             .reduce(
@@ -225,9 +240,9 @@ export default function DashboardComponent(props) {
             : friday.map((time, index) => {
                 return {
                   start: moment("10:00 am", "hh:mm a").add(
-                    monday.filter((val, i) => i < index).length === 0
+                    friday.filter((val, i) => i < index).length === 0
                       ? 0
-                      : monday
+                      : friday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
                           .reduce(
@@ -237,9 +252,9 @@ export default function DashboardComponent(props) {
                   ),
                   end: moment("10:00 am", "hh:mm a")
                     .add(
-                      monday.filter((val, i) => i < index).length === 0
+                      friday.filter((val, i) => i < index).length === 0
                         ? 0
-                        : monday
+                        : friday
                             .filter((val, i) => i < index)
                             .map(time => time.timeWorked)
                             .reduce(
@@ -262,9 +277,9 @@ export default function DashboardComponent(props) {
             : saturday.map((time, index) => {
                 return {
                   start: moment("10:00 am", "hh:mm a").add(
-                    monday.filter((val, i) => i < index).length === 0
+                    saturday.filter((val, i) => i < index).length === 0
                       ? 0
-                      : monday
+                      : saturday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
                           .reduce(
@@ -274,9 +289,9 @@ export default function DashboardComponent(props) {
                   ),
                   end: moment("10:00 am", "hh:mm a")
                     .add(
-                      monday.filter((val, i) => i < index).length === 0
+                      saturday.filter((val, i) => i < index).length === 0
                         ? 0
-                        : monday
+                        : saturday
                             .filter((val, i) => i < index)
                             .map(time => time.timeWorked)
                             .reduce(
@@ -299,9 +314,9 @@ export default function DashboardComponent(props) {
             : sunday.map((time, index) => {
                 return {
                   start: moment("10:00 am", "hh:mm a").add(
-                    monday.filter((val, i) => i < index).length === 0
+                    sunday.filter((val, i) => i < index).length === 0
                       ? 0
-                      : monday
+                      : sunday
                           .filter((val, i) => i < index)
                           .map(time => time.timeWorked)
                           .reduce(
@@ -311,9 +326,9 @@ export default function DashboardComponent(props) {
                   ),
                   end: moment("10:00 am", "hh:mm a")
                     .add(
-                      monday.filter((val, i) => i < index).length === 0
+                      sunday.filter((val, i) => i < index).length === 0
                         ? 0
-                        : monday
+                        : sunday
                             .filter((val, i) => i < index)
                             .map(time => time.timeWorked)
                             .reduce(
@@ -509,7 +524,7 @@ export default function DashboardComponent(props) {
 
   const theme = useTheme();
   const match = useMediaQuery(theme.breakpoints.down("sm"));
-  console.log(match);
+  // console.log(match);
 
   return (
     <Grid container direction="row" justify="center">
