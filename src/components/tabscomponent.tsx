@@ -29,6 +29,7 @@ import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 import EditProjectComponent from "./editprojectcomponent";
 import { IPhasesInfo } from "../model/phases";
+import ProjectDetailsComponent from "./projectdetailscomponent";
 
 const ITEM_HEIGHT = 48;
 
@@ -141,6 +142,8 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   const [value, setValue] = React.useState(0);
   const [managementValue, setManagementValue] = React.useState();
   const [urlPath, setUrlPath] = React.useState(props.location.pathname);
+  const [projectState, setProjectState] = React.useState(0);
+  const [projectId, setProjectId] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     if (newValue !== 5) {
@@ -180,6 +183,11 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   };
   const handleOpen1 = () => {
     setOpen3(true);
+  };
+  const changeProjectState = (id: number, state: number) => {
+    setProjectId(id);
+    setProjectState(state);
+    console.log(id, state);
   };
   return (
     <div className={classes.root}>
@@ -249,66 +257,6 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
           ))}
         </Menu>
       </Tabs>
-      {/* <TabPanel>
-        <Switch>
-          <Route
-            path={`dash/dashboard`}
-            render={() => (
-              <TimesheetComponent
-                setTimer={props.setTimer}
-                editTimer={props.editTimer}
-                timeWorked={props.timeWorked}
-              />
-            )}
-          />
-          <Route
-            path={`dash/projects/edit/:id`}
-            exact
-            render={() => {
-              return (
-                <EditProjectComponent
-                  projects={props.project}
-                  clients={props.clients}
-                  timeSheets={props.timeSheet}
-                />
-              );
-            }}
-          />
-          <Route
-            path={`dash/projects`}
-            exact
-            render={() => (/*
-              <ProjectComponent
-                clientData={props.clientData}
-                projectData={props.projectData}
-                phaseData={props.phaseData}
-                timesheetData={props.timesheetData}
-                project={props.project}
-                phases={props.phases}
-                timeSheet={props.timeSheet}
-                clients={props.clients}
-              />
-            )}
-          />
-          <Route
-            path={`dash/status`}
-            exact
-            render={() => (
-              <StatusComponent
-                project={props.project}
-                phases={props.phases}
-                timeSheet={props.timeSheet}
-                clients={props.clients}
-              />
-            )}
-          />
-          <Route
-            path={`dash/workspacesettings`}
-            exact
-            render={() => <WorkspaceSettingComponent />}
-          />
-        </Switch>
-      </TabPanel> */}
       <TabPanel value={value} index={0}>
         <TimesheetComponent
           setTimer={props.setTimer}
@@ -319,16 +267,32 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ProjectComponent
-          clientData={props.clientData}
-          projectData={props.projectData}
-          phaseData={props.phaseData}
-          timesheetData={props.timesheetData}
-          project={props.project}
-          phases={props.phases}
-          timeSheet={props.timeSheet}
-          clients={props.clients}
-        />
+        {projectState === 0 ? (
+          <ProjectComponent
+            clientData={props.clientData}
+            projectData={props.projectData}
+            phaseData={props.phaseData}
+            timesheetData={props.timesheetData}
+            project={props.project}
+            phases={props.phases}
+            timeSheet={props.timeSheet}
+            clients={props.clients}
+            changeProjectState={changeProjectState}
+          />
+        ) : projectState === 1 ? (
+          <ProjectDetailsComponent
+            projects={props.project}
+            timesheets={props.timeSheet}
+            projectId={projectId}
+          />
+        ) : projectState === 2 ? (
+          <EditProjectComponent
+            projects={props.project}
+            timeSheets={props.timeSheet}
+            clients={props.clients}
+            projectId={projectId}
+          />
+        ) : null}
       </TabPanel>
       <TabPanel value={value} index={2}>
         <StatusComponent

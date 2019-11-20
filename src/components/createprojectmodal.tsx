@@ -83,7 +83,7 @@ class CreateProjectModal extends React.Component<
       SelectedValue1: "",
       addedProject: {
         name: "",
-        projectColor: { r: "", g: "", b: "", a: "" },
+        projectColor: { r: "241", g: "112", b: "19", a: "1" },
         clientId: 1,
         members: { name: "", hourlyrate: 1 },
         phases: [],
@@ -134,7 +134,7 @@ class CreateProjectModal extends React.Component<
   };
   handleMemberName = (e: any) => {
     // this.state.SelectedValue1= e.target.value;
-    console.log("entered");
+    // console.log("entered");
     this.state.addedProject.members.name = e.target.value;
     this.setState({ addedProject: this.state.addedProject });
   };
@@ -156,19 +156,19 @@ class CreateProjectModal extends React.Component<
   };
 
   handlePhaseName = (e: string[]) => {
-    e.map((prop1, key1) => {
-      this.state.selectedPhase.push(prop1);
-      console.log(prop1);
-    });
-    this.setState({ addedProject: this.state.addedProject });
+    console.log(e);
+    this.setState({ selectedPhase: e }, () =>
+      console.log(this.state.selectedPhase)
+    );
   };
   handleColor = (e: any) => {
     this.state.addedProject.projectColor = e;
     this.setState({ addedProject: this.state.addedProject });
   };
   pushProject = () => {
+    // console.log(this.state.selectedPhase);
     this.state.selectedPhase.map((prop1, key1) => {
-      console.log(prop1);
+      // console.log(prop1);
       this.props.phases.map((prop, key) => {
         if (prop1 === prop.name) {
           this.state.addedProject.phases.push({
@@ -186,12 +186,35 @@ class CreateProjectModal extends React.Component<
       .subscribe(() => this.props.projectData());
   };
 
+  componentDidUpdate() {
+    if (
+      this.state.SelectedValue === "" &&
+      this.state.addedProject.members.name === "" &&
+      this.props.project.length !== 0
+    ) {
+      this.setState({
+        SelectedValue1: this.props.project[0].members.name,
+        addedProject: {
+          name: this.state.addedProject.name,
+          projectColor: this.state.addedProject.projectColor,
+          clientId: this.state.addedProject.clientId,
+          members: {
+            name: this.props.project[0].members.name,
+            hourlyrate: this.state.addedProject.members.hourlyrate
+          },
+          phases: this.state.addedProject.phases,
+          budget: this.state.addedProject.budget
+        }
+      });
+    }
+  }
+
   // handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
   //   this.setState({ phase: event.target.value as string[] });
   //   // setPhase(event.target.value as string[]);
   // };
   render() {
-    console.log(this.props.project);
+    // console.log(this.props.project);
     return (
       <Modal
         aria-labelledby="simple-modal-title"
@@ -278,8 +301,12 @@ class CreateProjectModal extends React.Component<
                     </optgroup>
                     <optgroup label="">
                       {this.props.clients.map((prop, key) => {
-                        console.log(prop);
-                        return <option key={key}>{prop.name}</option>;
+                        // console.log(prop);
+                        return (
+                          <option key={key} value={prop.name}>
+                            {prop.name}
+                          </option>
+                        );
                       })}
                     </optgroup>
                     <AddMember
@@ -337,7 +364,7 @@ class CreateProjectModal extends React.Component<
                     {" "}
                     <optgroup label="">
                       {this.props.project.map((prop, key) => {
-                        console.log(prop);
+                        // console.log(prop);
                         return (
                           <option value={prop.members.name}>
                             {prop.members.name}

@@ -151,6 +151,7 @@ interface IProjectComponentProps {
   projectData: () => void;
   phaseData: () => void;
   timesheetData: () => void;
+  changeProjectState: (id: number, state: number) => void;
 }
 const ProjectComponent: React.FC<IProjectComponentProps> = (
   props: IProjectComponentProps
@@ -239,15 +240,14 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
   const getTimeFromMins = (mins: number) => {
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
-
+    console.log(mins);
     if (mins === 0) return "00:00";
-    var h = (mins / 60) | 0,
+    let h = (mins / 60) | 0,
       m = mins % 60 | 0;
-    return moment
-      .utc()
-      .hours(h)
-      .minutes(m)
-      .format("hh:mm");
+    let hour = h < 10 ? "0" + h : h;
+    let min = m < 10 ? "0" + m : m;
+    let time = hour + ":" + min;
+    return time;
   };
 
   const filterProject = (e: any) => {
@@ -304,6 +304,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
       deletedProjectId.forEach(value => {
         projectService.deleteProject(value + "").subscribe(data => {
           props.projectData();
+          setSelected([]);
           console.log(data);
         });
       });
@@ -561,6 +562,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                           <EditIcon
                             onClick={e => {
                               history.push(`/dash/projects/edit/${proj.id}`);
+                              props.changeProjectState(proj.id, 2);
                             }}
                           />
                         </IconButton>
@@ -571,6 +573,7 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                         scope="row"
                         align="left"
                         className={classes.tableRow}
+                        onClick={e => props.changeProjectState(proj.id, 1)}
                       >
                         {proj.name}
                       </TableCell>

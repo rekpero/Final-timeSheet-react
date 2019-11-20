@@ -34,16 +34,16 @@ const StatusClientsComponent: React.FC<IStatusClientsProps> = (
   const getTimeFromMins = (mins: number) => {
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
-
+    console.log(mins);
     if (mins === 0) return "00:00";
-    var h = (mins / 60) | 0,
+    let h = (mins / 60) | 0,
       m = mins % 60 | 0;
-    return moment
-      .utc()
-      .hours(h)
-      .minutes(m)
-      .format("hh:mm");
+    let hour = h < 10 ? "0" + h : h;
+    let min = m < 10 ? "0" + m : m;
+    let time = hour + ":" + min;
+    return time;
   };
+
   return (
     <Grid container direction="row" justify="center">
       <Paper className={classes.root}>
@@ -68,7 +68,7 @@ const StatusClientsComponent: React.FC<IStatusClientsProps> = (
                   return time.project.clientId === row.id;
                 }
               );
-              console.log(filtered);
+              // console.log(filtered);
               return (
                 <TableRow key={i} hover>
                   <TableCell component="th" scope="row">

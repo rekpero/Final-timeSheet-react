@@ -89,6 +89,7 @@ interface IEditProjectComponent extends RouteComponentProps<RouteParams> {
   projects: IProjectInfo[];
   clients: IClientInfo[];
   timeSheets: IProjectTimeSheet[];
+  projectId: number;
 }
 
 const EditProjectComponent: React.FC<IEditProjectComponent> = (
@@ -132,7 +133,7 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
     console.log(props.projects);
     if (props.projects.length !== 0 && props.clients.length !== 0) {
       const project = props.projects.filter(proj => {
-        return proj.id === Number.parseInt(props.match.params.id);
+        return proj.id === props.projectId;
       })[0];
 
       const client = props.clients.filter(cl => cl.id === project.clientId)[0];

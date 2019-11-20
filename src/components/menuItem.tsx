@@ -33,7 +33,7 @@ const MenuItemComponent: React.FC<IMenuItem> = (props: IMenuItem) => {
   const theme = useTheme();
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPhase(event.target.value as string[]);
-    props.handleName(phase);
+    props.handleName(event.target.value as string[]);
   };
   const [phase, setPhase] = React.useState<string[]>([]);
   const getStyles = (name: string, personName: string[], theme: Theme) => {
@@ -47,7 +47,7 @@ const MenuItemComponent: React.FC<IMenuItem> = (props: IMenuItem) => {
   return (
     <div>
       <FormControl className={props.classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
+        <InputLabel id="demo-mutiple-chip-label">Phases</InputLabel>
         <Select
           labelId="demo-mutiple-chip-label"
           id="demo-mutiple-chip"

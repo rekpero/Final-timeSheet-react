@@ -61,6 +61,7 @@ const ReportComponent: React.FC<ReportProps> = (props: ReportProps) => {
   // var [timeWorked, setTimeWorked] = React.useState(0);
   const handleClose = () => {
     setOpen(false);
+    showProjectCharts(props.project[0].name);
   };
 
   const handleChange = (e: any) => {
@@ -84,10 +85,10 @@ const ReportComponent: React.FC<ReportProps> = (props: ReportProps) => {
         settimeWorked(timeWorked / 60);
       }
     });
-    console.log(Budget);
-    console.log(timeWorked);
-    console.log(labels);
-    console.log(dataset);
+    // console.log(Budget);
+    // console.log(timeWorked);
+    // console.log(labels);
+    // console.log(dataset);
     if (timeWorked !== 0 && Budget !== 0) {
       setChart(true);
     } else {

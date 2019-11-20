@@ -221,19 +221,21 @@ class Dashboard extends React.Component<{}, IDashboard> {
   render() {
     return (
       <div>
-        <VerticalTabs
-          project={this.state.project}
-          phases={this.state.phases}
-          timeSheet={this.state.timeSheet}
-          clients={this.state.clients}
-          clientData={this.getClientData}
-          projectData={this.getProjectData}
-          phaseData={this.getPhaseData}
-          timesheetData={this.getTimeSheetData}
-          setTimer={this.setTimer}
-          editTimer={this.editTimer}
-          timeWorked={this.state.timeWorked}
-        ></VerticalTabs>
+        <Router>
+          <VerticalTabs
+            project={this.state.project}
+            phases={this.state.phases}
+            timeSheet={this.state.timeSheet}
+            clients={this.state.clients}
+            clientData={this.getClientData}
+            projectData={this.getProjectData}
+            phaseData={this.getPhaseData}
+            timesheetData={this.getTimeSheetData}
+            setTimer={this.setTimer}
+            editTimer={this.editTimer}
+            timeWorked={this.state.timeWorked}
+          ></VerticalTabs>
+        </Router>
         <AppBarComponent
           clientData={this.getClientData}
           projectData={this.getProjectData}
