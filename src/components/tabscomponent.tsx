@@ -1,10 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  RouteComponentProps,
-  Route,
-  withRouter,
-  Switch
-} from "react-router-dom";
+import { RouteComponentProps, Route, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
@@ -31,6 +26,7 @@ import EditProjectComponent from "./editprojectcomponent";
 import { IPhasesInfo } from "../model/phases";
 import ProjectDetailsComponent from "./projectdetailscomponent";
 import InviteMember from "./addNewMembermodal";
+import auth0Client from "../services/auth0";
 
 const ITEM_HEIGHT = 48;
 
@@ -147,7 +143,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
   const [projectId, setProjectId] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    if (newValue !== 5) {
+    if (newValue !== 4) {
       setValue(newValue);
     }
   };
@@ -182,6 +178,9 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
     setValue(routesList.indexOf(path));
     setUrlPath(path);
     console.log(urlPath);
+    auth0Client.handleAuthentication().then(data => {
+      console.log(data);
+    });
   }, [props.location.pathname]);
   const [open5, setOpen5] = React.useState(false);
   const [open4, setOpen4] = React.useState(false);
@@ -262,7 +261,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
                 } else if (key === 2) {
                   handleOpen1();
                 } else {
-                  setValue(5);
+                  setValue(4);
                   history.push(prop.layout + prop.path);
                 }
               }}
@@ -329,9 +328,6 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
         ></ReportCreation>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <ActivityLogComponent />
-      </TabPanel>
-      <TabPanel value={value} index={5}>
         {managementValue === 0 ? (
           <InviteMember
             open={open5}

@@ -6,13 +6,14 @@ import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 
 class ProjectService {
+  private PORT: number = 8081;
   public getTimeSheetData = (): Observable<IProjectTimeSheet[]> => {
     return defer(() =>
       // for lazy loading
 
       {
         return from<Promise<IProjectTimeSheet[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3500/timesheet`).then(r => r.json())
+          fetch(`http://localhost:${this.PORT}/timesheet`).then(r => r.json())
         );
       }
     );
@@ -24,7 +25,7 @@ class ProjectService {
 
       {
         return from<Promise<IClientInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3500/clients`).then(r => r.json())
+          fetch(`http://localhost:${this.PORT}/clients`).then(r => r.json())
         );
       }
     );
@@ -36,7 +37,7 @@ class ProjectService {
 
       {
         return from<Promise<IProjectInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3500/project`).then(r => r.json())
+          fetch(`http://localhost:${this.PORT}/project`).then(r => r.json())
         );
       }
     );
@@ -48,7 +49,9 @@ class ProjectService {
 
       {
         return from<Promise<IProjectInfo>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3500/project/${id}`).then(r => r.json())
+          fetch(`http://localhost:${this.PORT}/project/${id}`).then(r =>
+            r.json()
+          )
         );
       }
     );
@@ -56,7 +59,7 @@ class ProjectService {
   public inviteClients = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:4000/invite`, {
+        fetch(`http://localhost:5000/invite`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(data)
@@ -71,7 +74,7 @@ class ProjectService {
 
       {
         return from<Promise<IPhasesInfo[]>>( // generic type coversion of promise to observable
-          fetch(`http://localhost:3500/phases`).then(r => r.json())
+          fetch(`http://localhost:${this.PORT}/phases`).then(r => r.json())
         );
       }
     );
@@ -80,7 +83,7 @@ class ProjectService {
   public postTimesheetData = (timesheet: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/timesheet`, {
+        fetch(`http://localhost:${this.PORT}/timesheet`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(timesheet)
@@ -92,7 +95,7 @@ class ProjectService {
   public postClient = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/clients`, {
+        fetch(`http://localhost:${this.PORT}/clients`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(data)
@@ -104,7 +107,7 @@ class ProjectService {
   public postPhase = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/phases`, {
+        fetch(`http://localhost:${this.PORT}/phases`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(data)
@@ -116,7 +119,7 @@ class ProjectService {
   public postProject = (data: any): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/project`, {
+        fetch(`http://localhost:${this.PORT}/project`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "POST",
           body: JSON.stringify(data)
@@ -128,7 +131,7 @@ class ProjectService {
   public updateTimesheetData = (update: any, id: number): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/timesheet/${id}`, {
+        fetch(`http://localhost:${this.PORT}/timesheet/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "PUT",
           body: JSON.stringify(update)
@@ -140,7 +143,7 @@ class ProjectService {
   public updateClient = (update: any, id: number): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/clients/${id}`, {
+        fetch(`http://localhost:${this.PORT}/clients/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "PUT",
           body: JSON.stringify(update)
@@ -152,7 +155,7 @@ class ProjectService {
   public updateProject = (update: any, id: number): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/project/${id}`, {
+        fetch(`http://localhost:${this.PORT}/project/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "PUT",
           body: JSON.stringify(update)
@@ -164,7 +167,7 @@ class ProjectService {
   public deleteTimesheetData = (id: number): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/timesheet/${id}`, {
+        fetch(`http://localhost:${this.PORT}/timesheet/${id}`, {
           method: "DELETE"
         })
       );
@@ -174,7 +177,7 @@ class ProjectService {
   public deletePhases = (id: string): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/phases/${id}`, {
+        fetch(`http://localhost:${this.PORT}/phases/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "DELETE"
         })
@@ -185,7 +188,7 @@ class ProjectService {
   public deleteProject = (id: string): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/project/${id}`, {
+        fetch(`http://localhost:${this.PORT}/project/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "DELETE"
         })
@@ -196,7 +199,7 @@ class ProjectService {
   public deleteClient = (id: string): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(
-        fetch(`http://localhost:3500/clients/${id}`, {
+        fetch(`http://localhost:${this.PORT}/clients/${id}`, {
           headers: { "Content-Type": "application/json; charset=utf-8" },
           method: "DELETE"
         })

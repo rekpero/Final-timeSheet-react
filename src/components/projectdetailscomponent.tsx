@@ -17,6 +17,7 @@ import { IProjectInfo } from "../model/project";
 import { IPhasesInfo } from "../model/phases";
 import TableBody from "@material-ui/core/TableBody";
 import history from "../services/history";
+import BarChart from "./bar";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -76,12 +77,10 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
   const [currProject, setCurrProject] = React.useState<
     IProjectInfo | undefined
   >();
-  const [projectTimesheets, setProjectTimesheets] = React.useState<
-    IProjectTimeSheet[] | undefined
-  >();
   const [totalTimer, setTotalTimer] = React.useState(0);
   const [phases, setPhases] = React.useState();
-
+  const [labels, setLabels] = React.useState<string[]>([]);
+  const [data, setData] = React.useState<number[]>([]);
   const getTimeFromMins = (mins: number) => {
     // do not include the first validation check if you want, for example,
     // getTimeFromMins(1530) to equal getTimeFromMins(90) (i.e. mins rollover)
@@ -100,6 +99,14 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
       const currProject = props.projects.filter(proj => {
         return proj.id === props.projectId;
       })[0];
+      let labels_n: string[] = [];
+      let dataset_n: number[] = [];
+      props.timesheets.map((prop, key) => {
+        if (prop.project.name === currProject.name) {
+          labels_n.push(prop.date);
+          dataset_n.push(prop.timeWorked);
+        }
+      });
 
       const projectTimesheets = props.timesheets.filter(
         (time: IProjectTimeSheet) => time.project.id === currProject.id
@@ -126,9 +133,10 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
                 .reduce((prev, curr) => prev + curr)
       }));
       setCurrProject(currProject);
-      setProjectTimesheets(projectTimesheets);
       setTotalTimer(timer);
       setPhases(phases);
+      setLabels(labels_n);
+      setData(dataset_n);
       console.log(timer, currProject.budget, getTimeFromMins(timer));
     }
   }, [props]);
@@ -165,6 +173,7 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
                 variant="contained"
                 color="default"
                 onClick={e => {
+                  history.push(`/dash/reports`);
                   props.openReports();
                 }}
                 style={{ width: "100%", marginBottom: 12 }}
@@ -173,8 +182,6 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
                 Project Report
               </Button>
               <Button
-                component={Link}
-                to="/infoprojectcomponent"
                 size="large"
                 variant="contained"
                 color="primary"
@@ -234,7 +241,9 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
         <Grid container spacing={2} className={classes.marginBottom}>
           <Grid item xs={8}>
             <Card className={classes.card} style={{ height: "100%" }}>
-              <CardContent>This is card content</CardContent>
+              <CardContent>
+                <BarChart labels={labels} dataset={data}></BarChart>
+              </CardContent>
             </Card>
           </Grid>
           <Grid item xs={4}>

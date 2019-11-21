@@ -165,9 +165,9 @@ class Timesheet extends React.Component {
                         <Tooltip overlay="Play" placement="right"><span><PlayArrowIcon fontSize="small"/></span></Tooltip>
                       </button></div>}
 
-                      {!scaled && <h6 className="timesheet__overlay-project">{schedule.data.project.name || 'Section Name'}</h6>}
-                      {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.phase.name || 'Professor Name'}</h6>}
-                      {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.note.name || 'Note Name'}</h6>}
+                      {!scaled && <h6 className="timesheet__overlay-project">{schedule.data.project.name}</h6>}
+                      {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.phase.name}</h6>}
+                      {!scaled && <h6 className="timesheet__overlay-other">{schedule.data.note.name}</h6>}
                       {!scaled && <h4 className="timesheet__overlay-title">{Number.parseInt(moment.utc(schedule.end.diff(schedule.start)).format("HH")) + "h" + Number.parseInt(moment.utc(schedule.end.diff(schedule.start)).format("mm")) + "m" || '1h20m'}</h4>}
 
                       {!disabled && <Resizer

@@ -53,7 +53,7 @@ const StatusOverviewComponent: React.FC<IStatusOverviewComponent> = (
 
   return (
     <Card className={classes.card}>
-      <CardHeader title="Rohan Saini" />
+      <CardHeader title={sessionStorage.getItem("name")} />
       <CardMedia className={classes.media} image={dp} title="User" />
 
       <CardActions disableSpacing>

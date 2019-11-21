@@ -536,13 +536,9 @@ export default function DashboardComponent(props) {
                 size="small"
                 aria-label="small contained button group"
               >
-                <Button>
-                  <ArrowBackIosIcon fontSize="medium"></ArrowBackIosIcon>
-                </Button>
+                
                 <Button>Today</Button>
-                <Button>
-                  <ArrowForwardIosIcon fontSize="medium"></ArrowForwardIosIcon>
-                </Button>
+                
               </ButtonGroup>
             </Box>
           </Grid>

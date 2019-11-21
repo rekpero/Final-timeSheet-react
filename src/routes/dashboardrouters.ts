@@ -26,13 +26,6 @@ var routes = [
     icon: "nc-icon nc-bell-55",
 
     layout: "/dash"
-  },
-  {
-    path: "/activity-log",
-    name: "Activity Log",
-    icon: "nc-icon nc-single-02",
-
-    layout: "/dash"
   }
   // {
   // path: "/Management",

@@ -52,12 +52,11 @@ const ReportComponent: React.FC<ReportProps> = (props: ReportProps) => {
   const [showChart, setChart] = React.useState(false);
   var [Budget, setBudget] = React.useState(0);
   var [timeWorked, settimeWorked] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
   const [labels, setLabels] = React.useState<string[]>([]);
   const [dataset, setData] = React.useState<number[]>([]);
   const [project, setProject] = React.useState("");
   const [loadFirst, setLoadFirst] = React.useState(false);
-
+  const [open, setOpen] = React.useState(false);
   // var [timeWorked, setTimeWorked] = React.useState(0);
   const handleClose = () => {
     setOpen(false);
@@ -73,14 +72,16 @@ const ReportComponent: React.FC<ReportProps> = (props: ReportProps) => {
     // console.log(e.target.value);
     Budget = 0;
     timeWorked = 0;
+    let labels_n: string[] = [];
+    let dataset_n: number[] = [];
     props.timeSheet.map((prop, key) => {
       if (prop.project.name === project) {
         Budget = prop.project.budget;
         timeWorked += prop.timeWorked;
-        labels.push(prop.date);
-        dataset.push(prop.timeWorked);
-        setLabels(labels);
-        setData(dataset);
+        labels_n.push(prop.date);
+        dataset_n.push(prop.timeWorked);
+        setLabels(labels_n);
+        setData(dataset_n);
         setBudget(Budget - timeWorked / 60);
         settimeWorked(timeWorked / 60);
       }

@@ -206,8 +206,10 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
                             />
                           ) : (
                             <CloseIcon
-                              onClick={e => {
-                                this.deleteRecord(key, prop.clients.name);
+                              onClick={() => {
+                                if (window.confirm("Delete the item?")) {
+                                  this.deleteRecord(key, prop.clients.name);
+                                } else this.handleChange(key);
                               }}
                             />
                           )}
@@ -254,8 +256,10 @@ class AddMember extends React.Component<addMemberProps, addMemberState> {
                             />
                           ) : (
                             <CloseIcon
-                              onClick={e => {
-                                this.deleteRecord1(key, prop.clients.name);
+                              onClick={() => {
+                                if (window.confirm("Delete the item?")) {
+                                  this.deleteRecord1(key, prop.clients.name);
+                                } else this.handleChange(key);
                               }}
                             />
                           )}

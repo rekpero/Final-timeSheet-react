@@ -3,24 +3,19 @@ import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import logo from "../asset/img/logo.png";
 import Toolbar from "@material-ui/core/Toolbar";
-
 import AddIcon from "@material-ui/icons/Add";
-import TimerIcon from "@material-ui/icons/Timer";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-
 import Fab from "@material-ui/core/Fab";
-
 import RegisterTimeModal from "./registertimemodal";
-import { IconButton, Grid } from "@material-ui/core";
-import EnteriesModal from "./enteriesmodal";
+import { IconButton, Grid, Button, Menu, MenuItem } from "@material-ui/core";
 import TimerModal from "./timercomponent";
 import TimerPaper from "./timerpaper";
 import { IProjectInfo } from "../model/project";
 import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
+import auth0Client from "../services/auth0";
+import { RouteComponentProps, withRouter } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,42 +69,62 @@ interface IAppBarProps {
   editTimerOpen: boolean;
   openTimerEdit: () => void;
   closeEditTimer: () => void;
+  closeTimer: () => void;
 }
 const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
   const classes = useStyles();
-  const [showTimer, setTimer] = React.useState(false);
-  var [hrs, setHrs] = React.useState(0);
-  var [min, setMin] = React.useState(0);
-  const [openRegisterModal, setOpenRegisterModal] = React.useState(false);
-  const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const handleOpen = () => {
-    setOpenRegisterModal(true);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const [name, setName] = React.useState(
+    sessionStorage.getItem("name") === null
+      ? ""
+      : sessionStorage.getItem("name")
+  );
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
-  const handleOpen1 = () => {
-    setOpen1(true);
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
-  const handleClose1 = () => {
-    setOpen1(false);
-  };
+
   const handleOpen2 = () => {
     setOpen2(true);
   };
   const handleClose2 = () => {
     setOpen2(false);
   };
-  const handleCloseModal = () => {
-    setOpenRegisterModal(false);
+
+  const logout = () => {
+    auth0Client.logout();
+    login();
   };
-  // const showTimerPaper = () => {
-  //   setTimer(props.showTimer);
-  // };
+
+  const login = () => {
+    if (!auth0Client.isAuthenticated()) {
+      auth0Client.signIn();
+    }
+  };
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setName(sessionStorage.getItem("name"));
+    }, 5000);
+  }, []);
 
   console.log(props.project);
   return (
     <AppBar position="fixed" color="primary" className={classes.appBar}>
       <Toolbar>
-        <img src={logo} style={{ marginLeft: 25 }} width="48" height="48"></img>
+        <img
+          src={logo}
+          style={{ marginLeft: 25 }}
+          width="48"
+          height="48"
+          alt="logo"
+        ></img>
         <Grid
           container
           alignItems="center"
@@ -118,7 +133,7 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
           {" "}
           <div style={{ fontFamily: "Helvetica", marginLeft: 35 }}>
             {" "}
-            TIMESHEET{" "}
+            TIMESEA{" "}
           </div>{" "}
         </Grid>
         <Fab
@@ -137,6 +152,7 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
               hrs={props.hrs}
               minutes={props.min}
               timesheet={props.timesheet}
+              closeTimer={props.closeTimer}
             />
           </IconButton>
         ) : null}
@@ -152,14 +168,34 @@ const AppBarComponent: React.FC<IAppBarProps> = (props: IAppBarProps) => {
             onClick={handleOpen2}
           ></CheckCircleOutlineIcon>
         </IconButton>
-
-        <IconButton color="inherit">
-          <NotificationsNoneIcon></NotificationsNoneIcon>
-        </IconButton>
-
-        <IconButton color="inherit" edge="end">
-          <HelpOutlineIcon></HelpOutlineIcon>
-        </IconButton>
+        {sessionStorage.getItem("name") === null ? (
+          <Button color="inherit" onClick={login}>
+            Login
+          </Button>
+        ) : (
+          <div>
+            <Button color="inherit" onClick={handleMenu}>
+              {name}
+            </Button>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </Menu>
+          </div>
+        )}
       </Toolbar>
       <RegisterTimeModal
         clientData={props.clientData}

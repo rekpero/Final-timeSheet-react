@@ -1,12 +1,6 @@
 import React from "react";
 
-import {
-  RouteComponentProps,
-  withRouter,
-  BrowserRouter as Router,
-  Route,
-  Redirect
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import VerticalTabs from "../components/tabscomponent";
@@ -17,14 +11,8 @@ import { IPhasesInfo } from "../model/phases";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 import { Typography, Box } from "@material-ui/core";
-import TimesheetComponent from "../components/timesheetcomponent";
-import EditProjectComponent from "../components/editprojectcomponent";
-import StatusComponent from "../components/statuscomponent";
-import ActivityLogComponent from "../components/activitylogcomponent";
-import WorkspaceSettingComponent from "../components/workspacesettingcomponent";
-import ProjectComponent from "../components/projectcomponent";
-import AddMember from "../components/addmemberclasscomponent";
-import PhasesModal from "../components/managePhases";
+import auth0Client from "../services/auth0";
+import Callback from "../components/callback";
 
 interface IDashboard {
   backgroundColor: string;
@@ -82,11 +70,22 @@ class Dashboard extends React.Component<{}, IDashboard> {
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
-
-      hours: 0,
-      minutes: 0,
-      timesheet: { id: 0, project: "", phase: "" },
-      setTimer: false,
+      hours:
+        sessionStorage.getItem("hours") !== null
+          ? Number.parseInt(sessionStorage.getItem("hours") + "")
+          : 0,
+      minutes:
+        sessionStorage.getItem("minutes") !== null
+          ? Number.parseInt(sessionStorage.getItem("minutes") + "")
+          : 0,
+      timesheet:
+        sessionStorage.getItem("timesheet") !== null
+          ? JSON.parse(sessionStorage.getItem("timesheet") + "")
+          : { id: 0, project: "", phase: "" },
+      setTimer:
+        sessionStorage.getItem("timer") !== null
+          ? Boolean(sessionStorage.getItem("timer"))
+          : false,
       project: [],
       phases: [],
       clients: [],
@@ -144,14 +143,20 @@ class Dashboard extends React.Component<{}, IDashboard> {
 
   tick = () => {
     if (this.state.minutes === 0) {
-      this.setState({ hours: this.state.hours - 1, minutes: 60 });
+      this.setState({ hours: this.state.hours - 1, minutes: 60 }, () => {
+        sessionStorage.setItem("hours", this.state.hours.toString());
+        sessionStorage.setItem("minutes", this.state.minutes.toString());
+      });
     }
     if (this.state.minutes === 0 && this.state.hours === 0) {
       clearInterval(this.intervalHandle);
     }
-    this.setState({ minutes: this.state.minutes - 1 }, () =>
-      console.log(this.state.hours, this.state.minutes)
-    );
+    this.setState({ minutes: this.state.minutes - 1 }, () => {
+      console.log(this.state.hours, this.state.minutes);
+
+      sessionStorage.setItem("hours", this.state.hours.toString());
+      sessionStorage.setItem("minutes", this.state.minutes.toString());
+    });
   };
   startCountDown = () => {
     this.intervalHandle = setInterval(this.tick, 60000);
@@ -164,9 +169,13 @@ class Dashboard extends React.Component<{}, IDashboard> {
     timer: boolean
   ) => {
     if (this.state.setTimer) clearInterval(this.intervalHandle);
-    this.setState({ hours, minutes, timesheet, setTimer: timer }, () =>
-      this.startCountDown()
-    );
+    this.setState({ hours, minutes, timesheet, setTimer: timer }, () => {
+      this.startCountDown();
+      sessionStorage.setItem("hours", hours.toString());
+      sessionStorage.setItem("minutes", minutes.toString());
+      sessionStorage.setItem("timesheet", JSON.stringify(timesheet));
+      sessionStorage.setItem("timer", timer.toString());
+    });
   };
 
   setTimerFromModal = (
@@ -176,9 +185,26 @@ class Dashboard extends React.Component<{}, IDashboard> {
     timer: boolean
   ) => {
     if (this.state.setTimer) clearInterval(this.intervalHandle);
-    this.setState({ hours, minutes, timesheet, setTimer: timer }, () =>
-      this.startCountDown()
-    );
+    this.setState({ hours, minutes, timesheet, setTimer: timer }, () => {
+      this.startCountDown();
+      sessionStorage.setItem("hours", hours.toString());
+      sessionStorage.setItem("minutes", minutes.toString());
+      sessionStorage.setItem("timesheet", JSON.stringify(timesheet));
+      sessionStorage.setItem("timer", timer.toString());
+    });
+  };
+
+  closeTimer = () => {
+    sessionStorage.removeItem("hours");
+    sessionStorage.removeItem("minutes");
+    sessionStorage.removeItem("timesheet");
+    sessionStorage.removeItem("timer");
+    this.setState({
+      hours: 0,
+      minutes: 0,
+      timesheet: { id: 0, project: "", phase: "" },
+      setTimer: false
+    });
   };
 
   closeTimerEdit = () => {
@@ -240,7 +266,13 @@ class Dashboard extends React.Component<{}, IDashboard> {
           <Route
             path="/"
             exact
-            render={() => <Redirect to="/dash/dashboard" />}
+            render={() => {
+              if (!auth0Client.isAuthenticated()) {
+                auth0Client.signIn();
+                return <div></div>;
+              }
+              return <Redirect to="/dash/dashboard" />;
+            }}
           />
           <Route
             path="/dash/projects/details/:id"
@@ -277,6 +309,7 @@ class Dashboard extends React.Component<{}, IDashboard> {
           editTimerOpen={this.state.openTimerEdit}
           openTimerEdit={this.openTimerEdit}
           closeEditTimer={this.closeTimerEdit}
+          closeTimer={this.closeTimer}
         ></AppBarComponent>
       </div>
     );

@@ -32,9 +32,9 @@ const BarChart: React.FC<IBarProps> = (props: IBarProps) => {
         <Bar
           data={data}
           width={100}
-          height={200}
+          height={80}
           options={{
-            maintainAspectRatio: false
+            maintainAspectRatio: true
           }}
         />
       </Grid>

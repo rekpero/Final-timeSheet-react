@@ -6,10 +6,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import history from "../services/history";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
-import moment from "moment";
 import { Grid } from "@material-ui/core";
 const useStyles = makeStyles({
   root: {
