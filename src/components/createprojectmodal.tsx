@@ -136,6 +136,7 @@ class CreateProjectModal extends React.Component<
     this.props.phases.map((prop, key) => {
       if (prop.name === e.target.value) {
         this.state.addedProject.clientId = prop.id;
+        console.log(this.state.addedProject.clientId)
       }
     });
     this.setState({ addedProject: this.state.addedProject });

@@ -149,6 +149,18 @@ class ProjectService {
     });
   };
 
+  public updateProject = (update: any, id: number): Observable<any> => {
+    return defer(() => {
+      return from<Promise<any>>(
+        fetch(`http://localhost:3500/project/${id}`, {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          method: "PUT",
+          body: JSON.stringify(update)
+        })
+      );
+    });
+  };
+
   public deleteTimesheetData = (id: number): Observable<any> => {
     return defer(() => {
       return from<Promise<any>>(

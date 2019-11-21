@@ -25,6 +25,7 @@ interface IMemberProjectProps {
   project: IProjectInfo;
   timeSheets: IProjectTimeSheet[];
   classes: any;
+  updateMember: (members: string[]) => void;
 }
 interface IMemberProjectState {
   stateRows: {
@@ -57,28 +58,33 @@ class MemberProjectComponent extends React.Component<
     ) {
       console.log(this.props.project);
       this.setState({
-        stateRows: [
-          {
-            cbox: true,
-            name:
-              this.props.project === undefined
-                ? ""
-                : this.props.project.members.name,
-            budget:
-              this.props.project === undefined ? 0 : this.props.project.budget,
-            hourlyrate:
-              this.props.project === undefined
-                ? 0
-                : this.props.project.members.hourlyrate,
+        stateRows:
+          this.props.project.members === null
+            ? []
+            : [
+                {
+                  cbox: true,
+                  name:
+                    this.props.project === undefined
+                      ? ""
+                      : this.props.project.members.name,
+                  budget:
+                    this.props.project === undefined
+                      ? 0
+                      : this.props.project.budget,
+                  hourlyrate:
+                    this.props.project === undefined
+                      ? 0
+                      : this.props.project.members.hourlyrate,
 
-            timetracked:
-              this.props.timeSheets.length === 0
-                ? 0
-                : this.props.timeSheets
-                    .map(time => time.timeWorked)
-                    .reduce((prev, curr) => prev + curr)
-          }
-        ]
+                  timetracked:
+                    this.props.timeSheets.length === 0
+                      ? 0
+                      : this.props.timeSheets
+                          .map(time => time.timeWorked)
+                          .reduce((prev, curr) => prev + curr)
+                }
+              ]
       });
     }
   }
@@ -95,9 +101,10 @@ class MemberProjectComponent extends React.Component<
     if (this.state.stateRows.length !== 0) {
       this.state.stateRows.splice(i, 1);
     }
-    this.setState({ stateRows: this.state.stateRows, deleted: true }, () =>
-      console.log(this.state.stateRows)
-    );
+    this.setState({ stateRows: this.state.stateRows, deleted: true }, () => {
+      console.log(this.state.stateRows);
+      this.props.updateMember([]);
+    });
   };
 
   getTimeFromMins = (mins: number) => {

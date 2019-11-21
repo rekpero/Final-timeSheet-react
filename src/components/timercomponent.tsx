@@ -74,7 +74,7 @@ const TimerModal: React.FC<ItimerModalProps> = (props: ItimerModalProps) => {
             <TimerIcon />
           </Grid>
           <Grid item xs={9}>
-            <Typography variant="h6">Enteries</Typography>
+            <Typography variant="h6">Entries</Typography>
           </Grid>
         </Grid>
         <hr></hr>

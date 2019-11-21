@@ -4,7 +4,8 @@ import {
   RouteComponentProps,
   withRouter,
   BrowserRouter as Router,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import PropTypes from "prop-types";
@@ -127,6 +128,7 @@ class Dashboard extends React.Component<{}, IDashboard> {
       .getTimeSheetData()
       .subscribe((timeSheetInfo: IProjectTimeSheet[]) => {
         this.setState({ timeSheet: timeSheetInfo });
+        this.totalTime = 0;
         timeSheetInfo.map((prop, key) => {
           this.totalTime += prop.timeWorked;
           this.setState({ timeWorked: this.totalTime / 60 });
@@ -235,6 +237,21 @@ class Dashboard extends React.Component<{}, IDashboard> {
             editTimer={this.editTimer}
             timeWorked={this.state.timeWorked}
           ></VerticalTabs>
+          <Route
+            path="/"
+            exact
+            render={() => <Redirect to="/dash/dashboard" />}
+          />
+          <Route
+            path="/dash/projects/details/:id"
+            exact
+            render={() => <Redirect to="/dash/projects" />}
+          />
+          <Route
+            path="/dash/projects/edit/:id"
+            exact
+            render={() => <Redirect to="/dash/projects" />}
+          />
         </Router>
         <AppBarComponent
           clientData={this.getClientData}

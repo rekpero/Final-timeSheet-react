@@ -6,8 +6,14 @@ import "./timesheetcomponents/styles/rc-tooltip.css";
 import "./timesheetcomponents/styles/react-select.css";
 import "./timesheetcomponents/styles/style.css";
 import "./timesheetcomponents/styles/vendor.css";
-import { Grid, Box, Typography, ButtonGroup, Button } from "@material-ui/core";
-import ProjectService from "../services/projectService";
+import {
+  Grid,
+  Box,
+  Typography,
+  ButtonGroup,
+  Button,
+  Paper
+} from "@material-ui/core";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import projectService from "../services/projectService";
@@ -591,12 +597,14 @@ export default function DashboardComponent(props) {
           </Grid>
         </Grid>
         <Grid item xs={3}>
-          <Chart
-            labels={[" Total Time in hrs"]}
-            chartData={[props.timeWorked]}
-            color={["#D32322"]}
-            title={"TimeWorked"}
-          />
+          <Paper style={{ padding: 12, marginLeft: 12, marginRight: 12 }}>
+            <Chart
+              labels={[" Total Time in hrs"]}
+              chartData={[props.timeWorked]}
+              color={["#D32322"]}
+              title={"TimeWorked"}
+            />
+          </Paper>
         </Grid>
       </Grid>
     </Grid>

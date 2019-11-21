@@ -15,6 +15,7 @@ import moment from "moment";
 
 interface IPhaseProjectState {
   stateRows: { cbox: boolean; name: string; timeTracked: number }[];
+  deleted: boolean;
 }
 
 interface IPhaseProjectProps {
@@ -31,6 +32,7 @@ class PhaseProjectComponent extends React.Component<
   constructor(props: IPhaseProjectProps) {
     super(props);
     this.state = {
+      deleted: false,
       stateRows: this.props.phases.map(phase => {
         const filteredTimeSheet = props.timeSheets.filter(
           time => time.phase === phase.name
@@ -50,7 +52,11 @@ class PhaseProjectComponent extends React.Component<
   }
 
   componentDidUpdate() {
-    if (this.props.phases.length !== 0 && this.state.stateRows.length === 0) {
+    if (
+      this.props.phases.length !== 0 &&
+      this.state.stateRows.length === 0 &&
+      !this.state.deleted
+    ) {
       console.log(this.props.phases);
       this.setState({
         stateRows: this.props.phases.map(phase => {
@@ -83,7 +89,7 @@ class PhaseProjectComponent extends React.Component<
     if (this.state.stateRows.length !== 0) {
       this.state.stateRows.splice(i, 1);
     }
-    this.setState({ stateRows: this.state.stateRows }, () =>
+    this.setState({ stateRows: this.state.stateRows, deleted: true }, () =>
       this.props.updatePhase(this.state.stateRows.map(row => row.name))
     );
     console.log(this.state.stateRows);

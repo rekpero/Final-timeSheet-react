@@ -41,9 +41,7 @@ const TimerPaper: React.FC<ITimerPaperProps> = (props: ITimerPaperProps) => {
       <Paper className={classes.paper1}>
         <Grid container direction="row" spacing={2} alignItems="center">
           <Grid item xs>
-            <div className={classes.project}>
-              {props.timesheet.project.name}
-            </div>
+            <div className={classes.project}>{props.timesheet.project}</div>
             <div className={classes.phase}>{props.timesheet.phase}</div>
           </Grid>
           <Grid item xs className={classes.time}>

@@ -22,6 +22,7 @@ const Chart: React.FC<IChartProp> = (props: IChartProp) => {
   };
   const chartOption: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: true,
     legend: {
       position: "top"
     },
@@ -36,7 +37,7 @@ const Chart: React.FC<IChartProp> = (props: IChartProp) => {
   };
   console.log(props.chartData);
   return (
-    <div className="rounded-lg shadow border py-3 px-4">
+    <div>
       <Doughnut data={chartData} options={chartOption} />
     </div>
   );

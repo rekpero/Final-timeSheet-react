@@ -158,6 +158,10 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const openReports = () => {
+    setValue(3);
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -214,6 +218,7 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
               onClick={event => {
                 event.preventDefault();
                 history.push(prop.layout + prop.path);
+                if (prop.path === "/projects") setProjectState(0);
                 // history.push(prop.layout + prop.path);
               }}
             ></Tab>
@@ -294,6 +299,8 @@ const VerticalTabs: React.FC<ITabsProps> = (props: ITabsProps) => {
             projects={props.project}
             timesheets={props.timeSheet}
             projectId={projectId}
+            changeProjectState={changeProjectState}
+            openReports={openReports}
           />
         ) : projectState === 2 ? (
           <EditProjectComponent

@@ -34,7 +34,6 @@ import { IProjectInfo } from "../model/project";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 import { IPhasesInfo } from "../model/phases";
-import moment from "moment";
 import EditIcon from "@material-ui/icons/Edit";
 import history from "../services/history";
 import CreateProjectModal from "./createprojectmodal";
@@ -448,10 +447,6 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                         <MenuItem onClick={openNewProject}>
                           Create a new project
                         </MenuItem>
-                        <Divider />
-                        <MenuItem onClick={handleClose}>
-                          Multiple new project by template
-                        </MenuItem>
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>
@@ -573,7 +568,10 @@ const ProjectComponent: React.FC<IProjectComponentProps> = (
                         scope="row"
                         align="left"
                         className={classes.tableRow}
-                        onClick={e => props.changeProjectState(proj.id, 1)}
+                        onClick={e => {
+                          history.push(`/dash/projects/details/${proj.id}`);
+                          props.changeProjectState(proj.id, 1);
+                        }}
                       >
                         {proj.name}
                       </TableCell>

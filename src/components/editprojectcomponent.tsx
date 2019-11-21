@@ -14,6 +14,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 import { IPhasesInfo } from "../model/phases";
+import projectService from "../services/projectService";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -123,10 +124,25 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
   };
 
   const updateProjectPhase = (phases: string[]) => {
-    project.phases = project.phases.filter((phase: IPhasesInfo) =>
-      phases.indexOf(phase.name)
-    );
+    console.log(phases);
+    project.phases = project.phases.filter((phase: IPhasesInfo) => {
+      console.log(phases.indexOf(phase.name) !== -1);
+      return phases.indexOf(phase.name) !== -1;
+    });
     console.log(project);
+  };
+  const updateProjectMember = (member: string[]) => {
+    if (member.length === 0) {
+      project.member = null;
+    }
+    console.log(project);
+  };
+
+  const saveProject = () => {
+    console.log(project);
+    projectService
+      .updateProject(project, project.id)
+      .subscribe(data => console.log(data));
   };
 
   useEffect(() => {
@@ -156,7 +172,12 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
           <Tab label="Phases" {...a11yProps(1)} />
           <Tab label="Members" {...a11yProps(2)} />
           <Grid item xs={7}></Grid>
-          <Button variant="contained" size="large" className={classes.button}>
+          <Button
+            variant="contained"
+            size="large"
+            className={classes.button}
+            onClick={saveProject}
+          >
             Save
           </Button>
         </Tabs>
@@ -184,6 +205,7 @@ const EditProjectComponent: React.FC<IEditProjectComponent> = (
             project={project}
             timeSheets={props.timeSheets}
             classes={classes}
+            updateMember={updateProjectMember}
           />
         </TabPanel>
       </div>

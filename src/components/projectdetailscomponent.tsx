@@ -6,21 +6,17 @@ import FolderIcon from "@material-ui/icons/Folder";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import TableRow from "@material-ui/core/TableRow";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import { Card, CardContent, Paper, FormControl } from "@material-ui/core";
+import { Card, CardContent, Paper } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { IProjectTimeSheet } from "../model/timesheet";
-import { IClientInfo } from "../model/clients";
 import { IProjectInfo } from "../model/project";
-import moment from "moment";
 import { IPhasesInfo } from "../model/phases";
 import TableBody from "@material-ui/core/TableBody";
+import history from "../services/history";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -51,6 +47,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   bold: {
     fontWeight: 550,
     color: "#696969"
+  },
+  out: {
+    fontSize: 16
+  },
+  number: {
+    fontWeight: 550
   }
 }));
 
@@ -62,6 +64,8 @@ interface ProjectDetailsProps extends RouteComponentProps<RouteParams> {
   timesheets: IProjectTimeSheet[];
   projects: IProjectInfo[];
   projectId: number;
+  changeProjectState: (id: number, state: number) => void;
+  openReports: () => void;
 }
 
 const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
@@ -101,15 +105,25 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
         (time: IProjectTimeSheet) => time.project.id === currProject.id
       );
       // console.log(Number.parseInt(props.match.params.id));
-      const timer = projectTimesheets
-        .map((time: IProjectTimeSheet) => time.timeWorked)
-        .reduce((prev: number, curr: number) => prev + curr);
+      const timer =
+        projectTimesheets.length === 0
+          ? 0
+          : projectTimesheets
+              .map((time: IProjectTimeSheet) => time.timeWorked)
+              .reduce((prev: number, curr: number) => prev + curr);
       const phases = currProject.phases.map((phase: IPhasesInfo) => ({
         name: phase.name,
-        totalTime: projectTimesheets
-          .filter((time: IProjectTimeSheet) => time.phase === phase.name)
-          .map((time: IProjectTimeSheet) => time.timeWorked)
-          .reduce((prev, curr) => prev + curr)
+        totalTime:
+          projectTimesheets.length === 0
+            ? 0
+            : projectTimesheets.filter(
+                (time: IProjectTimeSheet) => time.phase === phase.name
+              ).length === 0
+            ? 0
+            : projectTimesheets
+                .filter((time: IProjectTimeSheet) => time.phase === phase.name)
+                .map((time: IProjectTimeSheet) => time.timeWorked)
+                .reduce((prev, curr) => prev + curr)
       }));
       setCurrProject(currProject);
       setProjectTimesheets(projectTimesheets);
@@ -150,6 +164,9 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
                 size="large"
                 variant="contained"
                 color="default"
+                onClick={e => {
+                  props.openReports();
+                }}
                 style={{ width: "100%", marginBottom: 12 }}
                 startIcon={<FolderIcon />}
               >
@@ -161,6 +178,10 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
                 size="large"
                 variant="contained"
                 color="primary"
+                onClick={(e: any) => {
+                  history.push(`/dash/projects/edit/${props.projectId}`);
+                  props.changeProjectState(props.projectId, 2);
+                }}
                 style={{ width: "100%" }}
                 startIcon={<EditIcon />}
               >
@@ -170,11 +191,28 @@ const ProjectDetailsComponent: React.FC<ProjectDetailsProps> = (
           </Grid>
         </Grid>
         <Grid container>
-          <Box>
-            <Typography variant="h5" component="h5">
-              Budget
-            </Typography>
-          </Box>
+          <Grid item xs={6}>
+            <Box>
+              <Typography variant="h5" component="h5">
+                Budget
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Grid container justify="flex-end">
+              <Typography variant="h6" component="h5">
+                <span className={classes.number}>
+                  {getTimeFromMins(totalTimer)}
+                </span>{" "}
+                <span className={classes.out}>out of</span>{" "}
+                <span className={classes.number}>
+                  {getTimeFromMins(
+                    currProject !== undefined ? currProject.budget * 60 : 0
+                  )}
+                </span>
+              </Typography>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid container className={classes.marginBottom}>
           <Box width="100%" mt={1}>
