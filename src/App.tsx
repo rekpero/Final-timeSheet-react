@@ -1,16 +1,13 @@
-import React from 'react';
-import './App.css';
-import Login from './pages/logincomponent';
-// import {AppRouter} from './components/appRouter';
+import React from "react";
+import "./App.css";
+import Dashboard from "./layout/dashboardcomponent";
 
 const App: React.FC = (props: any) => {
   return (
     <div className="App">
-
-    {props.children}
-     
+      <Dashboard></Dashboard>
     </div>
   );
-}
+};
 
 export default App;
