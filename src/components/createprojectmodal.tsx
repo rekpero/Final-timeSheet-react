@@ -133,10 +133,10 @@ class CreateProjectModal extends React.Component<
     this.setState({ addedProject: this.state.addedProject });
   };
   handleClientName = (e: any) => {
-    this.props.phases.map((prop, key) => {
+    this.props.clients.map((prop, key) => {
       if (prop.name === e.target.value) {
         this.state.addedProject.clientId = prop.id;
-        console.log(this.state.addedProject.clientId)
+        console.log(this.state.addedProject.clientId);
       }
     });
     this.setState({ addedProject: this.state.addedProject });
@@ -372,12 +372,8 @@ class CreateProjectModal extends React.Component<
                     native
                     value={this.state.SelectedValue1}
                     onChange={e => {
-                      if (e.target.value === "new") {
-                        this.handleOpenInvitation();
-                      } else if (e.target.value) {
-                        this.handleMemberName(e);
-                        this.setState({ SelectedValue1: e.target.value });
-                      }
+                      this.handleMemberName(e);
+                      this.setState({ SelectedValue1: e.target.value });
                     }}
                   >
                     {" "}
