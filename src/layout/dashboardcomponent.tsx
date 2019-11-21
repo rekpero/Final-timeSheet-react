@@ -12,7 +12,6 @@ import { IClientInfo } from "../model/clients";
 import { IProjectTimeSheet } from "../model/timesheet";
 import { Typography, Box } from "@material-ui/core";
 import auth0Client from "../services/auth0";
-import Callback from "../components/callback";
 
 interface IDashboard {
   backgroundColor: string;
