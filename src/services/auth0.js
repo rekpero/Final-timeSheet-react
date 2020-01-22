@@ -67,7 +67,8 @@ class Auth {
         sessionStorage.setItem('access_token', authResult.accessToken);
         sessionStorage.setItem('id_token', authResult.idToken);
         sessionStorage.setItem('expires_at', expiresAt);
-        sessionStorage.setItem('name', "Mitrasish");
+        console.log(authResult.idTokenPayload.given_name);
+        sessionStorage.setItem('name', authResult.idTokenPayload.given_name);
         console.log(authResult.accessToken, authResult.idToken, expiresAt, prof)
     }
 
